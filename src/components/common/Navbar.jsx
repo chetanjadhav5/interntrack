@@ -37,10 +37,12 @@ const Navbar = () => {
           {/* Logo & Institution Branding */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm shadow-primary/30 group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  school
-                </span>
+              <div className="w-10 h-10 rounded-xl bg-white border border-outline-variant/60 p-1 flex items-center justify-center shadow-sm shadow-primary/10 group-hover:scale-105 transition-transform overflow-hidden">
+                <img
+                  src="/logo.png"
+                  alt="RaiSakshya Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <span className="font-headline font-bold text-lg text-on-surface tracking-tight flex items-center gap-1">

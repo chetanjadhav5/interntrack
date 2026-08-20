@@ -147,10 +147,10 @@ const FacultyRegisterPage = () => {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-background">
       <div className="w-full max-w-lg bg-surface-container-lowest rounded-3xl border border-outline-variant shadow-xl overflow-hidden animate-in fade-in">
         <div className="bg-gradient-to-r from-emerald-700 to-teal-700 p-6 text-white text-center relative">
-          <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md mx-auto flex items-center justify-center mb-3 shadow-inner">
-            <Users className="w-6 h-6 text-white" />
+          <div className="w-14 h-14 rounded-2xl bg-white p-2 backdrop-blur-md mx-auto flex items-center justify-center mb-3 shadow-lg overflow-hidden">
+            <img src="/logo.png" alt="RaiSakshya Logo" className="w-full h-full object-contain" />
           </div>
-          <h2 className="font-headline font-bold text-xl tracking-tight">Faculty Registration</h2>
+          <h2 className="font-headline font-bold text-xl tracking-tight">RaiSakshya Faculty Registration</h2>
           <p className="text-xs text-emerald-100 mt-1">
             {step === 1 ? 'Step 1 of 2: Security & OTP Verification' : 'Step 2 of 2: Department, Branch & Designation'}
           </p>

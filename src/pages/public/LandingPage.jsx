@@ -261,10 +261,8 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-surface-container-lowest border-t border-outline-variant/60 py-12 text-center text-xs text-on-surface-variant space-y-3">
         <div className="flex items-center justify-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-on-primary font-bold">
-            <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
-              school
-            </span>
+          <div className="w-8 h-8 rounded-lg bg-white border border-outline-variant/60 p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
+            <img src="/logo.png" alt="RaiSakshya Logo" className="w-full h-full object-contain" />
           </div>
           <span className="font-headline font-bold text-on-surface text-sm">
             Rai<span className="text-primary font-black">Sakshya</span>
