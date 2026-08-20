@@ -164,9 +164,9 @@ const ProfileVerificationPage = () => {
       )}
 
       {/* Main Grid: Student List vs Profile Detail Review Drawer */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Student Cards List */}
-        <div className="space-y-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        {/* Left Column: Student Cards List (Scrollable Viewport) */}
+        <div className="space-y-3 max-h-[calc(100vh-260px)] overflow-y-auto pr-2">
           {currentList.length === 0 ? (
             <div className="bg-surface-container-lowest rounded-3xl p-8 text-center border border-outline-variant/60 text-xs text-on-surface-variant">
               No students in {activeTab} status.
@@ -203,7 +203,7 @@ const ProfileVerificationPage = () => {
         </div>
 
         {/* Right 2 Columns: Detailed Credential Verification Drawer */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 sticky top-6">
           {selectedStudent ? (
             <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-5">
               <div className="flex items-start justify-between border-b border-outline-variant/40 pb-4">

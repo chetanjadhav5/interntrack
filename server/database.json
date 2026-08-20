@@ -427,12 +427,12 @@
       "github_username": "alexpatil-dev",
       "github_score": 95,
       "github_last_synced": "2026-08-20T20:28:37.222Z",
-      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 100,
       "verification_status": "PENDING",
       "verification_remarks": "Profile updated by student; awaiting verification.",
       "application_locked": true,
-      "updated_at": "2026-08-20T22:15:15.245Z",
+      "updated_at": "2026-08-20T22:26:41.666Z",
       "documents": [
         {
           "id": "doc_cert_id_1787233494672_uyp26g0uz",
@@ -620,12 +620,12 @@
       "github_username": "priyasharma-code",
       "github_score": 78,
       "github_last_synced": "2026-08-18T00:00:00.000Z",
-      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 100,
       "verification_status": "VERIFIED",
       "verification_remarks": "Approved all academic details.",
       "application_locked": true,
-      "updated_at": "2026-08-20T20:28:38.176Z",
+      "updated_at": "2026-08-20T22:26:41.707Z",
       "is_defaulter": false,
       "placement_status": "ELIGIBLE",
       "defaulter_reason": "Rejected official offer from Google India (Cloud Infrastructure Intern)",
@@ -669,12 +669,12 @@
       "github_username": "rohit-ml",
       "github_score": 86,
       "github_last_synced": "2026-08-19T00:00:00.000Z",
-      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 100,
       "verification_status": "VERIFIED",
       "verification_remarks": "Verified by Class Teacher Dr. S. K. Verma.",
       "application_locked": false,
-      "updated_at": "2026-08-20T20:28:38.207Z"
+      "updated_at": "2026-08-20T22:26:41.746Z"
     },
     {
       "id": "id_1787210915412_juhf0i374",
@@ -711,13 +711,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 100,
       "verification_status": "VERIFIED",
       "verification_remarks": "Approved all academic details.",
       "application_locked": false,
       "created_at": "2026-08-20T07:28:35.412Z",
-      "updated_at": "2026-08-20T20:28:38.240Z"
+      "updated_at": "2026-08-20T22:26:41.786Z"
     },
     {
       "id": "id_1787221963337_2n5p4pdux",
@@ -739,13 +739,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T10:32:43.337Z",
-      "updated_at": "2026-08-20T20:28:38.271Z"
+      "updated_at": "2026-08-20T22:26:41.825Z"
     },
     {
       "id": "id_1787239662399_wel86elcr",
@@ -781,13 +781,13 @@
       "is_pan_india": true,
       "github_username": "alexpatil-dev",
       "github_score": 100,
-      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 100,
-      "verification_status": "VERIFIED",
-      "verification_remarks": "Approved all academic details.",
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
       "application_locked": false,
       "created_at": "2026-08-20T15:27:42.399Z",
-      "updated_at": "2026-08-20T22:01:31.076Z",
+      "updated_at": "2026-08-20T22:26:41.865Z",
       "documents": [
         {
           "id": "doc_cert_id_1787241650388_6hqg9ezmv",
@@ -1101,13 +1101,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": null,
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T21:58:26.020Z",
-      "updated_at": "2026-08-20T21:58:26.255Z",
+      "updated_at": "2026-08-20T22:26:41.906Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1266,13 +1266,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": null,
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T21:59:24.711Z",
-      "updated_at": "2026-08-20T21:59:25.101Z",
+      "updated_at": "2026-08-20T22:26:41.949Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1431,13 +1431,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": null,
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T21:59:55.596Z",
-      "updated_at": "2026-08-20T21:59:55.975Z",
+      "updated_at": "2026-08-20T22:26:41.989Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1596,13 +1596,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": null,
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T22:13:58.800Z",
-      "updated_at": "2026-08-20T22:13:59.237Z",
+      "updated_at": "2026-08-20T22:26:42.035Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1761,13 +1761,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": null,
+      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T22:17:16.898Z",
-      "updated_at": "2026-08-20T22:17:17.274Z",
+      "updated_at": "2026-08-20T22:26:42.087Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1916,9 +1916,9 @@
       "department": "Engineering",
       "branch": "Computer Science and Engineering",
       "assigned_year": 2026,
-      "designation": "CLASS_TEACHER",
+      "designation": "MENTOR",
       "active_mentee_count": 14,
-      "updated_at": "2026-08-20T20:28:38.104Z"
+      "updated_at": "2026-08-20T22:26:41.593Z"
     },
     {
       "id": "fac_prof_2",
@@ -1940,10 +1940,10 @@
       "department": "Engineering",
       "branch": "Computer Science and Engineering",
       "assigned_year": 2026,
-      "designation": "MENTOR",
+      "designation": "CLASS_TEACHER",
       "active_mentee_count": 5,
       "created_at": "2026-08-20T07:24:26.224Z",
-      "updated_at": "2026-08-20T16:17:10.690Z",
+      "updated_at": "2026-08-20T22:26:41.626Z",
       "is_approved": true
     },
     {
@@ -7510,9 +7510,9 @@
       "title": "T&P Reminder: Profile Verification Required",
       "message": "T&P Coordinator requested prompt verification for student utkarsha kukure (ghr123) in Computer Science and Engineering.",
       "link_route": "/faculty/profile-verification",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T16:03:43.098Z",
-      "updated_at": "2026-08-20T16:03:43.098Z"
+      "updated_at": "2026-08-20T22:26:48.820Z"
     },
     {
       "id": "id_1787242435325_xm970fnfj",
@@ -8470,6 +8470,17 @@
       "is_read": false,
       "created_at": "2026-08-20T22:17:17.210Z",
       "updated_at": "2026-08-20T22:17:17.210Z"
+    },
+    {
+      "id": "id_1787264747442_z637tq6v8",
+      "user_id": "user_faculty_ct_1",
+      "module_key": "PROFILE",
+      "title": "Student Profile Updated",
+      "message": "utkarsha kukure (ghr123) has updated profile details and requested verification.",
+      "link_route": "/faculty/profile-verification",
+      "is_read": false,
+      "created_at": "2026-08-20T22:25:47.443Z",
+      "updated_at": "2026-08-20T22:25:47.443Z"
     }
   ],
   "support_tickets": [
