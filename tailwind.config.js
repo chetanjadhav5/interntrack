@@ -45,6 +45,11 @@ export default {
         "on-error": "#ffffff",
         "on-error-container": "#93000a",
         "surface-tint": "#1353d8",
+        "brand": "#5F1BBF",
+        "brand-dark": "#431288",
+        "brand-light": "#8545e6",
+        "brand-surface": "#F7F2FE",
+        "brand-border": "#E4D4FA",
       },
       borderRadius: {
         "DEFAULT": "0.5rem",

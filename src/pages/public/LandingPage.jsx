@@ -25,7 +25,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-background text-on-background">
       {/* Top Hackathon Banner */}
-      <div className="bg-gradient-to-r from-primary-container via-primary to-secondary text-white py-2 px-4 text-center text-xs font-bold tracking-wide shadow-sm flex items-center justify-center gap-2">
+      <div className="bg-gradient-to-r from-brand-dark via-brand to-primary text-white py-2 px-4 text-center text-xs font-bold tracking-wide shadow-sm flex items-center justify-center gap-2">
         <Sparkles className="w-4 h-4 animate-spin-slow" />
         <span>G H RAISONI COLLEGE OF ENGINEERING & MANAGEMENT — GHR INTER-TRACK HACKATHON 2026</span>
         <span className="hidden md:inline px-2 py-0.5 rounded-full bg-white/20 text-[10px] uppercase font-black">
@@ -35,18 +35,18 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#1a56db_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+        <div className="absolute inset-0 opacity-30 bg-[radial-gradient(#5F1BBF_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-extrabold tracking-wide uppercase">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-surface border border-brand-border text-brand text-xs font-extrabold tracking-wide uppercase shadow-sm">
               <Zap className="w-3.5 h-3.5" />
               Next-Generation Internship Management System
             </div>
 
             <h1 className="font-headline font-black text-4xl sm:text-5xl lg:text-6xl text-on-surface tracking-tight leading-tight">
               Building Smarter <br />
-              <span className="bg-gradient-to-r from-primary via-primary-container to-secondary bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-brand via-primary to-indigo-600 bg-clip-text text-transparent">
                 Internship Ecosystems
               </span>
             </h1>
@@ -59,7 +59,7 @@ const LandingPage = () => {
             <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
               <Link
                 to="/auth/login"
-                className="px-8 py-4 rounded-2xl bg-primary text-on-primary font-bold text-sm hover:bg-primary/90 shadow-lg shadow-primary/30 flex items-center gap-2 group transition-all hover:scale-105 active:scale-95"
+                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-brand to-primary hover:from-brand/90 hover:to-primary/90 text-white font-bold text-sm shadow-lg shadow-brand/25 flex items-center gap-2 group transition-all hover:scale-105 active:scale-95"
               >
                 <span>Launch IMS Workspace</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -264,8 +264,8 @@ const LandingPage = () => {
           <div className="w-8 h-8 rounded-lg bg-white border border-outline-variant/60 p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
             <img src="/logo.png" alt="RaiSakshya Logo" className="w-full h-full object-contain" />
           </div>
-          <span className="font-headline font-bold text-on-surface text-sm">
-            Rai<span className="text-primary font-black">Sakshya</span>
+          <span className="font-headline font-bold text-on-surface text-sm flex items-center gap-0.5">
+            Rai<span className="text-brand font-black">Sakshya</span>
           </span>
         </div>
         <p className="max-w-md mx-auto text-[11px] text-outline">

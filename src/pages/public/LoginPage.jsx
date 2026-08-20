@@ -82,12 +82,12 @@ const LoginPage = () => {
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-background">
       <div className="w-full max-w-md bg-surface-container-lowest rounded-3xl border border-outline-variant shadow-xl overflow-hidden animate-in fade-in">
         {/* Header */}
-        <div className="bg-gradient-to-r from-primary to-primary-container p-6 text-white text-center relative overflow-hidden">
+        <div className="bg-gradient-to-r from-brand-dark via-brand to-primary p-6 text-white text-center relative overflow-hidden">
           <div className="w-14 h-14 rounded-2xl bg-white p-2 backdrop-blur-md mx-auto flex items-center justify-center mb-3 shadow-lg overflow-hidden">
             <img src="/logo.png" alt="RaiSakshya Logo" className="w-full h-full object-contain" />
           </div>
           <h2 className="font-headline font-bold text-xl tracking-tight">RaiSakshya Portal Login</h2>
-          <p className="text-xs text-blue-100 mt-1">Sign in to your authorized institutional workspace</p>
+          <p className="text-xs text-brand-surface/90 mt-1">Sign in to your authorized institutional workspace</p>
         </div>
 
         {/* Role Tab Selector */}

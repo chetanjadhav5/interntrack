@@ -223,7 +223,7 @@ const InstitutionalConsentModal = ({
             type="button"
             onClick={handleSubmitApplication}
             disabled={!allPointsChecked || loading}
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary text-xs font-bold shadow-md shadow-primary/20 flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand to-primary hover:from-brand/90 hover:to-primary/90 text-on-primary text-xs font-bold shadow-md shadow-brand/20 flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
             {loading ? (
               <>
