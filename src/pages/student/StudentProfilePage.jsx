@@ -17,8 +17,11 @@ import {
   Globe,
   Eye,
   ExternalLink,
-  FileCheck
+  FileCheck,
+  ScanFace,
+  Camera
 } from 'lucide-react';
+import FaceRegistrationModal from '../../components/common/FaceRegistrationModal';
 
 const COMMON_SKILLS = [
   'React', 'Node.js', 'Python', 'Java', 'Spring Boot', 'SQL', 'PostgreSQL',
@@ -57,6 +60,10 @@ const StudentProfilePage = () => {
   const [isPanIndia, setIsPanIndia] = useState(true);
   const [preferredLocations, setPreferredLocations] = useState(['Pune']);
 
+  // Face ID Biometrics State
+  const [faceBiometrics, setFaceBiometrics] = useState(null);
+  const [isFaceModalOpen, setIsFaceModalOpen] = useState(false);
+
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -79,6 +86,7 @@ const StudentProfilePage = () => {
         setResumeUrl(data.resume_url || 'https://example.com/resumes/alex_patil_resume.pdf');
         setIsPanIndia(data.is_pan_india !== undefined ? data.is_pan_india : true);
         setPreferredLocations(data.preferred_locations || ['Pune', 'Bengaluru']);
+        setFaceBiometrics(data.face_biometrics || null);
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
@@ -652,6 +660,76 @@ const StudentProfilePage = () => {
           )}
         </div>
 
+        {/* Section 6: Biometric Face ID & Anti-Spoofing Registration */}
+        <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-outline-variant/40 pb-3 gap-2">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                <ScanFace className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="font-headline font-bold text-base text-on-surface">Biometric Face ID & Liveness Check</h2>
+                <p className="text-[11px] text-on-surface-variant">
+                  Enrolled biometric template used for facial verification and eye-blink liveness checks on daily check-in/out.
+                </p>
+              </div>
+            </div>
+
+            {faceBiometrics?.registered ? (
+              <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold inline-flex items-center gap-1.5 border border-emerald-200 self-start sm:self-auto">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Face ID Active & Verified</span>
+              </span>
+            ) : (
+              <span className="px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-[11px] font-bold inline-flex items-center gap-1.5 border border-amber-200 self-start sm:self-auto">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                <span>Face ID Not Enrolled</span>
+              </span>
+            )}
+          </div>
+
+          <div className="p-5 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-primary/30 bg-slate-100 flex items-center justify-center flex-shrink-0 shadow-sm">
+                {faceBiometrics?.photo_url ? (
+                  <img src={faceBiometrics.photo_url} alt="Enrolled Face" className="w-full h-full object-cover" />
+                ) : (
+                  <ScanFace className="w-8 h-8 text-on-surface-variant" />
+                )}
+              </div>
+              <div className="space-y-1 text-xs">
+                <p className="font-headline font-bold text-sm text-on-surface">
+                  {faceBiometrics?.registered ? '128-Dimensional Biometric Descriptor' : 'No Facial Profile Template'}
+                </p>
+                <p className="text-[11px] text-on-surface-variant">
+                  {faceBiometrics?.registered
+                    ? `Enrolled with Eye Blink Liveness on ${new Date(faceBiometrics.registered_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`
+                    : 'Enrollment is mandatory before taking attendance for active internships.'}
+                </p>
+                {faceBiometrics?.registered && (
+                  <div className="flex items-center gap-2 pt-0.5">
+                    <span className="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold border border-purple-200">
+                      Anti-Spoofing: Active
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-200">
+                      Method: Real-Time Blink
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsFaceModalOpen(true)}
+              className="px-5 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 shadow-md shadow-primary/20 flex items-center justify-center gap-2 transition"
+            >
+              <Camera className="w-4 h-4" />
+              <span>{faceBiometrics?.registered ? 'Update / Re-scan Face ID' : 'Enroll Face ID (Webcam)'}</span>
+            </button>
+          </div>
+        </div>
+
         {/* Submit Profile Details Button */}
         <div className="flex items-center justify-between p-6 rounded-3xl bg-surface-container-lowest border border-outline-variant/60 shadow-sm">
           <p className="text-xs text-on-surface-variant max-w-md">
@@ -677,7 +755,7 @@ const StudentProfilePage = () => {
         </div>
       </form>
 
-      {/* Section 6: Preferred Locations (Instant Save, No Verification Reset) */}
+      {/* Section 7: Preferred Locations (Instant Save, No Verification Reset) */}
       <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-4">
         <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
           <div className="flex items-center gap-2">
@@ -739,6 +817,14 @@ const StudentProfilePage = () => {
           </button>
         </div>
       </div>
+
+      {/* Biometric Face ID Enrollment Modal */}
+      <FaceRegistrationModal
+        isOpen={isFaceModalOpen}
+        onClose={() => setIsFaceModalOpen(false)}
+        onRegistered={(bio) => setFaceBiometrics(bio)}
+        currentBiometrics={faceBiometrics}
+      />
     </div>
   );
 };

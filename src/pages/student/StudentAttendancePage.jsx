@@ -20,8 +20,11 @@ import {
   Check,
   X,
   Sparkles,
-  Info
+  Info,
+  ScanFace,
+  Eye
 } from 'lucide-react';
+import FaceVerificationModal from '../../components/common/FaceVerificationModal';
 
 const StudentAttendancePage = () => {
   const [loading, setLoading] = useState(true);
@@ -41,8 +44,10 @@ const StudentAttendancePage = () => {
   const [actionMsg, setActionMsg] = useState('');
   const [actionErr, setActionErr] = useState('');
 
-  // Checkout Modal State
+  // Checkout & Face Verification Modal State
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [isFaceVerifyModalOpen, setIsFaceVerifyModalOpen] = useState(false);
+  const [faceModalActionType, setFaceModalActionType] = useState('CHECK_IN');
   const [workSummary, setWorkSummary] = useState('');
   const [customHours, setCustomHours] = useState('8.5');
 
@@ -91,79 +96,25 @@ const StudentAttendancePage = () => {
     }
   };
 
-  const handleCheckIn = async () => {
-    if (!data?.internship) return;
-    setActionLoading(true);
-    setActionErr('');
-    setActionMsg('');
-
-    // Simulate precise GPS proximate to registered company coordinates
-    const simulateLat = data.internship.latitude + (Math.random() - 0.5) * 0.0008;
-    const simulateLng = data.internship.longitude + (Math.random() - 0.5) * 0.0008;
-
-    try {
-      const token = localStorage.getItem('ghr_token');
-      const res = await fetch('/api/student/attendance/check-in', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          latitude: simulateLat,
-          longitude: simulateLng,
-          photo_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
-        })
-      });
-
-      const resJson = await res.json();
-      if (res.ok) {
-        setActionMsg(resJson.message);
-        await fetchAttendanceHistory();
-      } else {
-        setActionErr(resJson.error || 'Check-in failed');
-      }
-    } catch {
-      setActionErr('Network error while checking in');
-    } finally {
-      setActionLoading(false);
+  const handleOpenCheckInModal = () => {
+    if (!data?.face_biometrics?.registered) {
+      setActionErr('Please enroll your Biometric Face ID in your Profile before checking in.');
+      return;
     }
+    setFaceModalActionType('CHECK_IN');
+    setIsFaceVerifyModalOpen(true);
   };
 
-  const handleCheckOutSubmit = async (e) => {
-    if (e) e.preventDefault();
-    setActionLoading(true);
+  const handleProceedToBiometricCheckout = () => {
+    setShowCheckoutModal(false);
+    setFaceModalActionType('CHECK_OUT');
+    setIsFaceVerifyModalOpen(true);
+  };
+
+  const handleBiometricVerificationSuccess = async (result) => {
+    setActionMsg(result.message || 'Biometric verification successful!');
     setActionErr('');
-    setActionMsg('');
-
-    try {
-      const token = localStorage.getItem('ghr_token');
-      const res = await fetch('/api/student/attendance/check-out', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          hours_worked: parseFloat(customHours) || 8.0,
-          work_summary: workSummary || 'Completed daily assigned engineering tasks, code reviews, and sprint items.'
-        })
-      });
-
-      const resJson = await res.json();
-      if (res.ok) {
-        setActionMsg(resJson.message);
-        setShowCheckoutModal(false);
-        setWorkSummary('');
-        await fetchAttendanceHistory();
-      } else {
-        setActionErr(resJson.error || 'Check-out failed');
-      }
-    } catch {
-      setActionErr('Network error while checking out');
-    } finally {
-      setActionLoading(false);
-    }
+    await fetchAttendanceHistory();
   };
 
   const activeInternship = data?.internship;
@@ -332,31 +283,20 @@ const StudentAttendancePage = () => {
               {!todayRecord ? (
                 <button
                   type="button"
-                  onClick={handleCheckIn}
-                  disabled={actionLoading}
-                  className="w-full md:w-auto px-8 py-3.5 rounded-2xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50"
+                  onClick={handleOpenCheckInModal}
+                  className="w-full md:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary font-bold text-xs shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all active:scale-95"
                 >
-                  {actionLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Verifying GPS & Site...</span>
-                    </>
-                  ) : (
-                    <>
-                      <MapPin className="w-4 h-4" />
-                      <span>Check In Now (300m GPS)</span>
-                    </>
-                  )}
+                  <ScanFace className="w-4 h-4" />
+                  <span>Biometric Check In (Blink Liveness)</span>
                 </button>
               ) : isCheckedIn ? (
                 <button
                   type="button"
                   onClick={() => setShowCheckoutModal(true)}
-                  disabled={actionLoading}
-                  className="w-full md:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-purple-700 to-indigo-800 hover:from-purple-800 hover:to-indigo-900 text-white font-bold text-xs shadow-lg shadow-purple-900/30 flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50"
+                  className="w-full md:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-purple-700 to-indigo-800 hover:from-purple-800 hover:to-indigo-900 text-white font-bold text-xs shadow-lg shadow-purple-900/30 flex items-center justify-center gap-2 transition-all active:scale-95"
                 >
-                  <Clock className="w-4 h-4" />
-                  <span>Check Out & Log Hours</span>
+                  <ScanFace className="w-4 h-4" />
+                  <span>Biometric Check Out & Log Hours</span>
                 </button>
               ) : (
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold text-center">
@@ -406,6 +346,7 @@ const StudentAttendancePage = () => {
               </thead>
               <tbody className="divide-y divide-outline-variant/30 font-medium">
                 {records.map((rec) => {
+                  const isShiftComplete = rec.is_completed !== undefined ? rec.is_completed : (Boolean(rec.checkout_time) || rec.status === 'COMPLETED');
                   const checkinFormatted = rec.checkin_time
                     ? new Date(rec.checkin_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     : 'N/A';
@@ -413,9 +354,11 @@ const StudentAttendancePage = () => {
                     ? new Date(rec.checkout_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     : rec.status === 'CHECKED_IN'
                     ? 'In Progress'
-                    : 'Auto (8.0h)';
+                    : isShiftComplete
+                    ? 'Auto (8.0h)'
+                    : 'Not Checked Out';
 
-                  const hours = rec.hours_worked ? parseFloat(rec.hours_worked) : 8.0;
+                  const hours = isShiftComplete ? (rec.hours_worked ? parseFloat(rec.hours_worked) : 8.0) : 0.0;
 
                   return (
                     <tr key={rec.id} className="hover:bg-surface-container-low/60 transition-colors">
@@ -429,18 +372,31 @@ const StudentAttendancePage = () => {
                         {checkoutFormatted}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs font-mono">
-                          {hours.toFixed(1)} hrs
-                        </span>
+                        {isShiftComplete ? (
+                          <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 font-bold text-xs font-mono border border-emerald-200">
+                            {hours.toFixed(1)} hrs
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 font-bold text-xs font-mono border border-amber-200">
+                            0.0 hrs (Uncredited)
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Verified ({rec.distance_meters || 24}m)</span>
-                        </span>
+                        {isShiftComplete ? (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Biometric Verified ({rec.distance_meters || 24}m)</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700">
+                            <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                            <span>Incomplete Shift (No Check-Out)</span>
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-on-surface text-[11px] max-w-xs truncate">
-                        {rec.work_summary || 'Completed daily engineering tasks, feature development, and code reviews.'}
+                        {rec.work_summary || (isShiftComplete ? 'Completed daily engineering tasks.' : 'Unclosed shift: No check-out timestamp recorded.')}
                       </td>
                     </tr>
                   );
@@ -469,7 +425,7 @@ const StudentAttendancePage = () => {
               </button>
             </div>
 
-            <form onSubmit={handleCheckOutSubmit} className="space-y-4">
+            <form onSubmit={(e) => { e.preventDefault(); handleProceedToBiometricCheckout(); }} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-on-surface uppercase tracking-wider mb-1.5">
                   Logged Working Hours Today
@@ -485,7 +441,7 @@ const StudentAttendancePage = () => {
                   className="w-full px-3.5 py-2.5 rounded-xl border border-outline-variant bg-white text-xs font-mono font-bold focus:ring-2 focus:ring-primary outline-none"
                 />
                 <p className="text-[10px] text-on-surface-variant mt-1">
-                  Default standard full-day shift is 8.5 hours.
+                  Standard shift is 8.5 hours. Both check-in and check-out with biometric liveness are required to credit shift hours.
                 </p>
               </div>
 
@@ -513,26 +469,27 @@ const StudentAttendancePage = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={actionLoading}
-                  className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all"
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-800 hover:from-purple-800 hover:to-indigo-900 text-white font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all"
                 >
-                  {actionLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Saving Log...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Check className="w-4 h-4" />
-                      <span>Confirm Check Out</span>
-                    </>
-                  )}
+                  <ScanFace className="w-4 h-4" />
+                  <span>Verify Face & Check Out</span>
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Face Verification & Blink Liveness Modal */}
+      <FaceVerificationModal
+        isOpen={isFaceVerifyModalOpen}
+        onClose={() => setIsFaceVerifyModalOpen(false)}
+        actionType={faceModalActionType}
+        internship={activeInternship}
+        customHours={customHours}
+        workSummary={workSummary}
+        onSuccess={handleBiometricVerificationSuccess}
+      />
     </div>
   );
 };

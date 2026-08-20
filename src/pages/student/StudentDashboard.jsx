@@ -23,8 +23,11 @@ import {
   Check,
   X,
   TrendingUp,
-  Sparkles
+  Sparkles,
+  ScanFace,
+  Eye
 } from 'lucide-react';
+import FaceVerificationModal from '../../components/common/FaceVerificationModal';
 
 const StudentDashboard = () => {
   const { user } = useAuth();
@@ -40,10 +43,13 @@ const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-  // Check-in / Check-out State
+  // Check-in / Check-out & Face Verification State
   const [checkinLoading, setCheckinLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [isFaceVerifyModalOpen, setIsFaceVerifyModalOpen] = useState(false);
+  const [faceModalActionType, setFaceModalActionType] = useState('CHECK_IN');
+  const [isFaceRegistered, setIsFaceRegistered] = useState(false);
   const [workSummary, setWorkSummary] = useState('');
   const [customHours, setCustomHours] = useState('8.5');
   const [checkinDistance, setCheckinDistance] = useState(null);
@@ -86,6 +92,7 @@ const StudentDashboard = () => {
       if (profileRes.ok) {
         const prof = await profileRes.json();
         setProfileData(prof);
+        setIsFaceRegistered(Boolean(prof.face_biometrics?.registered));
         if (prof.profile_completion_percent < 100 || prof.verification_status !== 'VERIFIED') {
           setShowCompletionModal(true);
         }
@@ -95,6 +102,7 @@ const StudentDashboard = () => {
         const activeData = await activeRes.json();
         setActiveInternship(activeData.internship);
         setTodayCheckin(activeData.today_checkin);
+        if (activeData.face_registered !== undefined) setIsFaceRegistered(activeData.face_registered);
         if (activeData.total_hours_worked !== undefined) setTotalHoursWorked(activeData.total_hours_worked);
         if (activeData.days_attended !== undefined) setDaysAttended(activeData.days_attended);
         if (activeData.average_daily_hours !== undefined) setAvgDailyHours(activeData.average_daily_hours);
@@ -111,83 +119,32 @@ const StudentDashboard = () => {
     }
   };
 
-  const handlePerformCheckIn = async () => {
-    if (!activeInternship) return;
-    setCheckinLoading(true);
-    setCheckinError('');
-    setCheckinMessage('');
-
-    // Get live GPS position or simulate proximate office coordinates
-    const simulateLat = activeInternship.latitude + (Math.random() - 0.5) * 0.0008; // ~30m
-    const simulateLng = activeInternship.longitude + (Math.random() - 0.5) * 0.0008;
-
-    try {
-      const token = localStorage.getItem('ghr_token');
-      const res = await fetch('/api/student/attendance/check-in', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          latitude: simulateLat,
-          longitude: simulateLng,
-          photo_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'
-        })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        setTodayCheckin(data.record);
-        setCheckinDistance(data.distance_meters);
-        setCheckinMessage(data.message);
-        await fetchDashboardData();
-      } else {
-        setCheckinError(data.error || 'Check-in failed');
-        setCheckinDistance(data.distance_meters);
-      }
-    } catch (err) {
-      setCheckinError('Network error performing geofenced check-in');
-    } finally {
-      setCheckinLoading(false);
+  const handleOpenCheckinModal = () => {
+    if (!isFaceRegistered) {
+      setCheckinError('Please enroll your Biometric Face ID in your Profile section before checking in.');
+      return;
     }
+    setFaceModalActionType('CHECK_IN');
+    setIsFaceVerifyModalOpen(true);
   };
 
-  const handlePerformCheckOut = async (e) => {
-    if (e) e.preventDefault();
-    setCheckoutLoading(true);
-    setCheckinError('');
-    setCheckinMessage('');
+  const handleOpenCheckoutModal = () => {
+    setShowCheckoutModal(true);
+  };
 
-    try {
-      const token = localStorage.getItem('ghr_token');
-      const res = await fetch('/api/student/attendance/check-out', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          hours_worked: parseFloat(customHours) || 8.5,
-          work_summary: workSummary || 'Completed daily assigned engineering sprint items and code review.'
-        })
-      });
+  const handleProceedToBiometricCheckout = () => {
+    setShowCheckoutModal(false);
+    setFaceModalActionType('CHECK_OUT');
+    setIsFaceVerifyModalOpen(true);
+  };
 
-      const data = await res.json();
-      if (res.ok) {
-        setTodayCheckin(data.record);
-        setCheckinMessage(data.message);
-        setShowCheckoutModal(false);
-        setWorkSummary('');
-        await fetchDashboardData();
-      } else {
-        setCheckinError(data.error || 'Check-out failed');
-      }
-    } catch {
-      setCheckinError('Network error performing check-out');
-    } finally {
-      setCheckoutLoading(false);
+  const handleBiometricVerificationSuccess = async (result) => {
+    if (result.record) {
+      setTodayCheckin(result.record);
     }
+    setCheckinMessage(result.message || 'Biometric verification successful!');
+    setCheckinError('');
+    await fetchDashboardData();
   };
 
   if (loading) {
@@ -362,24 +319,14 @@ const StudentDashboard = () => {
                 {!todayCheckin ? (
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
                     <p className="text-xs text-on-surface-variant">
-                      Click check-in to verify your live GPS coordinates against the registered company location.
+                      Requires active Face ID with real-time eye blink liveness verification and 300m GPS geofencing.
                     </p>
                     <button
-                      onClick={handlePerformCheckIn}
-                      disabled={checkinLoading}
-                      className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 disabled:opacity-60 flex items-center justify-center gap-2 shadow-sm shadow-primary/30 transition-all"
+                      onClick={handleOpenCheckinModal}
+                      className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-primary/20 transition-all"
                     >
-                      {checkinLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Verifying GPS...</span>
-                        </>
-                      ) : (
-                        <>
-                          <MapPin className="w-4 h-4" />
-                          <span>Verify Geofence & Check In</span>
-                        </>
-                      )}
+                      <ScanFace className="w-4 h-4" />
+                      <span>Biometric Check In (Blink Liveness)</span>
                     </button>
                   </div>
                 ) : isCheckedIn ? (
@@ -389,12 +336,11 @@ const StudentDashboard = () => {
                       <span className="text-emerald-700 font-semibold ml-2">({todayCheckin.distance_meters}m from center)</span>
                     </div>
                     <button
-                      onClick={() => setShowCheckoutModal(true)}
-                      disabled={checkoutLoading}
+                      onClick={handleOpenCheckoutModal}
                       className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-800 hover:from-purple-800 hover:to-indigo-900 text-white text-xs font-bold shadow-md flex items-center justify-center gap-2 transition-all"
                     >
-                      <Clock className="w-4 h-4" />
-                      <span>Check Out & Log Hours</span>
+                      <ScanFace className="w-4 h-4" />
+                      <span>Biometric Check Out & Log Hours</span>
                     </button>
                   </div>
                 ) : (
@@ -599,27 +545,29 @@ const StudentDashboard = () => {
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  disabled={checkoutLoading}
-                  className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all"
+                  type="button"
+                  onClick={handleProceedToBiometricCheckout}
+                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-700 to-indigo-800 hover:from-purple-800 hover:to-indigo-900 text-white font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-1.5 transition-all"
                 >
-                  {checkoutLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Saving Log...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Check className="w-4 h-4" />
-                      <span>Confirm Check Out</span>
-                    </>
-                  )}
+                  <ScanFace className="w-4 h-4" />
+                  <span>Verify Face & Check Out</span>
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Face Verification & Blink Liveness Modal */}
+      <FaceVerificationModal
+        isOpen={isFaceVerifyModalOpen}
+        onClose={() => setIsFaceVerifyModalOpen(false)}
+        actionType={faceModalActionType}
+        internship={activeInternship}
+        customHours={customHours}
+        workSummary={workSummary}
+        onSuccess={handleBiometricVerificationSuccess}
+      />
     </div>
   );
 };

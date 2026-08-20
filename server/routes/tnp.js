@@ -74,20 +74,19 @@ router.get('/students', authenticate, requireRole('TNP'), (req, res) => {
       ? findById('users', student.assigned_class_teacher_id)
       : null;
 
-    // Calculate total hours worked across student's internships
+    // Calculate total hours worked across student's internships (STRICT: completed shifts with check-out only)
     const studentInternships = find('internships', { student_id: student.id }) || [];
     let totalHoursWorked = 0;
     let daysAttended = 0;
     studentInternships.forEach(intern => {
       const attendance = find('attendance_records', { internship_id: intern.id }) || [];
       attendance.forEach(a => {
-        totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+        if (a.checkout_time || a.status === 'COMPLETED') {
+          totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+          daysAttended += 1;
+        }
       });
-      daysAttended += attendance.length;
     });
-    if (totalHoursWorked === 0 && daysAttended > 0) {
-      totalHoursWorked = daysAttended * 8.0;
-    }
     totalHoursWorked = Math.round(totalHoursWorked * 10) / 10;
     const avgDailyHours = daysAttended > 0 ? Math.round((totalHoursWorked / daysAttended) * 10) / 10 : 8.0;
 
@@ -153,13 +152,12 @@ router.get('/students/:id/progress', authenticate, requireRole('TNP'), (req, res
 
   if (latestInternship) {
     const attendance = find('attendance_records', { internship_id: latestInternship.id }) || [];
-    attendanceCount = attendance.length;
     attendance.forEach(a => {
-      totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+      if (a.checkout_time || a.status === 'COMPLETED') {
+        totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+        attendanceCount += 1;
+      }
     });
-    if (totalHoursWorked === 0 && attendanceCount > 0) {
-      totalHoursWorked = attendanceCount * 8.0;
-    }
     totalHoursWorked = Math.round(totalHoursWorked * 10) / 10;
     reports = find('weekly_reports', { internship_id: latestInternship.id }) || [];
     cert = findOne('certificates', { internship_id: latestInternship.id });
