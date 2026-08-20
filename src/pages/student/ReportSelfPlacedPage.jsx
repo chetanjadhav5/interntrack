@@ -140,7 +140,8 @@ const ReportSelfPlacedPage = () => {
           end_date: endDate,
           requested_mentor_id: selectedMentorId,
           is_offsite_address: isOffsite,
-          first_checkin_photo_url: firstCheckinPhotoUrl
+          first_checkin_photo_url: firstCheckinPhotoUrl,
+          gstin_trust_data: gstinVerifiedData?.trust_data || null
         })
       });
 

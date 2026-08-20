@@ -565,7 +565,8 @@ router.post('/internships/report-self-placed', authenticate, requireRole('STUDEN
     end_date,
     requested_mentor_id,
     is_offsite_address,
-    first_checkin_photo_url
+    first_checkin_photo_url,
+    gstin_trust_data
   } = req.body;
 
   if (!company_name || !office_address || !latitude || !longitude || !offer_letter_url || !start_date || !end_date) {
@@ -588,6 +589,7 @@ router.post('/internships/report-self-placed', authenticate, requireRole('STUDEN
     placement_type: 'SELF_PLACED',
     company_name,
     gstin: gstin || 'UNREGISTERED',
+    gstin_trust_data: gstin_trust_data || null,
     role_position: role_position || 'Software Engineering Intern',
     office_address,
     latitude: parseFloat(latitude),
