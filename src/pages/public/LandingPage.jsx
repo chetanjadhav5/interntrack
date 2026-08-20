@@ -19,15 +19,8 @@ import {
 } from 'lucide-react';
 
 const LandingPage = () => {
-  const { user, quickSwitchRole } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
-
-  const handleDemoPersona = async (email, password, route) => {
-    const res = await quickSwitchRole(email, password);
-    if (res.success) {
-      navigate(route);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background text-on-background">
@@ -130,13 +123,13 @@ const LandingPage = () => {
                 Profile completion, Smart Eligibility check, Geofenced check-in, GitHub score, and Friday weekly reports.
               </p>
             </div>
-            <button
-              onClick={() => handleDemoPersona('alex.patil@ghr.edu', 'Student@123', '/student/dashboard')}
+            <Link
+              to="/auth/login"
               className="mt-6 w-full py-2.5 rounded-xl bg-blue-50 text-primary hover:bg-primary hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
             >
-              <span>Explore Student</span>
+              <span>Access Student Portal</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
 
           {/* Faculty / Class Teacher */}
@@ -150,13 +143,13 @@ const LandingPage = () => {
                 Class teacher profile verification, weekly report scoring with mandatory feedback, and certificate issuance.
               </p>
             </div>
-            <button
-              onClick={() => handleDemoPersona('classteacher.cs3@ghr.edu', 'Faculty@123', '/faculty/dashboard')}
+            <Link
+              to="/auth/login"
               className="mt-6 w-full py-2.5 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
             >
-              <span>Explore Faculty</span>
+              <span>Access Faculty Portal</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
 
           {/* T&P Department */}
@@ -170,13 +163,13 @@ const LandingPage = () => {
                 Campus placement drives, Offer Verification hub, Student Directory with progress sidebar, and analytics.
               </p>
             </div>
-            <button
-              onClick={() => handleDemoPersona('tnp.cs@ghr.edu', 'Tnp@123', '/tnp/dashboard')}
+            <Link
+              to="/auth/login"
               className="mt-6 w-full py-2.5 rounded-xl bg-purple-50 text-purple-700 hover:bg-purple-600 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
             >
-              <span>Explore T&P</span>
+              <span>Access T&P Portal</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
 
           {/* Corporate Recruiter */}
@@ -190,13 +183,13 @@ const LandingPage = () => {
                 Post drives, stage pipeline (GD/Interview), Bulk ZIP/PDF offer letter upload with Student ID matcher.
               </p>
             </div>
-            <button
-              onClick={() => handleDemoPersona('recruiter@google.com', 'Company@123', '/company/dashboard')}
+            <Link
+              to="/auth/login"
               className="mt-6 w-full py-2.5 rounded-xl bg-amber-50 text-amber-700 hover:bg-amber-600 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
             >
-              <span>Explore Company</span>
+              <span>Access Company Portal</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
 
           {/* HOD / Super Admin */}
@@ -210,13 +203,13 @@ const LandingPage = () => {
                 System approvals, Class Teacher role transfer with auto data reallocation, and skill gap matrix.
               </p>
             </div>
-            <button
-              onClick={() => handleDemoPersona('admin@ghr.edu', 'Admin@123', '/admin/dashboard')}
+            <Link
+              to="/auth/login"
               className="mt-6 w-full py-2.5 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
             >
-              <span>Explore Admin</span>
+              <span>Access Admin Portal</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           </div>
         </div>
       </section>

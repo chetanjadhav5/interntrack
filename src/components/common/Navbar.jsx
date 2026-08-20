@@ -5,10 +5,9 @@ import { useNotifications } from '../../context/NotificationContext';
 import { Bell, User, LogOut, ChevronDown, CheckCircle, AlertCircle, Building2, Briefcase, GraduationCap, Shield } from 'lucide-react';
 
 const Navbar = () => {
-  const { user, logout, quickSwitchRole } = useAuth();
+  const { user, logout } = useAuth();
   const { notifications, totalUnread, markAsRead } = useNotifications();
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showRoleSwitcher, setShowRoleSwitcher] = useState(false);
   const navigate = useNavigate();
 
   const getRoleBadge = (role) => {
@@ -25,18 +24,6 @@ const Navbar = () => {
         return { label: 'HOD / Super Admin', color: 'bg-rose-100 text-rose-800 border-rose-200', icon: Shield };
       default:
         return { label: 'Guest', color: 'bg-gray-100 text-gray-800 border-gray-200', icon: User };
-    }
-  };
-
-  const handleRoleSwitch = async (email, password) => {
-    setShowRoleSwitcher(false);
-    const res = await quickSwitchRole(email, password);
-    if (res.success) {
-      if (res.user.role === 'STUDENT') navigate('/student/dashboard');
-      else if (res.user.role === 'FACULTY') navigate('/faculty/dashboard');
-      else if (res.user.role === 'TNP') navigate('/tnp/dashboard');
-      else if (res.user.role === 'COMPANY') navigate('/company/dashboard');
-      else if (res.user.role === 'ADMIN') navigate('/admin/dashboard');
     }
   };
 
@@ -64,102 +51,6 @@ const Navbar = () => {
                 </span>
               </div>
             </Link>
-          </div>
-
-          {/* Center: Live Demo Quick Switcher Badge */}
-          <div className="hidden lg:flex items-center gap-2">
-            <div className="relative">
-              <button
-                onClick={() => setShowRoleSwitcher(!showRoleSwitcher)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high border border-outline-variant text-xs font-semibold text-on-surface hover:bg-surface-container-highest transition-all"
-                title="Switch demo persona for testing"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                <span>Demo Switcher:</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold border ${roleInfo.color}`}>
-                  {roleInfo.label}
-                </span>
-                <ChevronDown className="w-3.5 h-3.5 text-on-surface-variant" />
-              </button>
-
-              {showRoleSwitcher && (
-                <div className="absolute left-0 mt-2 w-72 rounded-2xl bg-white border border-outline-variant shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2">
-                  <div className="px-3 py-1.5 text-[11px] font-bold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant/60">
-                    Switch Test Persona
-                  </div>
-                  <button
-                    onClick={() => handleRoleSwitch('alex.patil@ghr.edu', 'Student@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-blue-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">Alex Patil (Student)</p>
-                      <p className="text-[11px] text-on-surface-variant">100% Profile Verified | Active Google Intern</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">Student</span>
-                  </button>
-                  <button
-                    onClick={() => handleRoleSwitch('priya.sharma@ghr.edu', 'Student@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-blue-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">Priya Sharma (Student)</p>
-                      <p className="text-[11px] text-on-surface-variant">90% Profile Pending | Java Candidate</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-bold">90% Pending</span>
-                  </button>
-                  <button
-                    onClick={() => handleRoleSwitch('classteacher.cs3@ghr.edu', 'Faculty@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-emerald-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">Dr. Suresh Verma (Class Teacher)</p>
-                      <p className="text-[11px] text-on-surface-variant">CS 3rd Year | Profile & Report Verifier</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold">Class Teacher</span>
-                  </button>
-                  <button
-                    onClick={() => handleRoleSwitch('mentor.cs3@ghr.edu', 'Faculty@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-emerald-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">Prof. Anjali Mehta (Mentor)</p>
-                      <p className="text-[11px] text-on-surface-variant">Internship Mentor | Certificate Issuer</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-teal-100 text-teal-700 font-bold">Mentor</span>
-                  </button>
-                  <button
-                    onClick={() => handleRoleSwitch('tnp.cs@ghr.edu', 'Tnp@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-purple-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">Prof. Rajesh Kulkarni (T&P Head)</p>
-                      <p className="text-[11px] text-on-surface-variant">Offer Verifier | Drive Manager</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 font-bold">T&P Head</span>
-                  </button>
-                  <button
-                    onClick={() => handleRoleSwitch('recruiter@google.com', 'Company@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-amber-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">Google India Recruiter</p>
-                      <p className="text-[11px] text-on-surface-variant">Bulk Offers | SDE Drive</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-bold">Company</span>
-                  </button>
-                  <button
-                    onClick={() => handleRoleSwitch('admin@ghr.edu', 'Admin@123')}
-                    className="w-full text-left px-3 py-2 hover:bg-rose-50 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <p className="font-bold text-on-surface">HOD / Super Admin</p>
-                      <p className="text-[11px] text-on-surface-variant">Role Transfers | System Approvals</p>
-                    </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-bold">Admin</span>
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
 
           {/* Right Action Icons & User Profile */}
