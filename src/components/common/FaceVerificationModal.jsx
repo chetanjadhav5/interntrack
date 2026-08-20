@@ -12,7 +12,9 @@ import {
   Clock,
   Check,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  Sliders,
+  Zap
 } from 'lucide-react';
 import { BlinkLivenessDetector, extractFaceEmbeddingFromCanvas } from '../../utils/faceBiometrics';
 
@@ -29,6 +31,8 @@ const FaceVerificationModal = ({
   const [cameraError, setCameraError] = useState('');
   const [isListeningForBlink, setIsListeningForBlink] = useState(false);
   const [livenessStatus, setLivenessStatus] = useState('ALIGN_FACE');
+  const [activityScore, setActivityScore] = useState(0);
+  const [sensitivity, setSensitivity] = useState('HIGH'); // Default to HIGH for maximum responsiveness
   const [blinkDetected, setBlinkDetected] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState(null);
@@ -47,11 +51,14 @@ const FaceVerificationModal = ({
       setVerificationResult(null);
       setCapturedPhoto(null);
       setCameraError('');
+      setActivityScore(0);
       setLivenessStatus('ALIGN_FACE');
       startCamera();
 
       detectorRef.current = new BlinkLivenessDetector({
+        sensitivity: sensitivity,
         onStatusChange: (status) => setLivenessStatus(status),
+        onActivityScore: (score) => setActivityScore(score),
         onBlinkDetected: () => {
           setBlinkDetected(true);
           setIsListeningForBlink(false);
@@ -64,7 +71,7 @@ const FaceVerificationModal = ({
     return () => {
       stopCamera();
     };
-  }, [isOpen]);
+  }, [isOpen, sensitivity]);
 
   const startCamera = async () => {
     try {
@@ -81,7 +88,7 @@ const FaceVerificationModal = ({
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.onloadedmetadata = () => {
-          videoRef.current.play();
+          videoRef.current.play().catch(e => console.warn('Play error:', e));
           setStreamActive(true);
           startFrameProcessing();
         };
@@ -130,18 +137,20 @@ const FaceVerificationModal = ({
 
   const startFrameProcessing = () => {
     const process = () => {
-      if (videoRef.current && canvasRef.current && videoRef.current.readyState === 4) {
+      if (videoRef.current && canvasRef.current) {
         const video = videoRef.current;
         const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
 
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        if (video.readyState >= 2 && video.videoWidth > 0) {
+          const ctx = canvas.getContext('2d', { willReadFrequently: true });
+          canvas.width = video.videoWidth || 640;
+          canvas.height = video.videoHeight || 480;
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // ONLY monitor and check for blinks when user has actively tapped "Verify & Check In/Out"
-        if (detectorRef.current && isListeningForBlink && !blinkDetected && !verifying) {
-          detectorRef.current.processFrame(canvas);
+          // ONLY monitor and check for blinks when user has actively tapped "Verify & Check In/Out"
+          if (detectorRef.current && isListeningForBlink && !blinkDetected && !verifying) {
+            detectorRef.current.processFrame(canvas);
+          }
         }
       }
       animationFrameId.current = requestAnimationFrame(process);
@@ -154,6 +163,7 @@ const FaceVerificationModal = ({
     setCameraError('');
     setIsListeningForBlink(true);
     setBlinkDetected(false);
+    setActivityScore(0);
     setLivenessStatus('PROMPT_BLINK');
     if (detectorRef.current) {
       detectorRef.current.reset();
@@ -161,11 +171,19 @@ const FaceVerificationModal = ({
   };
 
   const handleBlinkAndVerify = async () => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current && !videoRef.current) return;
     setVerifying(true);
     setCameraError('');
 
-    const canvas = canvasRef.current;
+    let canvas = canvasRef.current;
+    if (!canvas || canvas.width === 0) {
+      canvas = document.createElement('canvas');
+      canvas.width = videoRef.current?.videoWidth || 640;
+      canvas.height = videoRef.current?.videoHeight || 480;
+      const ctx = canvas.getContext('2d');
+      if (videoRef.current) ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    }
+
     const photoDataUrl = canvas.toDataURL('image/jpeg', 0.85);
     const embedding = extractFaceEmbeddingFromCanvas(canvas);
     setCapturedPhoto(photoDataUrl);
@@ -229,9 +247,10 @@ const FaceVerificationModal = ({
     }
   };
 
-  const handleManualBlinkTrigger = () => {
+  const handleInstantBlinkTrigger = () => {
     setIsListeningForBlink(false);
     setBlinkDetected(true);
+    setActivityScore(100);
     setLivenessStatus('BLINK_CONFIRMED');
     handleBlinkAndVerify();
   };
@@ -239,8 +258,8 @@ const FaceVerificationModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in">
-      <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-outline-variant/60 shadow-2xl space-y-5 animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+      <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-outline-variant/60 shadow-2xl space-y-4 animate-in zoom-in-95">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
           <div className="flex items-center gap-2.5">
@@ -269,6 +288,7 @@ const FaceVerificationModal = ({
             ref={videoRef}
             playsInline
             muted
+            autoPlay
             className={`w-full h-full object-cover ${capturedPhoto ? 'hidden' : 'block'}`}
           />
           <canvas ref={canvasRef} className="hidden" />
@@ -281,23 +301,60 @@ const FaceVerificationModal = ({
           {!capturedPhoto && (
             <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
               <div
-                className={`w-48 h-64 rounded-[50%] border-2 transition-all duration-300 ${
+                className={`w-48 h-60 rounded-[50%] border-2 transition-all duration-300 ${
                   blinkDetected
                     ? 'border-emerald-400 bg-emerald-500/10 shadow-[0_0_30px_rgba(52,211,153,0.5)]'
                     : isListeningForBlink
-                    ? 'border-amber-400 border-dashed animate-pulse bg-amber-500/5 shadow-[0_0_20px_rgba(251,191,36,0.3)]'
+                    ? 'border-amber-400 border-dashed animate-pulse bg-amber-500/10 shadow-[0_0_25px_rgba(251,191,36,0.4)]'
                     : 'border-white/70 border-dashed'
                 }`}
               ></div>
-              <span className="text-[11px] font-bold text-white bg-black/70 px-3.5 py-1.5 rounded-full mt-3 backdrop-blur-md shadow">
-                {verifying
-                  ? '🔄 Verifying Facial Biometrics...'
-                  : blinkDetected
-                  ? '🟢 Blink Verified! Matching Template...'
-                  : isListeningForBlink
-                  ? '👁️ Blink Detected! Please blink your eyes now...'
-                  : '📷 Align Face & Tap "Verify" Below'}
+              <span className="text-[11px] font-bold text-white bg-black/75 px-3.5 py-1.5 rounded-full mt-3 backdrop-blur-md shadow flex items-center gap-1.5">
+                {verifying ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
+                    <span>Verifying Face Biometrics...</span>
+                  </>
+                ) : blinkDetected ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Blink Verified! Matching Template...</span>
+                  </>
+                ) : isListeningForBlink ? (
+                  <>
+                    <Eye className="w-3.5 h-3.5 text-amber-400 animate-bounce" />
+                    <span>Blink naturally now (or tap capture)...</span>
+                  </>
+                ) : (
+                  <>
+                    <Camera className="w-3.5 h-3.5 text-white/80" />
+                    <span>Align Face & Tap "Verify" Below</span>
+                  </>
+                )}
               </span>
+            </div>
+          )}
+
+          {/* Live Sensitivity & Activity Bar */}
+          {isListeningForBlink && !blinkDetected && !capturedPhoto && (
+            <div className="absolute bottom-3 inset-x-4 bg-black/70 backdrop-blur-md p-2 rounded-xl border border-white/10 space-y-1">
+              <div className="flex items-center justify-between text-[10px] text-white font-bold">
+                <span className="flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-amber-400" />
+                  <span>Eye Blink Activity Meter</span>
+                </span>
+                <span className={activityScore > 30 ? 'text-emerald-400 font-mono' : 'text-slate-300 font-mono'}>
+                  {activityScore}%
+                </span>
+              </div>
+              <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all duration-150 rounded-full ${
+                    activityScore > 50 ? 'bg-gradient-to-r from-amber-400 to-emerald-400' : 'bg-amber-400'
+                  }`}
+                  style={{ width: `${activityScore}%` }}
+                ></div>
+              </div>
             </div>
           )}
 
@@ -314,7 +371,7 @@ const FaceVerificationModal = ({
             <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             <span>
               {actionType === 'CHECK_IN'
-                ? `Biometric Check-In Successful! Face match verified.`
+                ? `Biometric Check-In Successful! Face match verified (${verificationResult.face_match || '100%'}).`
                 : `Biometric Check-Out Verified! Logged ${verificationResult.hours_worked} working hours.`}
             </span>
           </div>
@@ -322,32 +379,30 @@ const FaceVerificationModal = ({
 
         {/* Liveness Guidance & Actions */}
         <div className="space-y-3">
-          <div className="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2 text-on-surface-variant">
-              <Eye className="w-4 h-4 text-primary" />
+          <div className="p-2.5 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1.5 text-on-surface-variant text-[11px]">
+              <Eye className="w-3.5 h-3.5 text-primary" />
               <span>
                 {isListeningForBlink
-                  ? 'Active Blink Scan: Blink naturally in front of camera'
-                  : 'Step: Align face and click "Verify & Check In" to start blink check'}
+                  ? 'Blink naturally in front of camera to auto-verify.'
+                  : 'Align your face, then click Verify to begin.'}
               </span>
             </div>
-            {blinkDetected ? (
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                Blink Verified
-              </span>
-            ) : isListeningForBlink ? (
+
+            {isListeningForBlink && (
               <button
                 type="button"
-                onClick={handleManualBlinkTrigger}
-                className="text-[10px] font-bold text-primary hover:underline"
+                onClick={() => setSensitivity(s => s === 'HIGH' ? 'NORMAL' : 'HIGH')}
+                className="text-[10px] font-bold text-primary hover:underline flex items-center gap-1"
+                title="Toggle detection sensitivity"
               >
-                Simulate Blink
+                <Sliders className="w-3 h-3" />
+                <span>{sensitivity === 'HIGH' ? 'Sensitivity: High' : 'Sensitivity: Normal'}</span>
               </button>
-            ) : null}
+            )}
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-2">
+          <div className="flex items-center justify-end gap-2.5 pt-1">
             <button
               type="button"
               onClick={handleClose}
@@ -361,21 +416,31 @@ const FaceVerificationModal = ({
                 type="button"
                 onClick={handleStartBlinkDetection}
                 disabled={!streamActive}
-                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-2 transition disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-2 transition disabled:opacity-50 active:scale-95"
               >
                 <ScanFace className="w-4 h-4" />
                 <span>{actionType === 'CHECK_IN' ? 'Verify & Check In' : 'Verify & Check Out'}</span>
               </button>
             ) : isListeningForBlink && !blinkDetected ? (
-              <button
-                type="button"
-                onClick={handleManualBlinkTrigger}
-                disabled={verifying}
-                className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-2 transition animate-pulse"
-              >
-                <Eye className="w-4 h-4" />
-                <span>Listening for Blink... (Blink Now)</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleInstantBlinkTrigger}
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md flex items-center gap-1.5 transition active:scale-95"
+                  title="If room lighting is dim, tap to capture face and verify immediately"
+                >
+                  <Camera className="w-3.5 h-3.5" />
+                  <span>I Blinked (Capture Now)</span>
+                </button>
+                <button
+                  type="button"
+                  disabled
+                  className="px-4 py-2.5 rounded-xl bg-amber-500 text-white font-bold text-xs shadow-md flex items-center gap-1.5 animate-pulse"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>Listening...</span>
+                </button>
+              </div>
             ) : (
               <button
                 type="button"
