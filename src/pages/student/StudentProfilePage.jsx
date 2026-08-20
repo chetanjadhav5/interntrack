@@ -430,7 +430,7 @@ const StudentProfilePage = () => {
                 </p>
               </div>
             </div>
-            <span className="px-3 py-1.5 rounded-xl bg-blue-100 text-primary font-headline font-black text-sm">
+            <span className="px-3 py-1.5 rounded-xl bg-purple-100 text-primary font-headline font-black text-sm">
               {profile?.experience_months || 0} Months Total
             </span>
           </div>
@@ -444,7 +444,7 @@ const StudentProfilePage = () => {
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="px-3 py-1.5 rounded-xl bg-blue-50 text-primary border border-blue-200 text-xs font-bold flex items-center gap-2"
+                className="px-3 py-1.5 rounded-xl bg-purple-50 text-primary border border-purple-200 text-xs font-bold flex items-center gap-2"
               >
                 <span>{skill}</span>
                 <button
@@ -642,7 +642,7 @@ const StudentProfilePage = () => {
             </div>
           ) : (
             <label className="border-2 border-dashed border-outline-variant hover:border-primary rounded-2xl p-6 text-center cursor-pointer transition-all block bg-surface-container-low/50 hover:bg-surface-container-low group">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-primary flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-primary flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
                 <Upload className="w-6 h-6" />
               </div>
               <p className="font-headline font-bold text-xs text-on-surface">
@@ -712,7 +712,7 @@ const StudentProfilePage = () => {
                     <span className="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold border border-purple-200">
                       Anti-Spoofing: Active
                     </span>
-                    <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-200">
+                    <span className="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold border border-purple-200">
                       Method: Real-Time Blink
                     </span>
                   </div>
@@ -769,7 +769,7 @@ const StudentProfilePage = () => {
             </div>
           </div>
 
-          <label className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-xs font-bold text-primary cursor-pointer">
+          <label className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-purple-50 border border-purple-200 text-xs font-bold text-primary cursor-pointer">
             <input
               type="checkbox"
               checked={isPanIndia}

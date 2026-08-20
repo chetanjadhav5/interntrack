@@ -8,14 +8,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        "primary": "#003fb1",
-        "primary-container": "#1a56db",
+        "primary": "#5f1bbf",
+        "primary-container": "#762edb",
         "on-primary": "#ffffff",
-        "on-primary-container": "#d4dcff",
-        "primary-fixed": "#dbe1ff",
-        "primary-fixed-dim": "#b5c4ff",
-        "on-primary-fixed": "#00174d",
-        "on-primary-fixed-variant": "#003dab",
+        "on-primary-container": "#f1e8ff",
+        "primary-fixed": "#ecdcff",
+        "primary-fixed-dim": "#d8baff",
+        "on-primary-fixed": "#250059",
+        "on-primary-fixed-variant": "#4c0da7",
         "secondary": "#006973",
         "secondary-container": "#85efff",
         "on-secondary": "#ffffff",
@@ -44,7 +44,7 @@ export default {
         "error-container": "#ffdad6",
         "on-error": "#ffffff",
         "on-error-container": "#93000a",
-        "surface-tint": "#1353d8",
+        "surface-tint": "#5f1bbf",
       },
       borderRadius: {
         "DEFAULT": "0.5rem",
@@ -81,8 +81,8 @@ export default {
       },
       boxShadow: {
         "card": "0px 1px 3px rgba(0,0,0,0.06), 0px 1px 2px rgba(0,0,0,0.04)",
-        "card-hover": "0 10px 25px -5px rgba(26, 86, 219, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03)",
-        "glow": "0 0 0 3px rgba(26, 86, 219, 0.25)"
+        "card-hover": "0 10px 25px -5px rgba(95, 27, 191, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03)",
+        "glow": "0 0 0 3px rgba(95, 27, 191, 0.25)"
       }
     },
   },
