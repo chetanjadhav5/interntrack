@@ -15,6 +15,7 @@ import CompanyRegisterPage from './pages/public/CompanyRegisterPage';
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
 import StudentProfilePage from './pages/student/StudentProfilePage';
+import StudentAttendancePage from './pages/student/StudentAttendancePage';
 import CompanyDirectoryPage from './pages/student/CompanyDirectoryPage';
 import SmartEligibilityPage from './pages/student/SmartEligibilityPage';
 import MyApplicationsPage from './pages/student/MyApplicationsPage';
@@ -133,6 +134,7 @@ function App() {
         <Route element={<RoleGuard allowedRoles={['STUDENT']} />}>
           <Route path="/student/dashboard" element={<StudentDashboard />} />
           <Route path="/student/profile" element={<StudentProfilePage />} />
+          <Route path="/student/attendance" element={<StudentAttendancePage />} />
           <Route path="/student/directory" element={<CompanyDirectoryPage />} />
           <Route path="/student/eligibility/:driveId" element={<SmartEligibilityPage />} />
           <Route path="/student/applications" element={<MyApplicationsPage />} />

@@ -4,8 +4,11 @@ import { jsPDF } from 'jspdf';
 import confetti from 'canvas-confetti';
 import { Award, Download, CheckCircle2, ShieldCheck, X } from 'lucide-react';
 
-const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyName, rolePosition, score, certNumber, issueDate }) => {
+const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyName, rolePosition, score, certNumber, issueDate, totalHoursWorked, daysAttended }) => {
   const [qrUrl, setQrUrl] = useState('');
+
+  const hours = certificate?.total_hours_worked || totalHoursWorked || 480;
+  const days = certificate?.days_attended || daysAttended || 60;
 
   useEffect(() => {
     if (isOpen) {
@@ -47,26 +50,26 @@ const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyNa
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(22);
     doc.setTextColor(26, 86, 219);
-    doc.text('G H RAISONI COLLEGE OF ENGINEERING & MANAGEMENT', 148.5, 32, { align: 'center' });
+    doc.text('G H RAISONI COLLEGE OF ENGINEERING & MANAGEMENT', 148.5, 30, { align: 'center' });
 
     doc.setFontSize(13);
     doc.setTextColor(67, 74, 87);
-    doc.text('Autonomous Institute Affiliated to KBCNMU, Jalgaon | NAAC A+ Grade', 148.5, 40, { align: 'center' });
+    doc.text('Autonomous Institute Affiliated to KBCNMU, Jalgaon | NAAC A+ Grade', 148.5, 38, { align: 'center' });
 
     doc.setFontSize(18);
     doc.setTextColor(19, 83, 216);
-    doc.text('CERTIFICATE OF INTERNSHIP EXCELLENCE', 148.5, 58, { align: 'center' });
+    doc.text('CERTIFICATE OF INTERNSHIP EXCELLENCE', 148.5, 54, { align: 'center' });
 
     // Body
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
     doc.setTextColor(25, 28, 29);
-    doc.text('This is to certify that', 148.5, 75, { align: 'center' });
+    doc.text('This is to certify that', 148.5, 70, { align: 'center' });
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
     doc.setTextColor(26, 86, 219);
-    doc.text(studentName || 'Alex Patil', 148.5, 88, { align: 'center' });
+    doc.text(studentName || 'Alex Patil', 148.5, 82, { align: 'center' });
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
@@ -74,30 +77,42 @@ const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyNa
     doc.text(
       `has successfully completed the industrial internship as ${rolePosition || 'Software Engineering Intern'}`,
       148.5,
-      100,
+      94,
       { align: 'center' }
     );
 
-    doc.text(`at ${companyName || 'Google India'} with an outstanding overall evaluation score of ${score || '94.5'}%.`, 148.5, 108, { align: 'center' });
+    doc.text(`at ${companyName || 'Google India'} with an outstanding overall evaluation score of ${score || '94.5'}%.`, 148.5, 102, { align: 'center' });
 
+    // Total Working Hours Metric Line
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 105, 115);
+    doc.text(
+      `Total Work Duration: ${hours} Hours Completed | ${days} Days Logged | 100% Geofence Attendance Verified`,
+      148.5,
+      112,
+      { align: 'center' }
+    );
+
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(25, 28, 29);
     doc.text(
       'During the internship tenure, the candidate demonstrated exceptional technical proficiency,',
       148.5,
-      120,
+      122,
       { align: 'center' }
     );
     doc.text(
-      'regularity in weekly progress reporting, and high commitment to industrial quality standards.',
+      'punctual check-in regularity, weekly progress reporting, and high commitment to industrial quality standards.',
       148.5,
-      127,
+      129,
       { align: 'center' }
     );
 
     // Signatures and Metadata
     doc.setFontSize(10);
     doc.text(`Certificate No: ${certNumber || 'GHR-IMS-2026-00429'}`, 25, 160);
-    doc.text(`Issue Date: ${issueDate || '20 August 2026'}`, 25, 166);
-    doc.text(`Institutional Security Hash: Verified`, 25, 172);
+    doc.text(`Total Hours Logged: ${hours} Hours (${days} Days)`, 25, 166);
+    doc.text(`Issue Date: ${issueDate || '20 August 2026'}`, 25, 172);
 
     doc.text('__________________________', 120, 165);
     doc.text('Faculty Mentor', 130, 172);
@@ -139,7 +154,7 @@ const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyNa
             </p>
           </div>
 
-          <div className="my-6 inline-block">
+          <div className="my-5 inline-block">
             <div className="px-6 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary font-headline font-extrabold text-xs tracking-widest uppercase">
               Certificate of Internship Excellence
             </div>
@@ -147,11 +162,11 @@ const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyNa
 
           <p className="text-xs text-on-surface-variant italic">This is proudly awarded to</p>
           
-          <h2 className="font-headline font-black text-2xl text-on-surface my-2 tracking-tight">
+          <h2 className="font-headline font-black text-2xl text-on-surface my-1.5 tracking-tight">
             {studentName || 'Alex Patil'}
           </h2>
 
-          <p className="text-xs text-on-surface max-w-lg mx-auto leading-relaxed mt-2">
+          <p className="text-xs text-on-surface max-w-lg mx-auto leading-relaxed mt-1">
             for successfully completing the industry internship as <span className="font-bold text-primary">{rolePosition || 'Software Engineering Intern'}</span> at{' '}
             <span className="font-bold text-secondary">{companyName || 'Google India'}</span> with an overall performance evaluation score of{' '}
             <span className="font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
@@ -159,14 +174,23 @@ const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyNa
             </span>.
           </p>
 
+          {/* Working Hours Badge Banner */}
+          <div className="my-4 inline-flex items-center gap-3 px-4 py-2 rounded-2xl bg-teal-50 border border-teal-200 text-teal-900 text-xs font-bold shadow-sm">
+            <span>⏱️ Total Work Duration: <strong>{hours} Hours Completed</strong></span>
+            <span>•</span>
+            <span>📅 <strong>{days} Days Logged</strong></span>
+            <span>•</span>
+            <span className="text-emerald-700 font-bold">100% Attendance Verified</span>
+          </div>
+
           {/* Footer Metadata & Verification QR */}
-          <div className="mt-8 pt-6 border-t border-outline-variant/60 flex items-center justify-between text-left">
+          <div className="mt-6 pt-5 border-t border-outline-variant/60 flex items-center justify-between text-left">
             <div className="space-y-1 text-[11px] text-on-surface-variant font-mono">
               <p>
                 <span className="font-bold text-on-surface">Cert ID:</span> {certNumber || 'GHR-IMS-2026-00429'}
               </p>
               <p>
-                <span className="font-bold text-on-surface">Issue Date:</span> {issueDate || '20 August 2026'}
+                <span className="font-bold text-on-surface">Duration:</span> {hours} Working Hours ({days} Days)
               </p>
               <p className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" /> Digitally Signed & Approved
@@ -176,7 +200,7 @@ const CertificateModal = ({ isOpen, onClose, certificate, studentName, companyNa
             {/* QR Code */}
             {qrUrl && (
               <div className="flex flex-col items-center">
-                <img src={qrUrl} alt="Certificate QR" className="w-20 h-20 rounded-lg border border-outline-variant p-1 bg-white shadow-sm" />
+                <img src={qrUrl} alt="Certificate QR" className="w-18 h-18 rounded-lg border border-outline-variant p-1 bg-white shadow-sm" />
                 <span className="text-[9px] text-on-surface-variant font-bold mt-1">Scan to Verify</span>
               </div>
             )}

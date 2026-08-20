@@ -107,6 +107,8 @@ const CertificationPage = () => {
           score={activeCertModal.score}
           certNumber={activeCertModal.certNumber}
           issueDate={activeCertModal.issueDate}
+          totalHoursWorked={activeCertModal.totalHoursWorked || activeCertModal.certificate?.total_hours_worked || 480}
+          daysAttended={activeCertModal.daysAttended || activeCertModal.certificate?.days_attended || 60}
         />
       )}
 

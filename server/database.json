@@ -382,18 +382,19 @@
       "verification_status": "PENDING",
       "verification_remarks": "Profile updated by student; awaiting verification.",
       "application_locked": true,
-      "updated_at": "2026-08-20T20:28:38.140Z",
+      "updated_at": "2026-08-20T21:46:57.451Z",
       "documents": [
         {
           "id": "doc_cert_id_1787233494672_uyp26g0uz",
           "title": "Official Internship Certificate — Google India",
           "type": "COMPLETION_CERTIFICATE",
-          "certificate_number": "GHR-IMS-2026-77216",
-          "score": 94.5,
+          "certificate_number": "GHR-IMS-2026-28700",
+          "score": 95,
           "grade": "O (Outstanding)",
+          "total_hours_worked": 480,
           "company_name": "Google India",
-          "issued_at": "2026-08-20T16:30:30.130Z",
-          "url": "https://example.com/certificates/GHR-IMS-2026-77216.pdf"
+          "issued_at": "2026-08-20T21:46:57.451Z",
+          "url": "https://example.com/certificates/GHR-IMS-2026-28700.pdf"
         }
       ],
       "github_access_token": "gho_token_1787257713415",
@@ -1746,9 +1747,9 @@
       "tnp_verified_by": "user_company_google",
       "tnp_verified_at": "2026-08-20T06:11:21.525Z",
       "tnp_remarks": "Verified campus placement drive selection; auto-assigned faculty mentor.",
-      "final_internship_score": 94.5,
+      "final_internship_score": 95,
       "created_at": "2026-08-20T06:11:21.525Z",
-      "updated_at": "2026-08-20T16:30:30.099Z",
+      "updated_at": "2026-08-20T21:46:57.410Z",
       "company_evaluation_score": 96.7,
       "company_technical_score": 98,
       "company_soft_skills_score": 95,
@@ -1756,8 +1757,9 @@
       "ppo_recommended": true,
       "company_feedback": "Outstanding intern! Solved mission-critical backend scaling tasks and demonstrated high leadership potential.",
       "company_evaluated_at": "2026-08-20T13:45:56.284Z",
-      "faculty_evaluated_at": "2026-08-20T16:30:30.099Z",
-      "faculty_evaluation_remarks": "Demonstrated outstanding technical innovation, full Friday logbook compliance, and team leadership."
+      "faculty_evaluated_at": "2026-08-20T21:46:57.410Z",
+      "faculty_evaluation_remarks": "Outstanding engineering performance and 100% attendance consistency.",
+      "total_hours_worked": 480
     },
     {
       "id": "id_1787219652109_ywntc5q9m",
@@ -1936,7 +1938,12 @@
       "is_inside_geofence": true,
       "photo_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
       "verification_status": "VERIFIED",
-      "date": "2026-08-20"
+      "date": "2026-08-20",
+      "checkout_time": "2026-08-20T21:46:28.741Z",
+      "hours_worked": 8.5,
+      "work_summary": "Engineered REST API endpoints and optimized geofence calculations.",
+      "status": "COMPLETED",
+      "updated_at": "2026-08-20T21:46:28.742Z"
     },
     {
       "id": "id_1787221671135_6d0x1oba1",
@@ -3930,29 +3937,34 @@
     },
     {
       "id": "id_1787233494672_uyp26g0uz",
-      "certificate_number": "GHR-IMS-2026-77216",
+      "certificate_number": "GHR-IMS-2026-28700",
       "internship_id": "id_1787206281525_3hmmdn1pq",
       "student_id": "stud_prof_1",
       "student_name": "Alex Patil",
       "student_roll": "GHR-CS-2023-042",
       "company_name": "Google India",
       "role_position": "Software Engineering Intern",
-      "issued_by_faculty_id": "user_faculty_ct_1",
-      "final_score": 94.5,
+      "issued_by_faculty_id": "user_faculty_mentor_1",
+      "final_score": 95,
       "grade": "O (Outstanding)",
       "rubric_breakdown": {
         "technical_score": 95,
         "discipline_score": 94,
         "soft_skills_score": 92,
         "friday_logbook_score": 96,
-        "attendance_score": 95,
-        "faculty_remarks": "Demonstrated outstanding technical innovation, full Friday logbook compliance, and team leadership."
+        "attendance_score": 98,
+        "total_hours_worked": 480,
+        "days_attended": 60,
+        "faculty_remarks": "Outstanding engineering performance and 100% attendance consistency."
       },
       "issue_date": "2026-08-20",
-      "qr_verification_hash": "SHA256:4d1e6a1f7f8948fe201bf5682474d2820d6d2ff78294ca415e183327341d35ba",
-      "certificate_pdf_url": "https://example.com/certificates/GHR-IMS-2026-77216.pdf",
+      "qr_verification_hash": "SHA256:8ccac9b75acfa5f9e4658fe7e5d759822b4cc5fe005f1e45539b82b6fb35ee9e",
+      "certificate_pdf_url": "https://example.com/certificates/GHR-IMS-2026-28700.pdf",
       "created_at": "2026-08-20T13:44:54.672Z",
-      "updated_at": "2026-08-20T16:30:30.070Z"
+      "updated_at": "2026-08-20T21:46:57.364Z",
+      "total_hours_worked": 480,
+      "days_attended": 60,
+      "average_daily_hours": 8
     },
     {
       "id": "id_1787241650388_6hqg9ezmv",
@@ -6607,9 +6619,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:10:50.010Z",
-      "updated_at": "2026-08-20T19:10:50.010Z"
+      "updated_at": "2026-08-20T21:32:26.590Z"
     },
     {
       "id": "id_1787253050251_kwa0pv89i",
@@ -6640,9 +6652,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:37:17.448Z",
-      "updated_at": "2026-08-20T19:37:17.448Z"
+      "updated_at": "2026-08-20T21:32:26.620Z"
     },
     {
       "id": "id_1787254646379_06x22j7zm",
@@ -6662,9 +6674,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:37:26.481Z",
-      "updated_at": "2026-08-20T19:37:26.481Z"
+      "updated_at": "2026-08-20T21:32:26.650Z"
     },
     {
       "id": "id_1787254663502_s2pybfj6x",
@@ -6684,9 +6696,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:37:43.590Z",
-      "updated_at": "2026-08-20T19:37:43.590Z"
+      "updated_at": "2026-08-20T21:32:26.679Z"
     },
     {
       "id": "id_1787254668078_bmsd3krtz",
@@ -6695,9 +6707,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:37:48.078Z",
-      "updated_at": "2026-08-20T19:37:48.078Z"
+      "updated_at": "2026-08-20T21:32:26.710Z"
     },
     {
       "id": "id_1787254668351_574bzn1h6",
@@ -6728,9 +6740,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:51:04.119Z",
-      "updated_at": "2026-08-20T19:51:04.119Z"
+      "updated_at": "2026-08-20T21:32:26.739Z"
     },
     {
       "id": "id_1787255468431_9o905azx6",
@@ -6739,9 +6751,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:51:08.431Z",
-      "updated_at": "2026-08-20T19:51:08.431Z"
+      "updated_at": "2026-08-20T21:32:26.768Z"
     },
     {
       "id": "id_1787255468693_inflk2lmj",
@@ -6761,9 +6773,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T19:55:28.921Z",
-      "updated_at": "2026-08-20T19:55:28.921Z"
+      "updated_at": "2026-08-20T21:32:26.802Z"
     },
     {
       "id": "id_1787255729173_ej31g3ece",
@@ -6783,9 +6795,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T20:18:34.623Z",
-      "updated_at": "2026-08-20T20:18:34.623Z"
+      "updated_at": "2026-08-20T21:32:26.835Z"
     },
     {
       "id": "id_1787257114860_ut35bpn7k",
@@ -6816,9 +6828,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T20:18:59.064Z",
-      "updated_at": "2026-08-20T20:18:59.064Z"
+      "updated_at": "2026-08-20T21:32:26.864Z"
     },
     {
       "id": "id_1787257143035_qx6eise08",
@@ -6860,9 +6872,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T20:19:11.302Z",
-      "updated_at": "2026-08-20T20:19:11.302Z"
+      "updated_at": "2026-08-20T21:32:26.895Z"
     },
     {
       "id": "id_1787257151535_3bjl7edep",
@@ -6937,9 +6949,9 @@
       "title": "Friday Week 1 Report Submitted",
       "message": "Alex Patil submitted Week 1 report for review.",
       "link_route": "/faculty/weekly-reports",
-      "is_read": false,
+      "is_read": true,
       "created_at": "2026-08-20T20:28:37.306Z",
-      "updated_at": "2026-08-20T20:28:37.306Z"
+      "updated_at": "2026-08-20T21:32:26.924Z"
     },
     {
       "id": "id_1787257717530_v7i2jck23",
@@ -6951,6 +6963,17 @@
       "is_read": false,
       "created_at": "2026-08-20T20:28:37.530Z",
       "updated_at": "2026-08-20T20:28:37.530Z"
+    },
+    {
+      "id": "id_1787262417510_an2ej1yg8",
+      "user_id": "user_student_alex",
+      "module_key": "CERTIFICATE",
+      "title": "🎓 Internship Certificate Issued!",
+      "message": "Your faculty mentor evaluated your completed internship at Google India (Score: 95%, Grade: O (Outstanding)). Certificate has been placed in your Document Vault.",
+      "link_route": "/student/documents",
+      "is_read": false,
+      "created_at": "2026-08-20T21:46:57.510Z",
+      "updated_at": "2026-08-20T21:46:57.510Z"
     }
   ],
   "support_tickets": [

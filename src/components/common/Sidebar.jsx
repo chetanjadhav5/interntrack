@@ -17,6 +17,7 @@ const Sidebar = () => {
         return [
           { name: 'Dashboard', path: '/student/dashboard', icon: 'dashboard', moduleKey: 'DASHBOARD' },
           { name: 'My Profile', path: '/student/profile', icon: 'person', moduleKey: 'PROFILE' },
+          { name: 'Daily Attendance & Hours', path: '/student/attendance', icon: 'schedule', moduleKey: 'ATTENDANCE' },
           { name: 'Company Directory', path: '/student/directory', icon: 'domain', moduleKey: 'DIRECTORY' },
           { name: 'My Applications', path: '/student/applications', icon: 'assignment_ind', moduleKey: 'APPLICATIONS' },
           { name: 'Workflow Tracker', path: '/student/workflow', icon: 'timeline', moduleKey: 'WORKFLOW' },

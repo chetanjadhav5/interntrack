@@ -67,13 +67,35 @@ router.get('/students', authenticate, requireRole('TNP'), (req, res) => {
 
   const result = students.map(student => {
     const activeInternship = findOne('internships', { student_id: student.id, status: 'WEEKLY_REVIEW_ONGOING' }) ||
-                           findOne('internships', { student_id: student.id, status: 'IN_PROGRESS' });
+                           findOne('internships', { student_id: student.id, status: 'IN_PROGRESS' }) ||
+                           findOne('internships', { student_id: student.id, status: 'COMPLETED' }) ||
+                           findOne('internships', { student_id: student.id, status: 'CERTIFICATE_ISSUED' });
     const classTeacher = student.assigned_class_teacher_id
       ? findById('users', student.assigned_class_teacher_id)
       : null;
 
+    // Calculate total hours worked across student's internships
+    const studentInternships = find('internships', { student_id: student.id }) || [];
+    let totalHoursWorked = 0;
+    let daysAttended = 0;
+    studentInternships.forEach(intern => {
+      const attendance = find('attendance_records', { internship_id: intern.id }) || [];
+      attendance.forEach(a => {
+        totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+      });
+      daysAttended += attendance.length;
+    });
+    if (totalHoursWorked === 0 && daysAttended > 0) {
+      totalHoursWorked = daysAttended * 8.0;
+    }
+    totalHoursWorked = Math.round(totalHoursWorked * 10) / 10;
+    const avgDailyHours = daysAttended > 0 ? Math.round((totalHoursWorked / daysAttended) * 10) / 10 : 8.0;
+
     return {
       ...student,
+      total_hours_worked: totalHoursWorked,
+      days_attended: daysAttended,
+      average_daily_hours: avgDailyHours,
       active_internship: activeInternship ? {
         company_name: activeInternship.company_name,
         role: activeInternship.role_position,
@@ -125,11 +147,20 @@ router.get('/students/:id/progress', authenticate, requireRole('TNP'), (req, res
   const latestInternship = internships[0] || null;
 
   let attendanceCount = 0;
+  let totalHoursWorked = 0;
   let reports = [];
   let cert = null;
 
   if (latestInternship) {
-    attendanceCount = (find('attendance_records', { internship_id: latestInternship.id }) || []).length;
+    const attendance = find('attendance_records', { internship_id: latestInternship.id }) || [];
+    attendanceCount = attendance.length;
+    attendance.forEach(a => {
+      totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+    });
+    if (totalHoursWorked === 0 && attendanceCount > 0) {
+      totalHoursWorked = attendanceCount * 8.0;
+    }
+    totalHoursWorked = Math.round(totalHoursWorked * 10) / 10;
     reports = find('weekly_reports', { internship_id: latestInternship.id }) || [];
     cert = findOne('certificates', { internship_id: latestInternship.id });
   }
@@ -177,6 +208,13 @@ router.get('/students/:id/progress', authenticate, requireRole('TNP'), (req, res
     student,
     internship: latestInternship,
     internship_records: internships,
+    attendance_summary: {
+      total_hours_worked: totalHoursWorked,
+      days_attended: attendanceCount,
+      average_daily_hours: attendanceCount > 0 ? Math.round((totalHoursWorked / attendanceCount) * 10) / 10 : 8.0,
+      target_hours: 450,
+      progress_percent: Math.min(100, Math.round((totalHoursWorked / 450) * 100))
+    },
     milestones,
     progress_percent: progressPercent,
     current_status: currentStatus

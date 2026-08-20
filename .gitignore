@@ -5,6 +5,7 @@
 server/.env
 server/.env.*
 !.env.local
+*.pem
 
 # Logs
 logs

@@ -15,7 +15,8 @@ import {
   Calendar,
   X,
   Loader2,
-  ShieldAlert
+  ShieldAlert,
+  Clock
 } from 'lucide-react';
 
 const StudentDirectoryPage = () => {
@@ -64,7 +65,7 @@ const StudentDirectoryPage = () => {
         setStudentProgress(data);
       }
     } catch (err) {
-      console.error('Error fetching student progress:', err);
+      console.error('Error loading student progress:', err);
     } finally {
       setProgressLoading(false);
     }
@@ -81,13 +82,13 @@ const StudentDirectoryPage = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        setPingMessage(`Notification ping dispatched to Class Teacher for ${studentName}!`);
+        setPingMessage(`Reminder notification sent to Class Teacher for ${studentName}.`);
         setTimeout(() => setPingMessage(''), 4000);
       } else {
         setPingError(data.error || 'Failed to ping class teacher');
       }
-    } catch {
-      setPingError('Network error sending reminder notification');
+    } catch (err) {
+      setPingError('Network error while notifying class teacher');
     }
   };
 
@@ -108,16 +109,21 @@ const StudentDirectoryPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {/* Top Header Card */}
       <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 border border-outline-variant/60 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <span className="text-xs font-bold text-purple-700 uppercase tracking-wider">Department Records</span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-purple-800 uppercase tracking-wider">Placement Administration</span>
+              <span className="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-bold">
+                Live Directory
+              </span>
+            </div>
             <h1 className="font-headline font-black text-2xl sm:text-3xl text-on-surface tracking-tight mt-0.5">
-              Student Placement Directory
+              Student Placement Directory & Hours Audit
             </h1>
-            <p className="text-xs sm:text-sm text-on-surface-variant mt-1">
-              Department-scoped candidate directory tracking profile verification status and 8-step milestone progression.
+            <p className="text-xs sm:text-sm text-on-surface-variant max-w-xl mt-1">
+              Department-scoped candidate directory tracking profile verification status, working hours logged, and 8-step milestone progression.
             </p>
           </div>
 
@@ -169,6 +175,7 @@ const StudentDirectoryPage = () => {
                   <th className="py-3 px-4">Student & PRN</th>
                   <th className="py-3 px-4">Branch</th>
                   <th className="py-3 px-4 text-center">CGPA</th>
+                  <th className="py-3 px-4 text-center">Hours Worked</th>
                   <th className="py-3 px-4 text-center">Profile Verification Status</th>
                   <th className="py-3 px-4">Active Placement</th>
                   <th className="py-3 px-4 text-right">Actions</th>
@@ -183,6 +190,14 @@ const StudentDirectoryPage = () => {
                     </td>
                     <td className="py-3.5 px-4 text-on-surface font-medium">{s.branch}</td>
                     <td className="py-3.5 px-4 text-center font-bold text-primary">{s.current_cgpa}</td>
+                    <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                      <span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-900 font-bold text-xs font-mono">
+                        {s.total_hours_worked || 0} hrs
+                      </span>
+                      <span className="block text-[10px] text-on-surface-variant mt-0.5">
+                        {s.days_attended || 0} Days Logged
+                      </span>
+                    </td>
                     <td className="py-3.5 px-4 text-center">
                       <div className="inline-flex items-center gap-2">
                         <StatusBadge status={s.verification_status} size="xs" />
@@ -260,11 +275,20 @@ const StudentDirectoryPage = () => {
                   <h4 className="font-headline font-bold text-xs uppercase tracking-wider text-purple-800">
                     Academic Qualifications & Proficiencies
                   </h4>
-                  <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-surface-container-low text-xs border border-outline-variant/60">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-2xl bg-surface-container-low text-xs border border-outline-variant/60">
                     <div>
                       <span className="text-[10px] font-bold text-on-surface-variant uppercase block">CGPA</span>
                       <span className="font-headline font-bold text-sm text-emerald-700">
                         {studentProgress?.student?.current_cgpa} / 10
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-bold text-on-surface-variant uppercase block">Hours Logged</span>
+                      <span className="font-headline font-bold text-sm text-primary">
+                        {studentProgress?.attendance_summary?.total_hours_worked || 0} hrs
+                      </span>
+                      <span className="text-[10px] text-on-surface-variant block">
+                        {studentProgress?.attendance_summary?.days_attended || 0} Days Attended
                       </span>
                     </div>
                     <div>
@@ -293,7 +317,7 @@ const StudentDirectoryPage = () => {
                       <div className="flex items-start justify-between">
                         <div>
                           <span className="font-bold text-primary text-[11px] uppercase">
-                            {studentProgress.internship.placement_type.replace('_', ' ')}
+                            {studentProgress.internship.placement_type?.replace('_', ' ') || 'INTERNSHIP'}
                           </span>
                           <h5 className="font-headline font-bold text-base text-on-surface mt-0.5">
                             {studentProgress.internship.company_name} — {studentProgress.internship.role_position}
@@ -317,8 +341,10 @@ const StudentDirectoryPage = () => {
                           <span className="font-bold text-emerald-700">T&P Approved</span>
                         </div>
                         <div className="p-2.5 rounded-xl bg-white border border-outline-variant/60">
-                          <span className="text-[10px] text-on-surface-variant font-bold block">Logbook Reports</span>
-                          <span className="font-bold text-primary">Weekly Ongoing</span>
+                          <span className="text-[10px] text-on-surface-variant font-bold block">Attendance Log</span>
+                          <span className="font-bold text-primary">
+                            {studentProgress.attendance_summary?.total_hours_worked || 0} hrs ({studentProgress.attendance_summary?.days_attended || 0}d)
+                          </span>
                         </div>
                         <div className="p-2.5 rounded-xl bg-white border border-outline-variant/60">
                           <span className="text-[10px] text-on-surface-variant font-bold block">Final Eval Score</span>

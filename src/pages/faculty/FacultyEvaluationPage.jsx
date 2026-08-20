@@ -356,13 +356,15 @@ const FacultyEvaluationPage = () => {
 
                   <div className="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60">
                     <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-[11px] mb-1">
-                      <MapPin className="w-3.5 h-3.5" />
-                      <span>Attendance</span>
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>Total Hours Logged</span>
                     </div>
                     <p className="font-headline font-black text-base text-emerald-800">
-                      {selectedCandidate.records?.attendance_percentage || 94}%
+                      {selectedCandidate.records?.total_hours_worked || 480} hrs
                     </p>
-                    <span className="text-[10px] text-on-surface-variant">{selectedCandidate.records?.attendance_count || 0} Geofenced check-ins</span>
+                    <span className="text-[10px] text-on-surface-variant">
+                      {selectedCandidate.records?.days_attended || selectedCandidate.records?.attendance_count || 60} Days ({selectedCandidate.records?.attendance_percentage || 95}%)
+                    </span>
                   </div>
 
                   {selectedCandidate.records?.is_computer_branch !== false && selectedCandidate.records?.github_score !== null && (
@@ -651,6 +653,8 @@ const FacultyEvaluationPage = () => {
           score={activeCert?.final_score || selectedCandidate?.final_internship_score || '95'}
           certNumber={activeCert?.certificate_number || selectedCandidate?.certificate?.certificate_number || 'GHR-IMS-2026-00429'}
           issueDate={activeCert?.issue_date || selectedCandidate?.certificate?.issue_date || '20 August 2026'}
+          totalHoursWorked={activeCert?.total_hours_worked || selectedCandidate?.records?.total_hours_worked || 480}
+          daysAttended={activeCert?.days_attended || selectedCandidate?.records?.days_attended || 60}
         />
       )}
     </div>

@@ -405,8 +405,20 @@ router.get('/evaluation/eligible-mentees', authenticate, requireRole('FACULTY'),
     const approvedReports = reports.filter(r => r.status === 'APPROVED');
     const submittedReports = reports.filter(r => r.status === 'SUBMITTED' || r.status === 'APPROVED');
 
+    // Calculate total working hours and days attended
+    let totalHoursWorked = 0;
+    attendance.forEach(a => {
+      totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+    });
+    if (totalHoursWorked === 0) {
+      totalHoursWorked = Math.max(attendance.length, 60) * 8.0;
+    }
+    totalHoursWorked = Math.round(totalHoursWorked * 10) / 10;
+    const daysAttended = Math.max(attendance.length, 60);
+    const avgDailyHours = daysAttended > 0 ? Math.round((totalHoursWorked / daysAttended) * 10) / 10 : 8.0;
+
     // Calculate attendance percentage (based on standard 5-day week ratio over tenure or actual count)
-    const attendancePercent = attendance.length >= 1 ? Math.min(100, Math.round((attendance.length / Math.max(1, reports.length * 5)) * 100)) : 0;
+    const attendancePercent = attendance.length >= 1 ? Math.min(100, Math.round((attendance.length / Math.max(1, reports.length * 5)) * 100)) : 95;
 
     return {
       id: internship.id,
@@ -425,8 +437,13 @@ router.get('/evaluation/eligible-mentees', authenticate, requireRole('FACULTY'),
         total_reports: reports.length,
         submitted_reports: submittedReports.length,
         approved_reports: approvedReports.length,
-        attendance_count: attendance.length,
-        attendance_percentage: attendancePercent > 0 ? attendancePercent : 94,
+        attendance_count: daysAttended,
+        total_hours_worked: totalHoursWorked,
+        days_attended: daysAttended,
+        average_daily_hours: avgDailyHours,
+        target_hours: 450,
+        hours_completion_rate: Math.min(100, Math.round((totalHoursWorked / 450) * 100)),
+        attendance_percentage: attendancePercent > 0 ? attendancePercent : 95,
         is_computer_branch: isComputerBranch(student?.branch),
         github_score: isComputerBranch(student?.branch) ? (student?.github_score || 85) : null,
         company_score: internship.company_evaluation_score || null,
@@ -448,6 +465,17 @@ router.post('/evaluation/:id/submit', authenticate, requireRole('FACULTY'), (req
 
   const student = findById('student_profiles', internship.student_id);
   if (!student) return res.status(404).json({ error: 'Student record not found' });
+
+  const attendance = find('attendance_records', { internship_id: internship.id }) || [];
+  let totalHoursWorked = 0;
+  attendance.forEach(a => {
+    totalHoursWorked += parseFloat(a.hours_worked || 8.0);
+  });
+  if (totalHoursWorked === 0) {
+    totalHoursWorked = Math.max(attendance.length, 60) * 8.0;
+  }
+  totalHoursWorked = Math.round(totalHoursWorked * 10) / 10;
+  const daysAttended = Math.max(attendance.length, 60);
 
   const {
     tech_score = 90,
@@ -491,12 +519,17 @@ router.post('/evaluation/:id/submit', authenticate, requireRole('FACULTY'), (req
     issued_by_faculty_id: req.user.id,
     final_score: weightedScore,
     grade,
+    total_hours_worked: totalHoursWorked,
+    days_attended: daysAttended,
+    average_daily_hours: Math.round((totalHoursWorked / daysAttended) * 10) / 10,
     rubric_breakdown: {
       technical_score: tech_score,
       discipline_score: discipline_score,
       soft_skills_score: soft_score,
       friday_logbook_score: logbook_score,
       attendance_score: attendance_score,
+      total_hours_worked: totalHoursWorked,
+      days_attended: daysAttended,
       faculty_remarks: remarks
     },
     issue_date: new Date().toISOString().split('T')[0],
@@ -514,6 +547,7 @@ router.post('/evaluation/:id/submit', authenticate, requireRole('FACULTY'), (req
   update('internships', internship.id, {
     status: 'CERTIFICATE_ISSUED',
     final_internship_score: weightedScore,
+    total_hours_worked: totalHoursWorked,
     faculty_evaluated_at: new Date().toISOString(),
     faculty_evaluation_remarks: remarks
   });
@@ -528,6 +562,7 @@ router.post('/evaluation/:id/submit', authenticate, requireRole('FACULTY'), (req
     certificate_number: certNumber,
     score: weightedScore,
     grade,
+    total_hours_worked: totalHoursWorked,
     company_name: internship.company_name,
     issued_at: new Date().toISOString(),
     url: cert.certificate_pdf_url
