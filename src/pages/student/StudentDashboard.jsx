@@ -319,14 +319,14 @@ const StudentDashboard = () => {
                 {!todayCheckin ? (
                   <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
                     <p className="text-xs text-on-surface-variant">
-                      Requires active Face ID with real-time eye blink liveness verification and 300m GPS geofencing.
+                      Requires 300m GPS office geofence verification and enrolled Biometric Face ID matching.
                     </p>
                     <button
                       onClick={handleOpenCheckinModal}
-                      className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-primary/20 transition-all"
+                      className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-primary/20 transition-all active:scale-95"
                     >
                       <ScanFace className="w-4 h-4" />
-                      <span>Biometric Check In (Blink Liveness)</span>
+                      <span>Geofenced Face Check-In</span>
                     </button>
                   </div>
                 ) : isCheckedIn ? (

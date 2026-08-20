@@ -633,14 +633,10 @@ router.post('/face/register', authenticate, requireRole('STUDENT'), (req, res) =
   const profile = findOne('student_profiles', { user_id: req.user.id });
   if (!profile) return res.status(404).json({ error: 'Student profile not found' });
 
-  const { face_photo_url, face_embedding, blink_verified } = req.body;
+  const { face_photo_url, face_embedding } = req.body;
 
-  if (!face_embedding || !Array.isArray(face_embedding) || face_embedding.length === 0) {
+  if (!face_embedding || !Array.isArray(face_embedding) || face_embedding.length !== 128) {
     return res.status(400).json({ error: 'Valid 128-dimensional facial biometric descriptor is required.' });
-  }
-
-  if (!blink_verified) {
-    return res.status(400).json({ error: 'Liveness check failed: Eye blink verification is required before enrolling Face ID.' });
   }
 
   const updatedBiometrics = {
@@ -648,7 +644,7 @@ router.post('/face/register', authenticate, requireRole('STUDENT'), (req, res) =
     face_embedding,
     photo_url: face_photo_url || profile.avatar_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200',
     registered_at: new Date().toISOString(),
-    liveness_method: 'REAL_TIME_BLINK_DETECTION',
+    liveness_method: 'FACIAL_DESCRIPTOR_CAPTURE',
     descriptor_dimensions: face_embedding.length
   };
 
@@ -657,7 +653,7 @@ router.post('/face/register', authenticate, requireRole('STUDENT'), (req, res) =
   });
 
   res.json({
-    message: 'Biometric Face ID successfully registered and verified with eye blink liveness check!',
+    message: 'Biometric Face ID successfully registered and enrolled!',
     face_biometrics: updatedBiometrics,
     profile: updatedProfile
   });
@@ -674,13 +670,10 @@ router.post('/face/verify', authenticate, requireRole('STUDENT'), (req, res) => 
     });
   }
 
-  const { face_embedding, blink_verified } = req.body;
+  const { face_embedding } = req.body;
 
-  if (!blink_verified) {
-    return res.status(400).json({
-      verified: false,
-      error: 'Liveness check failed: Eye blink was not detected during face capture.'
-    });
+  if (!face_embedding || !Array.isArray(face_embedding) || face_embedding.length !== 128) {
+    return res.status(400).json({ error: 'Valid 128-dimensional facial descriptor embedding is required for verification.' });
   }
 
   const verification = verifyFaceBiometrics(face_embedding, profile.face_biometrics.face_embedding, { threshold: 0.80 });
@@ -739,7 +732,7 @@ router.get('/internships/active', authenticate, requireRole('STUDENT'), (req, re
   });
 });
 
-// 12a. Daily Geofenced Check-In with Face Verification & Blink Liveness Check
+// 12a. Daily Geofenced Check-In with Face Verification
 router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, res) => {
   const profile = findOne('student_profiles', { user_id: req.user.id });
   if (!profile) return res.status(404).json({ error: 'Profile not found' });
@@ -765,19 +758,13 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
     return res.status(400).json({ error: 'You have already checked in for today.' });
   }
 
-  // 1. Biometric Face ID & Liveness Verification Check
-  const { latitude, longitude, photo_url, face_embedding, blink_verified } = req.body;
+  // 1. Biometric Face ID Verification Check
+  const { latitude, longitude, photo_url, face_embedding } = req.body;
 
   if (!profile.face_biometrics?.registered || !profile.face_biometrics?.face_embedding) {
     return res.status(400).json({
       error: 'Face ID not registered. Please enroll your Biometric Face ID in your Profile before checking in.',
       requires_face_registration: true
-    });
-  }
-
-  if (!blink_verified) {
-    return res.status(400).json({
-      error: 'Liveness verification failed: You must blink naturally in front of the camera before checking in.'
     });
   }
 
@@ -795,20 +782,22 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
     });
   }
 
-  // 2. Geofence Location Verification Check
-  if (!latitude || !longitude) {
+  // 2. Geofence Location Verification Check (300m radius of internship office)
+  if (latitude === undefined || longitude === undefined || latitude === null || longitude === null) {
     return res.status(400).json({ error: 'Current GPS coordinates are required for geofenced check-in.' });
   }
 
   const userLat = parseFloat(latitude);
   const userLng = parseFloat(longitude);
   const distance = calculateDistance(userLat, userLng, active.latitude, active.longitude);
-  const isInside = distance <= active.geofence_radius; // 300m
+  const allowedRadius = active.geofence_radius || 300; // 300m
+  const isInside = distance <= allowedRadius;
 
   if (!isInside && !active.first_checkin_photo_required) {
     return res.status(400).json({
-      error: `Geofence check failed. You are ${distance}m away from the designated company location (Allowed: ${active.geofence_radius}m).`,
+      error: `Geofence check failed. You are ${distance}m away from ${active.company_name} (Allowed: ${allowedRadius}m).`,
       distance_meters: distance,
+      allowed_radius: allowedRadius,
       is_inside: false
     });
   }
@@ -829,14 +818,13 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
     verification_status: 'VERIFIED',
     face_verified: true,
     face_similarity_score: faceVerification.similarity_score,
-    face_liveness_verified: true,
     work_summary: null,
     date: todayStr
   });
 
   res.status(201).json({
     message: isInside
-      ? `Biometric check-in successful! Face verified (${faceVerification.similarity_percent}) with blink liveness. You are inside the ${active.geofence_radius}m office geofence.`
+      ? `Biometric check-in successful! Face verified (${faceVerification.similarity_percent}). You are within the ${allowedRadius}m geofence (${distance}m from office).`
       : `Check-in submitted with biometric verification (${distance}m from site).`,
     record,
     face_match: faceVerification.similarity_percent,
@@ -869,16 +857,10 @@ router.post('/attendance/check-out', authenticate, requireRole('STUDENT'), (req,
     return res.status(400).json({ error: 'You have already checked out for today.' });
   }
 
-  // 1. Biometric Face ID & Liveness Verification on Check-Out
-  const { face_embedding, blink_verified } = req.body;
+  // 1. Biometric Face ID Verification on Check-Out
+  const { face_embedding } = req.body;
 
   if (profile.face_biometrics?.registered && profile.face_biometrics?.face_embedding) {
-    if (!blink_verified) {
-      return res.status(400).json({
-        error: 'Liveness verification failed: Please blink naturally in front of the camera to verify check-out.'
-      });
-    }
-
     const faceVerification = verifyFaceBiometrics(
       face_embedding || generateSyntheticEmbedding(profile.id),
       profile.face_biometrics.face_embedding,
