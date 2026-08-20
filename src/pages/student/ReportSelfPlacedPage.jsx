@@ -247,6 +247,7 @@ const ReportSelfPlacedPage = () => {
             initialAddress={officeAddress}
             initialLat={latitude}
             initialLng={longitude}
+            companyNameHint={companyName}
             onLocationSelect={handleLocationSelect}
           />
         </div>
