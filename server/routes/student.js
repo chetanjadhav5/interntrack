@@ -476,15 +476,22 @@ router.get('/drives/:id/eligibility', authenticate, requireRole('STUDENT'), (req
   });
 });
 
-// 7. Apply for Internship Drive
+// 7. Apply for Internship Drive (with Mandatory Institutional Consent & Placement Undertaking)
 router.post('/applications/apply', authenticate, requireRole('STUDENT'), (req, res) => {
   const profile = findOne('student_profiles', { user_id: req.user.id });
   if (!profile) return res.status(404).json({ error: 'Profile not found' });
 
-  const { drive_id } = req.body;
+  const { drive_id, consent_accepted, consent_accepted_at } = req.body;
   const drive = findById('placement_drives', drive_id);
   if (!drive || drive.status !== 'ACTIVE') {
     return res.status(400).json({ error: 'Drive is no longer accepting applications' });
+  }
+
+  // Mandatory Institutional Placement Undertaking & Conversion Policy Consent
+  if (!consent_accepted) {
+    return res.status(400).json({
+      error: 'You must read and accept the Institutional Placement Undertaking & Conversion Policy before applying for this drive.'
+    });
   }
 
   // Check ongoing internship constraint
@@ -515,19 +522,22 @@ router.post('/applications/apply', authenticate, requireRole('STUDENT'), (req, r
     drive_id: drive.id,
     student_id: profile.id,
     current_stage: 'APPLIED',
+    consent_accepted: true,
+    consent_accepted_at: consent_accepted_at || new Date().toISOString(),
+    consent_undertaking_policy: 'Candidate acknowledged that if an offer is extended by the company, the institution will permanently treat and record the student as CONVERTED / PLACED regardless of subsequent acceptance or rejection.',
     stage_events: [
       {
         stage: 'Applied',
         scheduled_at: new Date().toISOString(),
         venue_or_link: 'Campus Portal Submission',
-        notes: 'Application received and automatically screened by Smart Eligibility.'
+        notes: 'Application received with signed Institutional Placement Undertaking & Conversion Policy Consent.'
       }
     ],
     applied_at: new Date().toISOString()
   });
 
   res.status(201).json({
-    message: 'Application submitted successfully! Track your status in Applied Internships.',
+    message: 'Application submitted successfully with verified Institutional Placement Consent! Track your status in Applied Internships.',
     application: newApp
   });
 });

@@ -17,7 +17,9 @@ import {
   Info,
   Radio,
   FileText,
-  Sparkles
+  Sparkles,
+  Scale,
+  ShieldCheck
 } from 'lucide-react';
 
 const MyApplicationsPage = () => {
@@ -154,6 +156,14 @@ const MyApplicationsPage = () => {
                       <Clock className="w-3 h-3" /> Latest Round Update
                     </span>
                     <p className="text-on-surface truncate">{app.stage_events.slice(-1)[0].notes}</p>
+                  </div>
+                )}
+
+                {/* Institutional Consent Badge */}
+                {app.consent_accepted && (
+                  <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[10px] text-amber-900 font-semibold flex items-center gap-1.5">
+                    <Scale className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+                    <span>Placement Undertaking Signed: Conversion policy applies upon offer issuance.</span>
                   </div>
                 )}
               </div>

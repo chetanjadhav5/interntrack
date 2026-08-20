@@ -390,6 +390,156 @@
       "is_approved": true,
       "created_at": "2026-08-20T22:17:16.866Z",
       "updated_at": "2026-08-20T22:17:16.866Z"
+    },
+    {
+      "id": "id_1787266745528_nusecc7tn",
+      "email": "candidate.1787266745332@ghrcem.edu",
+      "password_hash": "$2b$10$K9Nh9Bz4n4rANzPGCqrblO9m.SDhBqKmjhXJ8zFP9YblbAlLiEI32",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T22:59:05.528Z",
+      "updated_at": "2026-08-20T22:59:05.528Z"
+    },
+    {
+      "id": "id_1787266761348_2zklkp0gl",
+      "email": "candidate.1787266761155@ghrcem.edu",
+      "password_hash": "$2b$10$MFdX6sfKDi0IaYaGYmYofOh7Zmuc/.F.hDQ/aUfaoXYPNe8ckESdG",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T22:59:21.348Z",
+      "updated_at": "2026-08-20T22:59:21.348Z"
+    },
+    {
+      "id": "id_1787266776975_oz48bhc2q",
+      "email": "candidate.1787266776782@ghrcem.edu",
+      "password_hash": "$2b$10$h4A1/y/73rRQNAjimnsWz..YjQ5o0dT16k5581vVJQr1R.SZmhrw2",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T22:59:36.975Z",
+      "updated_at": "2026-08-20T22:59:36.975Z"
+    },
+    {
+      "id": "id_1787266798997_gc5qa1eop",
+      "email": "candidate.1787266798804@ghrcem.edu",
+      "password_hash": "$2b$10$4KYgAw/q9rdi2w0PEaPxeepdscXiSDUnxYZZVtZz.syO0ZKrm7/o6",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T22:59:58.997Z",
+      "updated_at": "2026-08-20T22:59:58.997Z"
+    },
+    {
+      "id": "id_1787266814825_u7h9klf5i",
+      "email": "candidate.1787266814630@ghrcem.edu",
+      "password_hash": "$2b$10$YnFlHOVKX.EPBbj8dLEuhuAyqKvZB8hFUHM4/VmAHjQdwny322Jze",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:00:14.825Z",
+      "updated_at": "2026-08-20T23:00:14.825Z"
+    },
+    {
+      "id": "id_1787266827902_xy3sc4v6o",
+      "email": "candidate.1787266827692@ghrcem.edu",
+      "password_hash": "$2b$10$/VidTzwbZTAY6MBeSOExm.F2NRDCnr5CzfcTmiRYBwf7M8YJVRK5m",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:00:27.902Z",
+      "updated_at": "2026-08-20T23:00:27.902Z"
+    },
+    {
+      "id": "id_1787266839691_0ogvqicuk",
+      "email": "candidate.1787266839495@ghrcem.edu",
+      "password_hash": "$2b$10$D.mGHjsKsHt5mG5Rnlw3DOhFtG8Zs.w6J6Y9MwH5iD7maEst9CHhS",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:00:39.691Z",
+      "updated_at": "2026-08-20T23:00:39.691Z"
+    },
+    {
+      "id": "id_1787266853789_kkq1s9sn2",
+      "email": "candidate.1787266853594@ghrcem.edu",
+      "password_hash": "$2b$10$lN2qjTcSf/n1uRCeIRrMxexm6qwGY3/g8U6C8TlUDhbd6A.o5A5M.",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:00:53.789Z",
+      "updated_at": "2026-08-20T23:00:53.789Z"
+    },
+    {
+      "id": "id_1787266883561_mirhskh1l",
+      "email": "candidate.1787266883361@ghrcem.edu",
+      "password_hash": "$2b$10$VMN5uRNy0Mx3IO58EJEeAOl0xj77juJBpHX80PT0sOuXv1Lvr.TKG",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:01:23.561Z",
+      "updated_at": "2026-08-20T23:01:23.561Z"
+    },
+    {
+      "id": "id_1787266942574_r9fu7v5mx",
+      "email": "candidate.1787266942348@ghrcem.edu",
+      "password_hash": "$2b$10$5RXZjmCdttLMoWKUC2/kYOBlCQS2.ze7b/hvRxh7l/jzOVIl56P6y",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:02:22.574Z",
+      "updated_at": "2026-08-20T23:02:22.575Z"
+    },
+    {
+      "id": "id_1787266965173_kjbx31eeh",
+      "email": "candidate.1787266964971@ghrcem.edu",
+      "password_hash": "$2b$10$TSz7dnFrRLBICzMeTcdwIut4F657RVnyn/P38GnpnHB3Qpy1aMy5G",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:02:45.173Z",
+      "updated_at": "2026-08-20T23:02:45.173Z"
+    },
+    {
+      "id": "id_1787266989120_mx20oaz0j",
+      "email": "candidate.1787266988988@ghrcem.edu",
+      "password_hash": "$2b$10$XiMi4Gxr/eBOvGjerp7lwuRvnZuR2OYCX6kACx7ni6T7tT.NtDFiO",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:03:09.120Z",
+      "updated_at": "2026-08-20T23:03:09.120Z"
+    },
+    {
+      "id": "id_1787267003606_l5r41bnge",
+      "email": "candidate.1787267003457@ghrcem.edu",
+      "password_hash": "$2b$10$MGqJpWa0j5sfQ8zUvoCDmOQ/u9FGM1X7q0ff1hcULMy1lVMxGmw3e",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:03:23.606Z",
+      "updated_at": "2026-08-20T23:03:23.606Z"
+    },
+    {
+      "id": "id_1787267058300_6zz06imo0",
+      "email": "candidate.1787267058160@ghrcem.edu",
+      "password_hash": "$2b$10$zSj5WZPklSQdv3Kw/mPx4ucjaFG8QjFXhIzUCY0X9A4LqnU/T7H5q",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:04:18.300Z",
+      "updated_at": "2026-08-20T23:04:18.300Z"
+    },
+    {
+      "id": "id_1787267093543_vusix7lz3",
+      "email": "candidate.1787267093402@ghrcem.edu",
+      "password_hash": "$2b$10$WBBVdU5N.uxEdJse/3vqC.HYFwDpd2ND7IwFhvyajwADcmR2IaH.q",
+      "role": "STUDENT",
+      "is_active": true,
+      "is_approved": true,
+      "created_at": "2026-08-20T23:04:53.543Z",
+      "updated_at": "2026-08-20T23:04:53.543Z"
     }
   ],
   "student_profiles": [
@@ -427,12 +577,12 @@
       "github_username": "alexpatil-dev",
       "github_score": 95,
       "github_last_synced": "2026-08-20T20:28:37.222Z",
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 100,
       "verification_status": "PENDING",
       "verification_remarks": "Profile updated by student; awaiting verification.",
       "application_locked": true,
-      "updated_at": "2026-08-20T22:26:41.666Z",
+      "updated_at": "2026-08-20T23:04:52.475Z",
       "documents": [
         {
           "id": "doc_cert_id_1787233494672_uyp26g0uz",
@@ -620,12 +770,12 @@
       "github_username": "priyasharma-code",
       "github_score": 78,
       "github_last_synced": "2026-08-18T00:00:00.000Z",
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 100,
       "verification_status": "VERIFIED",
       "verification_remarks": "Approved all academic details.",
       "application_locked": true,
-      "updated_at": "2026-08-20T22:26:41.707Z",
+      "updated_at": "2026-08-20T23:04:52.510Z",
       "is_defaulter": false,
       "placement_status": "ELIGIBLE",
       "defaulter_reason": "Rejected official offer from Google India (Cloud Infrastructure Intern)",
@@ -669,12 +819,12 @@
       "github_username": "rohit-ml",
       "github_score": 86,
       "github_last_synced": "2026-08-19T00:00:00.000Z",
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 100,
       "verification_status": "VERIFIED",
       "verification_remarks": "Verified by Class Teacher Dr. S. K. Verma.",
       "application_locked": false,
-      "updated_at": "2026-08-20T22:26:41.746Z"
+      "updated_at": "2026-08-20T23:04:52.544Z"
     },
     {
       "id": "id_1787210915412_juhf0i374",
@@ -711,13 +861,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 100,
       "verification_status": "VERIFIED",
       "verification_remarks": "Approved all academic details.",
       "application_locked": false,
       "created_at": "2026-08-20T07:28:35.412Z",
-      "updated_at": "2026-08-20T22:26:41.786Z"
+      "updated_at": "2026-08-20T23:04:52.578Z"
     },
     {
       "id": "id_1787221963337_2n5p4pdux",
@@ -739,13 +889,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T10:32:43.337Z",
-      "updated_at": "2026-08-20T22:26:41.825Z"
+      "updated_at": "2026-08-20T23:04:52.612Z"
     },
     {
       "id": "id_1787239662399_wel86elcr",
@@ -781,13 +931,13 @@
       "is_pan_india": true,
       "github_username": "alexpatil-dev",
       "github_score": 100,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 100,
       "verification_status": "PENDING",
       "verification_remarks": "Profile updated by student; awaiting verification.",
       "application_locked": false,
       "created_at": "2026-08-20T15:27:42.399Z",
-      "updated_at": "2026-08-20T22:26:41.865Z",
+      "updated_at": "2026-08-20T23:04:52.648Z",
       "documents": [
         {
           "id": "doc_cert_id_1787241650388_6hqg9ezmv",
@@ -1101,13 +1251,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 45,
       "verification_status": "VERIFIED",
       "verification_remarks": "Approved all academic details.",
       "application_locked": false,
       "created_at": "2026-08-20T21:58:26.020Z",
-      "updated_at": "2026-08-20T22:31:16.059Z",
+      "updated_at": "2026-08-20T23:04:52.685Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1266,13 +1416,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T21:59:24.711Z",
-      "updated_at": "2026-08-20T22:26:41.949Z",
+      "updated_at": "2026-08-20T23:04:52.720Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1431,13 +1581,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T21:59:55.596Z",
-      "updated_at": "2026-08-20T22:26:41.989Z",
+      "updated_at": "2026-08-20T23:04:52.758Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1596,13 +1746,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T22:13:58.800Z",
-      "updated_at": "2026-08-20T22:26:42.035Z",
+      "updated_at": "2026-08-20T23:04:52.796Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1761,13 +1911,13 @@
       "is_pan_india": true,
       "github_username": null,
       "github_score": 0,
-      "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
+      "assigned_class_teacher_id": "user_faculty_ct_1",
       "profile_completion_percent": 45,
       "verification_status": "PENDING",
       "verification_remarks": "Profile pending completion and class teacher verification",
       "application_locked": false,
       "created_at": "2026-08-20T22:17:16.898Z",
-      "updated_at": "2026-08-20T22:26:42.087Z",
+      "updated_at": "2026-08-20T23:04:52.831Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -1905,6 +2055,625 @@
         "liveness_method": "REAL_TIME_BLINK_DETECTION",
         "descriptor_dimensions": 128
       }
+    },
+    {
+      "id": "id_1787266745559_t939psaol",
+      "user_id": "id_1787266745528_nusecc7tn",
+      "student_id": "GHR-CS-2023-816",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 8.9,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "SQL",
+        "FastAPI"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Cloud",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T22:59:05.559Z",
+      "updated_at": "2026-08-20T23:04:52.869Z"
+    },
+    {
+      "id": "id_1787266761379_uzj1bw655",
+      "user_id": "id_1787266761348_2zklkp0gl",
+      "student_id": "GHR-CS-2023-128",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Cloud",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T22:59:21.379Z",
+      "updated_at": "2026-08-20T23:04:52.909Z"
+    },
+    {
+      "id": "id_1787266777007_qs0x68mgk",
+      "user_id": "id_1787266776975_oz48bhc2q",
+      "student_id": "GHR-CS-2023-447",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T22:59:37.007Z",
+      "updated_at": "2026-08-20T23:04:52.947Z"
+    },
+    {
+      "id": "id_1787266799030_zw3aa9zm7",
+      "user_id": "id_1787266798997_gc5qa1eop",
+      "student_id": "GHR-CS-2023-927",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T22:59:59.030Z",
+      "updated_at": "2026-08-20T23:04:52.986Z"
+    },
+    {
+      "id": "id_1787266814857_zhbx32n07",
+      "user_id": "id_1787266814825_u7h9klf5i",
+      "student_id": "GHR-CS-2023-666",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:00:14.857Z",
+      "updated_at": "2026-08-20T23:04:53.024Z"
+    },
+    {
+      "id": "id_1787266827946_4ua7kvryz",
+      "user_id": "id_1787266827902_xy3sc4v6o",
+      "student_id": "GHR-CS-2023-418",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:00:27.946Z",
+      "updated_at": "2026-08-20T23:04:53.061Z"
+    },
+    {
+      "id": "id_1787266839726_warvhfyb8",
+      "user_id": "id_1787266839691_0ogvqicuk",
+      "student_id": "GHR-CS-2023-218",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:00:39.726Z",
+      "updated_at": "2026-08-20T23:04:53.097Z"
+    },
+    {
+      "id": "id_1787266853820_0pvx7ocqd",
+      "user_id": "id_1787266853789_kkq1s9sn2",
+      "student_id": "GHR-CS-2023-755",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:00:53.820Z",
+      "updated_at": "2026-08-20T23:04:53.134Z"
+    },
+    {
+      "id": "id_1787266883594_hyhgsz4hv",
+      "user_id": "id_1787266883561_mirhskh1l",
+      "student_id": "GHR-CS-2023-325",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:01:23.594Z",
+      "updated_at": "2026-08-20T23:04:53.172Z"
+    },
+    {
+      "id": "id_1787266942613_uzpf7dtts",
+      "user_id": "id_1787266942574_r9fu7v5mx",
+      "student_id": "GHR-CS-2023-865",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:02:22.613Z",
+      "updated_at": "2026-08-20T23:04:53.218Z"
+    },
+    {
+      "id": "id_1787266965206_w4embdmvf",
+      "user_id": "id_1787266965173_kjbx31eeh",
+      "student_id": "GHR-CS-2023-406",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:02:45.206Z",
+      "updated_at": "2026-08-20T23:04:53.257Z"
+    },
+    {
+      "id": "id_1787266989153_c94yeht92",
+      "user_id": "id_1787266989120_mx20oaz0j",
+      "student_id": "GHR-CS-2023-166",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:03:09.153Z",
+      "updated_at": "2026-08-20T23:04:53.298Z"
+    },
+    {
+      "id": "id_1787267003641_axpkvkjl0",
+      "user_id": "id_1787267003606_l5r41bnge",
+      "student_id": "GHR-CS-2023-439",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "PENDING",
+      "verification_remarks": "Profile updated by student; awaiting verification.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:03:23.641Z",
+      "updated_at": "2026-08-20T23:04:53.332Z"
+    },
+    {
+      "id": "id_1787267058333_dxnhrx5mz",
+      "user_id": "id_1787267058300_6zz06imo0",
+      "student_id": "GHR-CS-2023-537",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "VERIFIED",
+      "verification_remarks": "Academic credentials and skills verified for campus placement drives.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:04:18.333Z",
+      "updated_at": "2026-08-20T23:04:53.365Z"
+    },
+    {
+      "id": "id_1787267093574_ejbsddqjv",
+      "user_id": "id_1787267093543_vusix7lz3",
+      "student_id": "GHR-CS-2023-898",
+      "full_name": "Tanvi Joshi",
+      "department": "Engineering",
+      "branch": "Computer Science and Engineering",
+      "passing_year": 2026,
+      "gender": "Female",
+      "current_cgpa": 9.2,
+      "current_backlogs": 0,
+      "skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "Data Structures",
+        "Algorithms",
+        "Docker",
+        "PostgreSQL",
+        "Tailwind CSS"
+      ],
+      "certifications": [
+        {
+          "name": "AWS Certified Cloud Practitioner",
+          "url": "https://example.com/aws.pdf"
+        }
+      ],
+      "resume_url": "https://example.com/resume.pdf",
+      "preferred_locations": [
+        "Pan India"
+      ],
+      "is_pan_india": true,
+      "github_username": null,
+      "github_score": 0,
+      "assigned_class_teacher_id": "user_faculty_ct_1",
+      "profile_completion_percent": 100,
+      "verification_status": "VERIFIED",
+      "verification_remarks": "Academic credentials and skills verified for campus placement drives.",
+      "application_locked": false,
+      "created_at": "2026-08-20T23:04:53.574Z",
+      "updated_at": "2026-08-20T23:04:54.016Z"
     }
   ],
   "faculty_profiles": [
@@ -1916,9 +2685,9 @@
       "department": "Engineering",
       "branch": "Computer Science and Engineering",
       "assigned_year": 2026,
-      "designation": "MENTOR",
+      "designation": "CLASS_TEACHER",
       "active_mentee_count": 14,
-      "updated_at": "2026-08-20T22:26:41.593Z"
+      "updated_at": "2026-08-20T23:04:52.443Z"
     },
     {
       "id": "fac_prof_2",
@@ -1940,10 +2709,10 @@
       "department": "Engineering",
       "branch": "Computer Science and Engineering",
       "assigned_year": 2026,
-      "designation": "CLASS_TEACHER",
+      "designation": "MENTOR",
       "active_mentee_count": 5,
       "created_at": "2026-08-20T07:24:26.224Z",
-      "updated_at": "2026-08-20T22:26:41.626Z",
+      "updated_at": "2026-08-20T23:04:17.252Z",
       "is_approved": true
     },
     {
@@ -2844,6 +3613,60 @@
       "applied_at": "2026-08-20T17:36:33.338Z",
       "created_at": "2026-08-20T17:36:33.338Z",
       "updated_at": "2026-08-20T17:36:33.401Z"
+    },
+    {
+      "id": "id_1787266697104_kpiw1k6r9",
+      "drive_id": "id_1787246684072_s0eaktt70",
+      "student_id": "stud_prof_3",
+      "current_stage": "APPLIED",
+      "stage_events": [
+        {
+          "stage": "Applied",
+          "scheduled_at": "2026-08-20T22:58:17.104Z",
+          "venue_or_link": "Campus Portal Submission",
+          "notes": "Application received and automatically screened by Smart Eligibility."
+        }
+      ],
+      "applied_at": "2026-08-20T22:58:17.104Z",
+      "created_at": "2026-08-20T22:58:17.105Z",
+      "updated_at": "2026-08-20T22:58:17.105Z"
+    },
+    {
+      "id": "id_1787267058808_f0708dmwb",
+      "drive_id": "drive_google_sde",
+      "student_id": "id_1787267058333_dxnhrx5mz",
+      "current_stage": "APPLIED",
+      "stage_events": [
+        {
+          "stage": "Applied",
+          "scheduled_at": "2026-08-20T23:04:18.808Z",
+          "venue_or_link": "Campus Portal Submission",
+          "notes": "Application received and automatically screened by Smart Eligibility."
+        }
+      ],
+      "applied_at": "2026-08-20T23:04:18.808Z",
+      "created_at": "2026-08-20T23:04:18.808Z",
+      "updated_at": "2026-08-20T23:04:18.808Z"
+    },
+    {
+      "id": "id_1787267094147_otqal4nm7",
+      "drive_id": "drive_google_sde",
+      "student_id": "id_1787267093574_ejbsddqjv",
+      "current_stage": "APPLIED",
+      "consent_accepted": true,
+      "consent_accepted_at": "2026-08-20T23:04:54.140Z",
+      "consent_undertaking_policy": "Candidate acknowledged that if an offer is extended by the company, the institution will permanently treat and record the student as CONVERTED / PLACED regardless of subsequent acceptance or rejection.",
+      "stage_events": [
+        {
+          "stage": "Applied",
+          "scheduled_at": "2026-08-20T23:04:54.147Z",
+          "venue_or_link": "Campus Portal Submission",
+          "notes": "Application received with signed Institutional Placement Undertaking & Conversion Policy Consent."
+        }
+      ],
+      "applied_at": "2026-08-20T23:04:54.147Z",
+      "created_at": "2026-08-20T23:04:54.147Z",
+      "updated_at": "2026-08-20T23:04:54.147Z"
     }
   ],
   "internships": [
@@ -8492,6 +9315,193 @@
       "is_read": false,
       "created_at": "2026-08-20T22:31:16.094Z",
       "updated_at": "2026-08-20T22:31:16.094Z"
+    },
+    {
+      "id": "id_1787266745596_fqbyuaxh9",
+      "user_id": "id_1787266745528_nusecc7tn",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T22:59:05.596Z",
+      "updated_at": "2026-08-20T22:59:05.596Z"
+    },
+    {
+      "id": "id_1787266761416_5wgyy8gwu",
+      "user_id": "id_1787266761348_2zklkp0gl",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T22:59:21.416Z",
+      "updated_at": "2026-08-20T22:59:21.416Z"
+    },
+    {
+      "id": "id_1787266777047_gjjx8dv1j",
+      "user_id": "id_1787266776975_oz48bhc2q",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T22:59:37.047Z",
+      "updated_at": "2026-08-20T22:59:37.047Z"
+    },
+    {
+      "id": "id_1787266799064_yj2aiqf1y",
+      "user_id": "id_1787266798997_gc5qa1eop",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T22:59:59.064Z",
+      "updated_at": "2026-08-20T22:59:59.064Z"
+    },
+    {
+      "id": "id_1787266814895_ss2emm24t",
+      "user_id": "id_1787266814825_u7h9klf5i",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:00:14.895Z",
+      "updated_at": "2026-08-20T23:00:14.895Z"
+    },
+    {
+      "id": "id_1787266827988_zrqrrlv11",
+      "user_id": "id_1787266827902_xy3sc4v6o",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:00:27.988Z",
+      "updated_at": "2026-08-20T23:00:27.988Z"
+    },
+    {
+      "id": "id_1787266839766_adgun2efd",
+      "user_id": "id_1787266839691_0ogvqicuk",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:00:39.767Z",
+      "updated_at": "2026-08-20T23:00:39.767Z"
+    },
+    {
+      "id": "id_1787266853858_s46h70wr1",
+      "user_id": "id_1787266853789_kkq1s9sn2",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:00:53.858Z",
+      "updated_at": "2026-08-20T23:00:53.858Z"
+    },
+    {
+      "id": "id_1787266883633_nim5eyzs9",
+      "user_id": "id_1787266883561_mirhskh1l",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:01:23.633Z",
+      "updated_at": "2026-08-20T23:01:23.633Z"
+    },
+    {
+      "id": "id_1787266942655_n2um80pb8",
+      "user_id": "id_1787266942574_r9fu7v5mx",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:02:22.655Z",
+      "updated_at": "2026-08-20T23:02:22.655Z"
+    },
+    {
+      "id": "id_1787266965245_2bmlpz7rf",
+      "user_id": "id_1787266965173_kjbx31eeh",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:02:45.245Z",
+      "updated_at": "2026-08-20T23:02:45.245Z"
+    },
+    {
+      "id": "id_1787266989196_1suy025yj",
+      "user_id": "id_1787266989120_mx20oaz0j",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:03:09.196Z",
+      "updated_at": "2026-08-20T23:03:09.196Z"
+    },
+    {
+      "id": "id_1787267003678_5o74nhvhk",
+      "user_id": "id_1787267003606_l5r41bnge",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:03:23.678Z",
+      "updated_at": "2026-08-20T23:03:23.678Z"
+    },
+    {
+      "id": "id_1787267058367_lr8sui1lp",
+      "user_id": "id_1787267058300_6zz06imo0",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:04:18.368Z",
+      "updated_at": "2026-08-20T23:04:18.368Z"
+    },
+    {
+      "id": "id_1787267058751_vxpg6hgx7",
+      "user_id": "id_1787267058300_6zz06imo0",
+      "module_key": "PROFILE",
+      "title": "Profile Verified!",
+      "message": "Your profile has been verified. You can now apply for campus placement drives!",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:04:18.751Z",
+      "updated_at": "2026-08-20T23:04:18.751Z"
+    },
+    {
+      "id": "id_1787267093612_p4ayw2zro",
+      "user_id": "id_1787267093543_vusix7lz3",
+      "module_key": "PROFILE",
+      "title": "Welcome to Internship Connect Pro!",
+      "message": "Please complete your profile to 100% and submit for verification to unlock internship applications.",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:04:53.612Z",
+      "updated_at": "2026-08-20T23:04:53.612Z"
+    },
+    {
+      "id": "id_1787267094050_yy28kwnf2",
+      "user_id": "id_1787267093543_vusix7lz3",
+      "module_key": "PROFILE",
+      "title": "Profile Verified!",
+      "message": "Your profile has been verified. You can now apply for campus placement drives!",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T23:04:54.050Z",
+      "updated_at": "2026-08-20T23:04:54.050Z"
     }
   ],
   "support_tickets": [

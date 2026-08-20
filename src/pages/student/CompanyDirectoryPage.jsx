@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import StatusBadge from '../../components/common/StatusBadge';
+import InstitutionalConsentModal from '../../components/student/InstitutionalConsentModal';
 import {
   Search,
   Building2,
@@ -26,6 +27,7 @@ const CompanyDirectoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [filterEligibleOnly, setFilterEligibleOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [consentDrive, setConsentDrive] = useState(null);
   const [applyingId, setApplyingId] = useState(null);
   const [actionMessage, setActionMessage] = useState('');
   const [actionError, setActionError] = useState('');
@@ -51,7 +53,15 @@ const CompanyDirectoryPage = () => {
     }
   };
 
-  const handleApply = async (driveId) => {
+  const handleOpenConsentModal = (drive) => {
+    setActionMessage('');
+    setActionError('');
+    setConsentDrive(drive);
+  };
+
+  const handleConfirmApply = async (consentData) => {
+    if (!consentDrive) return;
+    const driveId = consentDrive.id;
     setApplyingId(driveId);
     setActionMessage('');
     setActionError('');
@@ -64,12 +74,17 @@ const CompanyDirectoryPage = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ drive_id: driveId })
+        body: JSON.stringify({
+          drive_id: driveId,
+          consent_accepted: true,
+          consent_accepted_at: consentData.consent_accepted_at
+        })
       });
 
       const data = await res.json();
 
       if (res.ok) {
+        setConsentDrive(null);
         setActionMessage(data.message);
         // Remove applied drive from available list and navigate to My Applications after brief delay
         setDrives(drives.filter((d) => d.id !== driveId));
@@ -262,9 +277,9 @@ const CompanyDirectoryPage = () => {
 
                 <button
                   type="button"
-                  onClick={() => handleApply(drive.id)}
+                  onClick={() => handleOpenConsentModal(drive)}
                   disabled={!drive.is_eligible || applyingId === drive.id}
-                  className="flex-1 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-primary/20 flex items-center justify-center gap-1.5 transition-all"
+                  className="flex-1 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-primary/20 flex items-center justify-center gap-1.5 transition-all active:scale-95"
                 >
                   {applyingId === drive.id ? (
                     <>
@@ -283,6 +298,16 @@ const CompanyDirectoryPage = () => {
           ))}
         </div>
       )}
+
+      {/* Institutional Placement Undertaking & Conversion Policy Modal */}
+      <InstitutionalConsentModal
+        isOpen={Boolean(consentDrive)}
+        onClose={() => setConsentDrive(null)}
+        onConfirm={handleConfirmApply}
+        drive={consentDrive}
+        student={user?.profile}
+        loading={Boolean(applyingId)}
+      />
     </div>
   );
 };

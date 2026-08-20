@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import InstitutionalConsentModal from '../../components/student/InstitutionalConsentModal';
 import {
   CheckCircle2,
   XCircle,
@@ -18,10 +20,13 @@ import {
 const SmartEligibilityPage = () => {
   const { driveId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [eligibility, setEligibility] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showConsentModal, setShowConsentModal] = useState(false);
   const [applying, setApplying] = useState(false);
+  const [applyError, setApplyError] = useState('');
 
   useEffect(() => {
     fetchEligibility();
@@ -44,8 +49,9 @@ const SmartEligibilityPage = () => {
     }
   };
 
-  const handleApply = async () => {
+  const handleConfirmApply = async (consentData) => {
     setApplying(true);
+    setApplyError('');
     try {
       const token = localStorage.getItem('ghr_token');
       const res = await fetch('/api/student/applications/apply', {
@@ -54,13 +60,22 @@ const SmartEligibilityPage = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({ drive_id: driveId })
+        body: JSON.stringify({
+          drive_id: driveId,
+          consent_accepted: true,
+          consent_accepted_at: consentData.consent_accepted_at
+        })
       });
+      const data = await res.json();
       if (res.ok) {
+        setShowConsentModal(false);
         navigate('/student/applications');
+      } else {
+        setApplyError(data.error || 'Application submission failed.');
       }
     } catch (err) {
       console.error('Apply error:', err);
+      setApplyError('Network error submitting application.');
     } finally {
       setApplying(false);
     }
@@ -255,18 +270,22 @@ const SmartEligibilityPage = () => {
         </div>
 
         {/* Action Footer */}
-        <div className="pt-4 flex items-center justify-between border-t border-outline-variant/40">
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-outline-variant/40">
           <Link
             to="/student/profile"
-            className="px-5 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-bold transition-colors"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-bold transition-colors text-center"
           >
             Update Profile & Skills
           </Link>
 
+          {applyError && (
+            <p className="text-xs text-error font-semibold">{applyError}</p>
+          )}
+
           <button
-            onClick={handleApply}
+            onClick={() => setShowConsentModal(true)}
             disabled={!eligibility.is_eligible || applying}
-            className="px-8 py-3 rounded-2xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-primary/30 flex items-center gap-2 transition-all"
+            className="w-full sm:w-auto px-8 py-3 rounded-2xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-primary/30 flex items-center justify-center gap-2 transition-all active:scale-95"
           >
             {applying ? (
               <>
@@ -275,13 +294,23 @@ const SmartEligibilityPage = () => {
               </>
             ) : (
               <>
-                <span>Apply to Drive Now</span>
+                <span>Apply to Drive (Review Undertaking)</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
           </button>
         </div>
       </div>
+
+      {/* Institutional Placement Undertaking & Conversion Policy Consent Modal */}
+      <InstitutionalConsentModal
+        isOpen={showConsentModal}
+        onClose={() => setShowConsentModal(false)}
+        onConfirm={handleConfirmApply}
+        drive={eligibility.drive}
+        student={user?.profile}
+        loading={applying}
+      />
     </div>
   );
 };
