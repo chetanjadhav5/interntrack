@@ -10,7 +10,9 @@ import {
   ScanFace,
   MapPin,
   Clock,
-  Check
+  Check,
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
 import { BlinkLivenessDetector, extractFaceEmbeddingFromCanvas } from '../../utils/faceBiometrics';
 
@@ -25,6 +27,7 @@ const FaceVerificationModal = ({
 }) => {
   const [streamActive, setStreamActive] = useState(false);
   const [cameraError, setCameraError] = useState('');
+  const [isListeningForBlink, setIsListeningForBlink] = useState(false);
   const [livenessStatus, setLivenessStatus] = useState('ALIGN_FACE');
   const [blinkDetected, setBlinkDetected] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -34,20 +37,24 @@ const FaceVerificationModal = ({
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const animationFrameId = useRef(null);
+  const streamRef = useRef(null);
   const detectorRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
       setBlinkDetected(false);
+      setIsListeningForBlink(false);
       setVerificationResult(null);
       setCapturedPhoto(null);
       setCameraError('');
+      setLivenessStatus('ALIGN_FACE');
       startCamera();
 
       detectorRef.current = new BlinkLivenessDetector({
         onStatusChange: (status) => setLivenessStatus(status),
         onBlinkDetected: () => {
           setBlinkDetected(true);
+          setIsListeningForBlink(false);
           handleBlinkAndVerify();
         }
       });
@@ -69,6 +76,8 @@ const FaceVerificationModal = ({
         }
       });
 
+      streamRef.current = stream;
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.onloadedmetadata = () => {
@@ -86,13 +95,37 @@ const FaceVerificationModal = ({
   const stopCamera = () => {
     if (animationFrameId.current) {
       cancelAnimationFrame(animationFrameId.current);
+      animationFrameId.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => {
+        try {
+          track.stop();
+          track.enabled = false;
+        } catch (e) {
+          console.warn('Error stopping track:', e);
+        }
+      });
+      streamRef.current = null;
     }
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
-      tracks.forEach(track => track.stop());
+      tracks.forEach(track => {
+        try {
+          track.stop();
+          track.enabled = false;
+        } catch (e) {
+          console.warn('Error stopping video track:', e);
+        }
+      });
       videoRef.current.srcObject = null;
     }
     setStreamActive(false);
+  };
+
+  const handleClose = () => {
+    stopCamera();
+    onClose();
   };
 
   const startFrameProcessing = () => {
@@ -106,13 +139,25 @@ const FaceVerificationModal = ({
         canvas.height = video.videoHeight || 480;
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        if (detectorRef.current && !blinkDetected && !verifying) {
+        // ONLY monitor and check for blinks when user has actively tapped "Verify & Check In/Out"
+        if (detectorRef.current && isListeningForBlink && !blinkDetected && !verifying) {
           detectorRef.current.processFrame(canvas);
         }
       }
       animationFrameId.current = requestAnimationFrame(process);
     };
     animationFrameId.current = requestAnimationFrame(process);
+  };
+
+  // Called ONLY when the user clicks the "Verify & Check In" (or "Verify & Check Out") button
+  const handleStartBlinkDetection = () => {
+    setCameraError('');
+    setIsListeningForBlink(true);
+    setBlinkDetected(false);
+    setLivenessStatus('PROMPT_BLINK');
+    if (detectorRef.current) {
+      detectorRef.current.reset();
+    }
   };
 
   const handleBlinkAndVerify = async () => {
@@ -162,6 +207,8 @@ const FaceVerificationModal = ({
       const data = await res.json();
       if (res.ok) {
         setVerificationResult(data);
+        // Cleanly release camera stream immediately after successful verification
+        stopCamera();
         if (onSuccess) onSuccess(data);
         setTimeout(() => {
           onClose();
@@ -169,11 +216,13 @@ const FaceVerificationModal = ({
       } else {
         setCameraError(data.error || 'Biometric verification failed.');
         setBlinkDetected(false);
+        setIsListeningForBlink(false);
         if (detectorRef.current) detectorRef.current.reset();
       }
     } catch {
       setCameraError('Network error while processing biometric verification.');
       setBlinkDetected(false);
+      setIsListeningForBlink(false);
       if (detectorRef.current) detectorRef.current.reset();
     } finally {
       setVerifying(false);
@@ -181,6 +230,7 @@ const FaceVerificationModal = ({
   };
 
   const handleManualBlinkTrigger = () => {
+    setIsListeningForBlink(false);
     setBlinkDetected(true);
     setLivenessStatus('BLINK_CONFIRMED');
     handleBlinkAndVerify();
@@ -201,12 +251,13 @@ const FaceVerificationModal = ({
               <h3 className="font-headline font-bold text-base text-on-surface">
                 {actionType === 'CHECK_IN' ? 'Biometric Check-In & Liveness' : 'Biometric Check-Out & Liveness'}
               </h3>
-              <p className="text-[11px] text-on-surface-variant">Blink detection anti-spoofing & facial template match</p>
+              <p className="text-[11px] text-on-surface-variant">Tap Verify to begin eye blink liveness & face matching</p>
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="p-1 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition"
+            onClick={handleClose}
+            className="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition"
+            title="Cancel & Release Camera"
           >
             <X className="w-5 h-5" />
           </button>
@@ -233,17 +284,19 @@ const FaceVerificationModal = ({
                 className={`w-48 h-64 rounded-[50%] border-2 transition-all duration-300 ${
                   blinkDetected
                     ? 'border-emerald-400 bg-emerald-500/10 shadow-[0_0_30px_rgba(52,211,153,0.5)]'
-                    : 'border-white/70 border-dashed animate-pulse'
+                    : isListeningForBlink
+                    ? 'border-amber-400 border-dashed animate-pulse bg-amber-500/5 shadow-[0_0_20px_rgba(251,191,36,0.3)]'
+                    : 'border-white/70 border-dashed'
                 }`}
               ></div>
-              <span className="text-[11px] font-bold text-white bg-black/60 px-3 py-1 rounded-full mt-3 backdrop-blur-sm shadow">
+              <span className="text-[11px] font-bold text-white bg-black/70 px-3.5 py-1.5 rounded-full mt-3 backdrop-blur-md shadow">
                 {verifying
                   ? '🔄 Verifying Facial Biometrics...'
                   : blinkDetected
                   ? '🟢 Blink Verified! Matching Template...'
-                  : livenessStatus === 'BLINK_DETECTED'
-                  ? '👁️ Blink Detected! Processing...'
-                  : '👁️ Please Blink Naturally'}
+                  : isListeningForBlink
+                  ? '👁️ Blink Detected! Please blink your eyes now...'
+                  : '📷 Align Face & Tap "Verify" Below'}
               </span>
             </div>
           )}
@@ -272,50 +325,76 @@ const FaceVerificationModal = ({
           <div className="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between text-xs">
             <div className="flex items-center gap-2 text-on-surface-variant">
               <Eye className="w-4 h-4 text-primary" />
-              <span>Liveness Rule: <strong>Blink naturally once</strong></span>
+              <span>
+                {isListeningForBlink
+                  ? 'Active Blink Scan: Blink naturally in front of camera'
+                  : 'Step: Align face and click "Verify & Check In" to start blink check'}
+              </span>
             </div>
             {blinkDetected ? (
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                 Blink Verified
               </span>
-            ) : (
+            ) : isListeningForBlink ? (
               <button
                 type="button"
                 onClick={handleManualBlinkTrigger}
                 className="text-[10px] font-bold text-primary hover:underline"
               >
-                Simulate Blink Test
+                Simulate Blink
               </button>
-            )}
+            ) : null}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-on-surface-variant hover:bg-surface-container-high"
+              onClick={handleClose}
+              className="px-4 py-2.5 rounded-xl text-xs font-bold text-on-surface-variant hover:bg-surface-container-high border border-outline-variant/60 transition"
             >
               Cancel
             </button>
-            <button
-              type="button"
-              onClick={handleManualBlinkTrigger}
-              disabled={verifying}
-              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-2 transition disabled:opacity-50"
-            >
-              {verifying ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Matching Biometrics...</span>
-                </>
-              ) : (
-                <>
-                  <ScanFace className="w-4 h-4" />
-                  <span>{actionType === 'CHECK_IN' ? 'Verify & Check In' : 'Verify & Check Out'}</span>
-                </>
-              )}
-            </button>
+
+            {!isListeningForBlink && !blinkDetected && !capturedPhoto ? (
+              <button
+                type="button"
+                onClick={handleStartBlinkDetection}
+                disabled={!streamActive}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-2 transition disabled:opacity-50"
+              >
+                <ScanFace className="w-4 h-4" />
+                <span>{actionType === 'CHECK_IN' ? 'Verify & Check In' : 'Verify & Check Out'}</span>
+              </button>
+            ) : isListeningForBlink && !blinkDetected ? (
+              <button
+                type="button"
+                onClick={handleManualBlinkTrigger}
+                disabled={verifying}
+                className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-2 transition animate-pulse"
+              >
+                <Eye className="w-4 h-4" />
+                <span>Listening for Blink... (Blink Now)</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={verifying || Boolean(verificationResult)}
+                className="px-6 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md flex items-center gap-2 transition disabled:opacity-80"
+              >
+                {verifying ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Matching Biometrics...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Verified!</span>
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>

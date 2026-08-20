@@ -16,6 +16,7 @@ import { BlinkLivenessDetector, extractFaceEmbeddingFromCanvas } from '../../uti
 const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometrics }) => {
   const [streamActive, setStreamActive] = useState(false);
   const [cameraError, setCameraError] = useState('');
+  const [isListeningForBlink, setIsListeningForBlink] = useState(false);
   const [livenessStatus, setLivenessStatus] = useState('ALIGN_FACE');
   const [blinkDetected, setBlinkDetected] = useState(false);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
@@ -26,15 +27,18 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const animationFrameId = useRef(null);
+  const streamRef = useRef(null);
   const detectorRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
+      setIsListeningForBlink(false);
       startCamera();
       detectorRef.current = new BlinkLivenessDetector({
         onStatusChange: (status) => setLivenessStatus(status),
         onBlinkDetected: () => {
           setBlinkDetected(true);
+          setIsListeningForBlink(false);
           handleAutoCaptureOnBlink();
         }
       });
@@ -49,6 +53,7 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
   const startCamera = async () => {
     setCameraError('');
     setBlinkDetected(false);
+    setIsListeningForBlink(false);
     setCapturedPhoto(null);
     setCapturedEmbedding(null);
     setSuccessMessage('');
@@ -62,6 +67,8 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
         }
       });
 
+      streamRef.current = stream;
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.onloadedmetadata = () => {
@@ -72,20 +79,44 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
       }
     } catch (err) {
       console.warn('Webcam permission error or camera not accessible:', err);
-      setCameraError('Webcam access was not granted. You can use standard snapshot enrollment or retry permissions.');
+      setCameraError('Webcam access was not granted. Please ensure camera permissions are enabled in your browser.');
     }
   };
 
   const stopCamera = () => {
     if (animationFrameId.current) {
       cancelAnimationFrame(animationFrameId.current);
+      animationFrameId.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => {
+        try {
+          track.stop();
+          track.enabled = false;
+        } catch (e) {
+          console.warn('Error stopping stream track:', e);
+        }
+      });
+      streamRef.current = null;
     }
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = videoRef.current.srcObject.getTracks();
-      tracks.forEach(track => track.stop());
+      tracks.forEach(track => {
+        try {
+          track.stop();
+          track.enabled = false;
+        } catch (e) {
+          console.warn('Error stopping video track:', e);
+        }
+      });
       videoRef.current.srcObject = null;
     }
     setStreamActive(false);
+  };
+
+  const handleClose = () => {
+    stopCamera();
+    onClose();
   };
 
   const startFrameProcessing = () => {
@@ -99,13 +130,22 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
         canvas.height = video.videoHeight || 480;
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        if (detectorRef.current && !blinkDetected) {
+        if (detectorRef.current && isListeningForBlink && !blinkDetected) {
           detectorRef.current.processFrame(canvas);
         }
       }
       animationFrameId.current = requestAnimationFrame(process);
     };
     animationFrameId.current = requestAnimationFrame(process);
+  };
+
+  const handleStartBlinkDetection = () => {
+    setIsListeningForBlink(true);
+    setBlinkDetected(false);
+    setLivenessStatus('PROMPT_BLINK');
+    if (detectorRef.current) {
+      detectorRef.current.reset();
+    }
   };
 
   const handleAutoCaptureOnBlink = () => {
@@ -119,6 +159,7 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
   };
 
   const handleManualBlinkTrigger = () => {
+    setIsListeningForBlink(false);
     setBlinkDetected(true);
     setLivenessStatus('BLINK_CONFIRMED');
     handleAutoCaptureOnBlink();
@@ -147,6 +188,8 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
       const data = await res.json();
       if (res.ok) {
         setSuccessMessage('Biometric Face ID successfully registered and verified with eye blink liveness!');
+        // Cleanly stop camera immediately upon enrollment
+        stopCamera();
         if (onRegistered) onRegistered(data.face_biometrics);
         setTimeout(() => {
           onClose();
@@ -178,8 +221,9 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="p-1 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition"
+            onClick={handleClose}
+            className="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container-high transition"
+            title="Cancel & Release Camera"
           >
             <X className="w-5 h-5" />
           </button>
@@ -206,15 +250,17 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
                 className={`w-48 h-64 rounded-[50%] border-2 transition-all duration-300 ${
                   blinkDetected
                     ? 'border-emerald-400 bg-emerald-500/10 shadow-[0_0_30px_rgba(52,211,153,0.5)]'
-                    : 'border-white/70 border-dashed animate-pulse'
+                    : isListeningForBlink
+                    ? 'border-amber-400 border-dashed animate-pulse bg-amber-500/5 shadow-[0_0_20px_rgba(251,191,36,0.3)]'
+                    : 'border-white/70 border-dashed'
                 }`}
               ></div>
-              <span className="text-[11px] font-bold text-white bg-black/60 px-3 py-1 rounded-full mt-3 backdrop-blur-sm shadow">
+              <span className="text-[11px] font-bold text-white bg-black/70 px-3.5 py-1.5 rounded-full mt-3 backdrop-blur-md shadow">
                 {blinkDetected
                   ? '🟢 Blink Liveness Verified!'
-                  : livenessStatus === 'BLINK_DETECTED'
-                  ? '👁️ Blink Detected! Re-opening...'
-                  : '👁️ Please Blink Naturally'}
+                  : isListeningForBlink
+                  ? '👁️ Please Blink Naturally Now...'
+                  : '📷 Align Face & Tap "Capture via Blink"'}
               </span>
             </div>
           )}
@@ -239,14 +285,18 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
           <div className="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/60 flex items-center justify-between text-xs">
             <div className="flex items-center gap-2 text-on-surface-variant">
               <Eye className="w-4 h-4 text-primary" />
-              <span>Liveness Rule: <strong>Blink naturally once</strong></span>
+              <span>
+                {isListeningForBlink
+                  ? 'Active Blink Scan: Blink naturally in front of camera'
+                  : 'Step: Align face and click "Capture via Blink" to start'}
+              </span>
             </div>
             {blinkDetected ? (
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                 Verified
               </span>
-            ) : (
+            ) : isListeningForBlink ? (
               <button
                 type="button"
                 onClick={handleManualBlinkTrigger}
@@ -254,10 +304,18 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
               >
                 Simulate Blink Test
               </button>
-            )}
+            ) : null}
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-bold text-on-surface-variant hover:bg-surface-container-high transition"
+            >
+              Cancel
+            </button>
+
             {capturedPhoto && (
               <button
                 type="button"
@@ -265,9 +323,10 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
                   setCapturedPhoto(null);
                   setCapturedEmbedding(null);
                   setBlinkDetected(false);
+                  setIsListeningForBlink(false);
                   if (detectorRef.current) detectorRef.current.reset();
                 }}
-                className="px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-bold text-on-surface-variant hover:bg-surface-container-high flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl border border-outline-variant text-xs font-bold text-on-surface-variant hover:bg-surface-container-high flex items-center gap-1.5 transition"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Retake</span>
@@ -275,20 +334,32 @@ const FaceRegistrationModal = ({ isOpen, onClose, onRegistered, currentBiometric
             )}
 
             {!capturedPhoto ? (
-              <button
-                type="button"
-                onClick={handleManualBlinkTrigger}
-                className="px-6 py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-bold text-xs flex items-center gap-2 transition"
-              >
-                <Camera className="w-4 h-4 text-primary" />
-                <span>Capture Frame</span>
-              </button>
+              !isListeningForBlink ? (
+                <button
+                  type="button"
+                  onClick={handleStartBlinkDetection}
+                  disabled={!streamActive}
+                  className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-2 transition disabled:opacity-50"
+                >
+                  <Camera className="w-4 h-4" />
+                  <span>Capture via Blink</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleManualBlinkTrigger}
+                  className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-500/20 flex items-center gap-2 transition animate-pulse"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>Listening for Blink...</span>
+                </button>
+              )
             ) : (
               <button
                 type="button"
                 onClick={handleSaveFaceRegistration}
                 disabled={saving}
-                className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary/90 text-on-primary font-bold text-xs shadow-md shadow-primary/20 flex items-center gap-2 transition disabled:opacity-50"
+                className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 flex items-center gap-2 transition disabled:opacity-50"
               >
                 {saving ? (
                   <>
