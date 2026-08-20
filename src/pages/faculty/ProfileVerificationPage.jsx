@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StatusBadge from '../../components/common/StatusBadge';
+import { viewOrDownloadPdf } from '../../utils/fileViewer';
 import {
   UserCheck,
   CheckCircle2,
@@ -259,15 +260,14 @@ const ProfileVerificationPage = () => {
                           <Award className="w-4 h-4 text-emerald-600" />
                           <span className="font-bold text-on-surface">{c.name}</span>
                         </div>
-                        <a
-                          href={c.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="px-3 py-1 rounded-lg bg-white border border-outline-variant text-primary hover:bg-blue-50 font-bold text-[11px] flex items-center gap-1 shadow-sm"
+                        <button
+                          type="button"
+                          onClick={() => viewOrDownloadPdf(c.url, `${selectedStudent.student_id}_${c.name}.pdf`)}
+                          className="px-3 py-1 rounded-lg bg-white border border-outline-variant text-primary hover:bg-blue-50 font-bold text-[11px] flex items-center gap-1 shadow-sm transition active:scale-95"
                         >
                           <ExternalLink className="w-3 h-3" />
                           <span>View Certificate PDF</span>
-                        </a>
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -285,15 +285,14 @@ const ProfileVerificationPage = () => {
                     <p className="text-[11px] text-on-surface-variant">Uploaded PDF for company drive screening</p>
                   </div>
                 </div>
-                <a
-                  href={selectedStudent.resume_url || 'https://example.com/resume.pdf'}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-4 py-2 rounded-xl bg-white border border-outline-variant text-primary hover:bg-blue-50 font-bold text-xs flex items-center gap-1.5 shadow-sm"
+                <button
+                  type="button"
+                  onClick={() => viewOrDownloadPdf(selectedStudent.resume_url, `${selectedStudent.student_id}_Resume.pdf`)}
+                  className="px-4 py-2 rounded-xl bg-white border border-outline-variant text-primary hover:bg-blue-50 font-bold text-xs flex items-center gap-1.5 shadow-sm transition active:scale-95"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Inspect Resume</span>
-                </a>
+                </button>
               </div>
 
               {/* Class Teacher Verification Form */}

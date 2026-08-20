@@ -1103,11 +1103,11 @@
       "github_score": 0,
       "assigned_class_teacher_id": "id_1787210666223_wgmydphri",
       "profile_completion_percent": 45,
-      "verification_status": "PENDING",
-      "verification_remarks": "Profile pending completion and class teacher verification",
+      "verification_status": "VERIFIED",
+      "verification_remarks": "Approved all academic details.",
       "application_locked": false,
       "created_at": "2026-08-20T21:58:26.020Z",
-      "updated_at": "2026-08-20T22:26:41.906Z",
+      "updated_at": "2026-08-20T22:31:16.059Z",
       "face_biometrics": {
         "registered": true,
         "face_embedding": [
@@ -8481,6 +8481,17 @@
       "is_read": false,
       "created_at": "2026-08-20T22:25:47.443Z",
       "updated_at": "2026-08-20T22:25:47.443Z"
+    },
+    {
+      "id": "id_1787265076094_3hocu8knr",
+      "user_id": "id_1787263105991_3a21xxldf",
+      "module_key": "PROFILE",
+      "title": "Profile Verified!",
+      "message": "Your profile has been verified. You can now apply for campus placement drives!",
+      "link_route": "/student/profile",
+      "is_read": false,
+      "created_at": "2026-08-20T22:31:16.094Z",
+      "updated_at": "2026-08-20T22:31:16.094Z"
     }
   ],
   "support_tickets": [

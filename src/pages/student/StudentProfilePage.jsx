@@ -21,7 +21,9 @@ import {
   ScanFace,
   Camera
 } from 'lucide-react';
+import StatusBadge from '../../components/common/StatusBadge';
 import FaceRegistrationModal from '../../components/common/FaceRegistrationModal';
+import { viewOrDownloadPdf } from '../../utils/fileViewer';
 
 const COMMON_SKILLS = [
   'React', 'Node.js', 'Python', 'Java', 'Spring Boot', 'SQL', 'PostgreSQL',
@@ -617,15 +619,14 @@ const StudentProfilePage = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <a
-                  href={resumeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="px-3.5 py-2 rounded-xl bg-white hover:bg-surface-container-high text-primary border border-outline-variant text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm"
+                <button
+                  type="button"
+                  onClick={() => viewOrDownloadPdf(resumeUrl, resumeFileName || `${profile?.full_name || 'Student'}_Resume.pdf`)}
+                  className="px-3.5 py-2 rounded-xl bg-white hover:bg-surface-container-high text-primary border border-outline-variant text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
                 >
                   <Eye className="w-3.5 h-3.5" />
                   <span>Preview PDF</span>
-                </a>
+                </button>
 
                 <label className="px-3.5 py-2 rounded-xl bg-primary text-on-primary hover:bg-primary/90 text-xs font-bold cursor-pointer flex items-center gap-1.5 transition-all shadow-sm">
                   <Upload className="w-3.5 h-3.5" />
