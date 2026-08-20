@@ -12,7 +12,10 @@ import {
   Camera,
   ArrowRight,
   Loader2,
-  DollarSign
+  DollarSign,
+  Sparkles,
+  ExternalLink,
+  Check
 } from 'lucide-react';
 
 const ReportSelfPlacedPage = () => {
@@ -26,10 +29,15 @@ const ReportSelfPlacedPage = () => {
   const [endDate, setEndDate] = useState('2026-12-31');
   const [offerLetterUrl, setOfferLetterUrl] = useState('https://example.com/self-placed-offer.pdf');
 
-  // Google Maps Coordinates
+  // OpenStreetMap Coordinates
   const [officeAddress, setOfficeAddress] = useState('EON Free Zone, Kharadi, Pune, Maharashtra 411014');
   const [latitude, setLatitude] = useState(18.5529);
   const [longitude, setLongitude] = useState(73.9497);
+
+  // GSTIN Live Verification State
+  const [isVerifyingGstin, setIsVerifyingGstin] = useState(false);
+  const [gstinVerifiedData, setGstinVerifiedData] = useState(null);
+  const [gstinError, setGstinError] = useState('');
 
   // Mentor Selector from same department & branch
   const [mentors, setMentors] = useState([]);
@@ -56,6 +64,50 @@ const ReportSelfPlacedPage = () => {
     setOfficeAddress(loc.address);
     setLatitude(loc.latitude);
     setLongitude(loc.longitude);
+  };
+
+  // RapidAPI GSTIN Verification & Location Autofetch
+  const handleVerifyGstin = async () => {
+    const cleanGst = (gstin || '').trim().toUpperCase();
+    if (!cleanGst || cleanGst.length < 10) {
+      setGstinError('Please enter a valid 15-character GSTIN number (e.g. 27AAJCM9929L1ZM)');
+      return;
+    }
+
+    setIsVerifyingGstin(true);
+    setGstinError('');
+
+    try {
+      const token = localStorage.getItem('ghr_token');
+      const res = await fetch(`/api/student/verify-gstin/${encodeURIComponent(cleanGst)}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setGstinVerifiedData(data);
+        // Autofill Company Name if not filled
+        if (!companyName || companyName.trim() === '') {
+          setCompanyName(data.company_name || data.legal_name);
+        }
+        // Autofill registered address and geocoded coordinates
+        if (data.registered_address) {
+          setOfficeAddress(data.registered_address);
+        }
+        if (data.latitude && data.longitude) {
+          setLatitude(data.latitude);
+          setLongitude(data.longitude);
+        }
+      } else {
+        setGstinError(data.error || 'Unable to verify GSTIN with government portal. Please check the number.');
+      }
+    } catch {
+      setGstinError('Network error while verifying GSTIN with server.');
+    } finally {
+      setIsVerifyingGstin(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -138,9 +190,14 @@ const ReportSelfPlacedPage = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Company & Position Details */}
         <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-outline-variant/40 pb-3">
-            <Building2 className="w-5 h-5 text-primary" />
-            <h2 className="font-headline font-bold text-base text-on-surface">Company & Offer Information</h2>
+          <div className="flex items-center justify-between border-b border-outline-variant/40 pb-3">
+            <div className="flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-primary" />
+              <h2 className="font-headline font-bold text-base text-on-surface">Company & Offer Information</h2>
+            </div>
+            <span className="text-[11px] font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5" /> RapidAPI GSTIN Verified
+            </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -159,17 +216,93 @@ const ReportSelfPlacedPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-on-surface uppercase tracking-wider mb-1.5">
-                Company GSTIN (For Trust Verification)
-              </label>
-              <input
-                type="text"
-                value={gstin}
-                onChange={(e) => setGstin(e.target.value)}
-                placeholder="e.g. 27AABCP1234F1Z9"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-outline-variant bg-white text-xs font-medium focus:ring-2 focus:ring-primary outline-none"
-              />
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-on-surface uppercase tracking-wider">
+                  Company GSTIN (Auto-Verification)
+                </label>
+                <span className="text-[10px] text-on-surface-variant font-medium">15 Alphanumeric</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={gstin}
+                  onChange={(e) => {
+                    setGstin(e.target.value.toUpperCase());
+                    if (gstinVerifiedData) setGstinVerifiedData(null);
+                    if (gstinError) setGstinError('');
+                  }}
+                  placeholder="e.g. 27AAJCM9929L1ZM"
+                  maxLength={15}
+                  className="flex-1 px-3.5 py-2.5 rounded-xl border border-outline-variant bg-white text-xs font-mono font-medium focus:ring-2 focus:ring-primary outline-none uppercase"
+                />
+                <button
+                  type="button"
+                  onClick={handleVerifyGstin}
+                  disabled={isVerifyingGstin || !gstin}
+                  className="px-3.5 py-2.5 bg-primary hover:bg-primary-hover active:scale-95 text-on-primary rounded-xl text-xs font-bold transition flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 shadow-sm"
+                  title="Verify GSTIN with Government Portal & Autofetch Registered Office Coordinates"
+                >
+                  {isVerifyingGstin ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>Verifying...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Verify & Autofetch</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
+
+            {/* GSTIN Verification Feedback & Details Card */}
+            {gstinError && (
+              <div className="sm:col-span-2 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
+                <span>{gstinError}</span>
+              </div>
+            )}
+
+            {gstinVerifiedData && (
+              <div className="sm:col-span-2 p-4 rounded-2xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50/70 border border-emerald-300 text-emerald-950 text-xs shadow-sm space-y-2.5 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center justify-between border-b border-emerald-200/60 pb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-emerald-950 leading-tight">
+                        {gstinVerifiedData.legal_name || gstinVerifiedData.trade_name}
+                      </h4>
+                      <p className="text-[11px] text-emerald-800 font-medium">
+                        GSTIN: <span className="font-mono font-bold">{gstinVerifiedData.gstin}</span> • {gstinVerifiedData.company_type}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold tracking-wide uppercase shadow-sm">
+                    {gstinVerifiedData.status || 'Active'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-emerald-900">
+                  <div>
+                    <span className="font-bold text-emerald-950">Registered Office Address:</span>
+                    <p className="line-clamp-2 mt-0.5 text-emerald-800">{gstinVerifiedData.registered_address}</p>
+                  </div>
+                  <div className="bg-white/80 p-2.5 rounded-xl border border-emerald-200/80 flex flex-col justify-center">
+                    <div className="flex items-center gap-1 text-primary font-bold">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>Autofetched Office Coordinates</span>
+                    </div>
+                    <p className="text-[10px] text-emerald-700 font-mono mt-0.5">
+                      Lat: {gstinVerifiedData.latitude.toFixed(6)} | Lng: {gstinVerifiedData.longitude.toFixed(6)} (300m Attendance Ring Set)
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="block text-xs font-bold text-on-surface uppercase tracking-wider mb-1.5">

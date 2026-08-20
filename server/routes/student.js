@@ -3,6 +3,7 @@ import { findOne, find, findById, insert, update, calculateDistance, getDB } fro
 import { authenticate, requireRole } from '../middleware/auth.js';
 import { generateFridayReports } from '../services/reportScheduler.js';
 import { autoAssignMentor } from './tnp.js';
+import { verifyGstinAndResolveLocation } from '../services/gstinService.js';
 
 const router = express.Router();
 
@@ -1227,6 +1228,27 @@ router.get('/certificates', authenticate, requireRole('STUDENT'), (req, res) => 
 
   const certificates = find('certificates', { student_id: profile.id }) || [];
   res.json(certificates);
+});
+
+// 18. RapidAPI GSTIN Verification & OpenStreetMap Geocoding Resolver
+router.get('/verify-gstin/:gstin', authenticate, requireRole('STUDENT'), async (req, res) => {
+  try {
+    const { gstin } = req.params;
+    const result = await verifyGstinAndResolveLocation(gstin);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message || 'Failed to verify GSTIN' });
+  }
+});
+
+router.post('/verify-gstin', authenticate, requireRole('STUDENT'), async (req, res) => {
+  try {
+    const { gstin } = req.body;
+    const result = await verifyGstinAndResolveLocation(gstin);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message || 'Failed to verify GSTIN' });
+  }
 });
 
 export default router;
