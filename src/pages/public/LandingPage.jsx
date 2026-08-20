@@ -267,7 +267,7 @@ const LandingPage = () => {
             </span>
           </div>
           <span className="font-headline font-bold text-on-surface text-sm">
-            Internship Connect PRO
+            Rai<span className="text-primary font-black">Sakshya</span>
           </span>
         </div>
         <p className="max-w-md mx-auto text-[11px] text-outline">

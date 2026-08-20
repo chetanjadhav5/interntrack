@@ -78,7 +78,7 @@ app.use('/api/support', supportRouter);
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'HEALTHY',
-    service: 'Internship Connect Pro Backend API',
+    service: 'RaiSakshya Backend API',
     instance_ip: process.env.INSTANCE_IP || '15.206.74.169',
     timestamp: new Date().toISOString()
   });
@@ -87,7 +87,7 @@ app.get('/api/health', (req, res) => {
 // Start Server listening on 0.0.0.0 (all interfaces)
 app.listen(PORT, '0.0.0.0', async () => {
   console.log(`=======================================================`);
-  console.log(`🚀 Internship Connect Pro API Server running on port ${PORT}`);
+  console.log(`🚀 RaiSakshya API Server running on port ${PORT}`);
   console.log(`🌐 Public Instance IP: ${process.env.INSTANCE_IP || '15.206.74.169'}`);
   console.log(`🌐 Health check: http://${process.env.INSTANCE_IP || 'localhost'}:${PORT}/api/health`);
   console.log(`=======================================================`);

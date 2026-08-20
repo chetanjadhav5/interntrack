@@ -20,7 +20,7 @@ async function request(method, path, body = null, token = null) {
 
 async function runTests() {
   console.log('====================================================');
-  console.log('🧪 RUNNING END-TO-END SUITE FOR INTERNSHIP CONNECT PRO');
+  console.log('🧪 RUNNING END-TO-END SUITE FOR RAISAKSHYA');
   console.log('====================================================\n');
 
   let passed = 0;

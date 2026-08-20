@@ -1,6 +1,6 @@
-# 🔐 Internship Connect PRO — System Accounts & Credentials
+# 🔐 RaiSakshya — Institutional System Accounts & Credentials
 
-This document contains all pre-configured institutional accounts, roles, login credentials, and brief workflow descriptions for the **Internship Connect PRO** platform.
+This document contains all pre-configured institutional accounts, roles, login credentials, and brief workflow descriptions for the **RaiSakshya** platform.
 
 ---
 

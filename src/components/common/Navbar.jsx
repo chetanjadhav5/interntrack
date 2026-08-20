@@ -43,8 +43,8 @@ const Navbar = () => {
                 </span>
               </div>
               <div>
-                <span className="font-headline font-bold text-lg text-on-surface tracking-tight flex items-center gap-1.5">
-                  Internship Connect <span className="text-primary font-black">PRO</span>
+                <span className="font-headline font-bold text-lg text-on-surface tracking-tight flex items-center gap-1">
+                  Rai<span className="text-primary font-black">Sakshya</span>
                 </span>
                 <span className="text-[11px] text-on-surface-variant font-medium tracking-wide block uppercase">
                   G H Raisoni College of Engineering

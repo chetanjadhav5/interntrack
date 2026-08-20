@@ -746,7 +746,7 @@ const TasksReportsPage = () => {
             {/* Authorize Title */}
             <div className="text-center space-y-1">
               <h3 className="font-headline font-black text-xl text-on-surface tracking-tight">
-                Authorize Internship Connect Pro
+                Authorize RaiSakshya
               </h3>
               <p className="text-xs text-on-surface-variant">
                 by <strong className="text-primary">G. H. Raisoni College of Engineering (Autonomous)</strong>

@@ -66,13 +66,13 @@ export const sendOtpEmail = async (toEmail, otp, context = 'Registration & Accou
     <body>
       <div class="container">
         <div class="header">
-          <h1>Internship Connect Pro</h1>
+          <h1>RaiSakshya</h1>
           <p>G H Raisoni College of Engineering and Management</p>
         </div>
         <div class="content">
           <div class="greeting">Hello,</div>
           <div class="message">
-            You requested a verification code for <strong>${context}</strong> on the Internship Management Portal.
+            You requested a verification code for <strong>${context}</strong> on the RaiSakshya Portal.
             Please use the One-Time Password (OTP) below to complete your verification:
           </div>
           
@@ -96,8 +96,8 @@ export const sendOtpEmail = async (toEmail, otp, context = 'Registration & Accou
   const mailOptions = {
     from: SMTP_FROM,
     to: toEmail,
-    subject: `🔐 ${otp} is your verification code for Internship Connect Pro`,
-    text: `Your verification OTP for Internship Connect Pro is: ${otp}. It is valid for 10 minutes. If you did not request this code, please ignore this email.`,
+    subject: `🔐 ${otp} is your verification code for RaiSakshya`,
+    text: `Your verification OTP for RaiSakshya is: ${otp}. It is valid for 10 minutes. If you did not request this code, please ignore this email.`,
     html: htmlTemplate
   };
 

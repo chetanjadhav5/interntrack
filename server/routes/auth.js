@@ -126,7 +126,7 @@ router.post('/register/student', async (req, res) => {
     insert('notifications', {
       user_id: user.id,
       module_key: 'PROFILE',
-      title: 'Welcome to Internship Connect Pro!',
+      title: 'Welcome to RaiSakshya!',
       message: 'Please complete your profile to 100% and submit for verification to unlock internship applications.',
       link_route: '/student/profile',
       is_read: false
