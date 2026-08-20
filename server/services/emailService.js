@@ -50,14 +50,14 @@ export const sendOtpEmail = async (toEmail, otp, context = 'Registration & Accou
       <style>
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
         .container { max-width: 540px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .header { background: linear-gradient(135deg, #5f1bbf, #3b0764); color: #ffffff; padding: 28px 24px; text-align: center; }
+        .header { background: linear-gradient(135deg, #1a56db, #006973); color: #ffffff; padding: 28px 24px; text-align: center; }
         .header h1 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
-        .header p { margin: 6px 0 0 0; font-size: 13px; color: #f3e8ff; opacity: 0.9; }
+        .header p { margin: 6px 0 0 0; font-size: 13px; color: #dbeafe; opacity: 0.9; }
         .content { padding: 32px 24px; }
         .greeting { font-size: 15px; font-weight: 600; margin-bottom: 12px; }
         .message { font-size: 13px; line-height: 1.6; color: #475569; margin-bottom: 24px; }
-        .otp-box { background: #faf5ff; border: 2px dashed #d8b4fe; border-radius: 12px; padding: 18px; text-align: center; margin: 20px 0; }
-        .otp-code { font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #5f1bbf; margin: 0; font-family: monospace; }
+        .otp-box { background: #eff6ff; border: 2px dashed #93c5fd; border-radius: 12px; padding: 18px; text-align: center; margin: 20px 0; }
+        .otp-code { font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #1e40af; margin: 0; font-family: monospace; }
         .otp-expiry { font-size: 11px; color: #64748b; margin-top: 6px; font-weight: 600; }
         .warning { background: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 12px; font-size: 11px; color: #92400e; margin-top: 24px; line-height: 1.5; }
         .footer { background: #f8fafc; padding: 16px 24px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px solid #f1f5f9; }

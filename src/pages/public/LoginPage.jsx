@@ -87,7 +87,7 @@ const LoginPage = () => {
             <img src="/logo.png" alt="RaiSakshya Logo" className="w-full h-full object-contain" />
           </div>
           <h2 className="font-headline font-bold text-xl tracking-tight">RaiSakshya Portal Login</h2>
-          <p className="text-xs text-purple-100 mt-1">Sign in to your authorized institutional workspace</p>
+          <p className="text-xs text-blue-100 mt-1">Sign in to your authorized institutional workspace</p>
         </div>
 
         {/* Role Tab Selector */}

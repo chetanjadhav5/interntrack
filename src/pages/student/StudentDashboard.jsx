@@ -191,20 +191,20 @@ const StudentDashboard = () => {
             <h1 className="font-headline font-black text-2xl sm:text-3xl tracking-tight">
               Welcome back, {profileData?.full_name || 'Student'}!
             </h1>
-            <p className="text-xs sm:text-sm text-purple-100 max-w-xl">
+            <p className="text-xs sm:text-sm text-blue-100 max-w-xl">
               PRN: <strong>{profileData?.student_id}</strong> | {profileData?.branch} ({profileData?.passing_year})
             </p>
           </div>
 
           {/* Assigned Mentor Badge */}
           <div className="bg-white/15 backdrop-blur-md border border-white/20 rounded-2xl p-4 min-w-[240px]">
-            <span className="text-[10px] font-bold text-purple-200 uppercase tracking-widest block mb-1">
+            <span className="text-[10px] font-bold text-blue-200 uppercase tracking-widest block mb-1">
               Assigned Faculty Mentor
             </span>
             <p className="font-headline font-bold text-sm text-white">
               {profileData?.mentor_info?.name || 'Yet to assign'}
             </p>
-            <p className="text-[11px] text-purple-100">
+            <p className="text-[11px] text-blue-100">
               {profileData?.mentor_info?.email || 'Will be assigned upon T&P verification'}
             </p>
           </div>
@@ -274,7 +274,7 @@ const StudentDashboard = () => {
               <div className="bg-surface-container-low rounded-2xl p-5 border border-outline-variant/60 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-primary">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-primary">
                       <Navigation className="w-5 h-5" />
                     </div>
                     <div>
@@ -291,7 +291,7 @@ const StudentDashboard = () => {
                       <span>Checked In ({activeDurationText})</span>
                     </span>
                   ) : isCheckedOut ? (
-                    <span className="px-3 py-1 rounded-full bg-primary text-white text-xs font-bold flex items-center gap-1 shadow-sm">
+                    <span className="px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center gap-1 shadow-sm">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Day Completed ({todayCheckin.hours_worked} hrs)</span>
                     </span>
@@ -395,7 +395,7 @@ const StudentDashboard = () => {
             </div>
           ) : (
             <div className="bg-surface-container-lowest rounded-3xl p-8 border border-outline-variant/60 text-center space-y-4 shadow-sm">
-              <div className="w-14 h-14 rounded-2xl bg-purple-50 text-primary flex items-center justify-center mx-auto border border-purple-100">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-primary flex items-center justify-center mx-auto border border-blue-100">
                 <Building2 className="w-7 h-7" />
               </div>
               <div>
@@ -435,7 +435,7 @@ const StudentDashboard = () => {
                 className="w-full p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container-high text-on-surface text-xs font-semibold flex items-center justify-between transition-colors border border-outline-variant/40"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-purple-100 text-primary flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-blue-100 text-primary flex items-center justify-center">
                     <Clock className="w-4 h-4" />
                   </div>
                   <span>Attendance & Hours Log</span>
@@ -472,7 +472,7 @@ const StudentDashboard = () => {
           </div>
 
           {/* Institutional Compliance Notice */}
-          <div className="bg-gradient-to-br from-purple-50 to-indigo-50/50 rounded-3xl p-6 border border-purple-100 shadow-sm space-y-3">
+          <div className="bg-gradient-to-br from-blue-50 to-teal-50 rounded-3xl p-6 border border-blue-100 shadow-sm space-y-3">
             <div className="flex items-center gap-2 text-primary font-headline font-bold text-xs uppercase tracking-wider">
               <ShieldCheck className="w-4 h-4" />
               <span>GHR Inter-Track Policy</span>

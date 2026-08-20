@@ -98,7 +98,7 @@ const WorkflowTrackerPage = () => {
                   isDone
                     ? 'bg-emerald-50/60 border-emerald-200 shadow-sm'
                     : isCurrent
-                    ? 'bg-purple-50/80 border-primary ring-2 ring-primary/20 shadow-md'
+                    ? 'bg-blue-50/80 border-primary ring-2 ring-primary/20 shadow-md'
                     : 'bg-surface-container-low border-outline-variant/60 opacity-60'
                 }`}
               >
@@ -130,7 +130,7 @@ const WorkflowTrackerPage = () => {
 
                 {/* Status Footnote */}
                 <div className="pt-2 border-t border-outline-variant/30 text-[10px] font-semibold">
-                  <span className={isDone ? 'text-emerald-800' : isCurrent ? 'text-purple-900 font-bold' : 'text-on-surface-variant'}>
+                  <span className={isDone ? 'text-emerald-800' : isCurrent ? 'text-blue-900 font-bold' : 'text-on-surface-variant'}>
                     {s.status_label}
                   </span>
                 </div>
@@ -141,9 +141,9 @@ const WorkflowTrackerPage = () => {
       </div>
 
       {/* Action Next Step Card */}
-      <div className="bg-gradient-to-r from-primary via-purple-700 to-primary-container rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+      <div className="bg-gradient-to-r from-primary via-blue-700 to-primary-container rounded-3xl p-6 sm:p-8 text-white shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
         <div className="space-y-1">
-          <span className="text-xs font-bold text-purple-200 uppercase tracking-widest">Recommended Next Action</span>
+          <span className="text-xs font-bold text-blue-200 uppercase tracking-widest">Recommended Next Action</span>
           <h3 className="font-headline font-bold text-xl">
             {currentStepObj?.step === 1 && 'Complete your academic profile details'}
             {currentStepObj?.step === 2 && 'Awaiting Class Teacher verification of your profile'}
@@ -154,7 +154,7 @@ const WorkflowTrackerPage = () => {
             {currentStepObj?.step === 7 && 'Submit upcoming Friday weekly reports and sync GitHub'}
             {currentStepObj?.step === 8 && 'View and download your official institutional digital certificate'}
           </h3>
-          <p className="text-xs text-purple-100/90">
+          <p className="text-xs text-blue-100/90">
             {currentStepObj?.details || 'Track your journey stage'}
           </p>
         </div>
@@ -175,7 +175,7 @@ const WorkflowTrackerPage = () => {
               ? '/student/tasks-reports'
               : '/student/vault'
           }
-          className="px-6 py-3 rounded-2xl bg-white text-primary font-bold text-xs hover:bg-purple-50 shadow-md flex items-center gap-1.5 transition-all self-start sm:self-auto"
+          className="px-6 py-3 rounded-2xl bg-white text-primary font-bold text-xs hover:bg-blue-50 shadow-md flex items-center gap-1.5 transition-all self-start sm:self-auto"
         >
           <span>Proceed with Next Step</span>
           <ArrowRight className="w-4 h-4" />

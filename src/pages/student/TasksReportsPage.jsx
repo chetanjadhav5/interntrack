@@ -357,13 +357,13 @@ const TasksReportsPage = () => {
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-3 p-4 rounded-2xl bg-purple-50/80 border border-purple-200/80 text-purple-950 flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
+          <div className="flex items-center gap-3 p-4 rounded-2xl bg-blue-50/80 border border-blue-200/80 text-blue-950 flex-shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-purple-800 uppercase tracking-wider block">Accredited Evaluation</span>
-              <p className="font-headline font-bold text-xs text-purple-950">100% Institutional Logbook & Work Proofs</p>
+              <span className="text-[10px] font-bold text-blue-800 uppercase tracking-wider block">Accredited Evaluation</span>
+              <p className="font-headline font-bold text-xs text-blue-950">100% Institutional Logbook & Work Proofs</p>
             </div>
           </div>
         )}
@@ -472,7 +472,7 @@ const TasksReportsPage = () => {
                     <div className="space-y-3">
                       {/* Multi-file Upload Button / Dropzone */}
                       <label className="flex items-center justify-center gap-3 p-4 rounded-2xl border-2 border-dashed border-outline-variant hover:border-primary bg-surface-container-low cursor-pointer hover:bg-surface-container-high transition-all text-center group">
-                        <div className="w-8 h-8 rounded-xl bg-purple-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-8 h-8 rounded-xl bg-blue-50 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
                           <FileUp className="w-4 h-4" />
                         </div>
                         <div className="text-left">
@@ -544,7 +544,7 @@ const TasksReportsPage = () => {
                                 </div>
                                 <div className="flex items-center justify-between text-[10px] text-on-surface-variant font-medium">
                                   <span className="truncate max-w-[130px] font-bold text-on-surface">{item.name}</span>
-                                  <span className="px-1.5 py-0.5 rounded bg-purple-50 text-purple-800 font-bold">Image</span>
+                                  <span className="px-1.5 py-0.5 rounded bg-blue-50 text-blue-800 font-bold">Image</span>
                                 </div>
                               </div>
                             ) : isPdf ? (
@@ -568,7 +568,7 @@ const TasksReportsPage = () => {
                               </div>
                             ) : (
                               <div className="space-y-2">
-                                <div className="h-28 rounded-xl bg-purple-50/70 border border-purple-200/60 flex flex-col items-center justify-center p-3 text-center">
+                                <div className="h-28 rounded-xl bg-blue-50/70 border border-blue-200/60 flex flex-col items-center justify-center p-3 text-center">
                                   <ExternalLink className="w-8 h-8 text-primary mb-1" />
                                   <span className="text-[10px] font-bold text-primary uppercase tracking-wider">External Link</span>
                                   <span className="text-[10px] text-on-surface-variant truncate max-w-full font-mono mt-0.5">{item.name}</span>
@@ -674,7 +674,7 @@ const TasksReportsPage = () => {
                     onClick={() => handleSelectReportForEdit(rep)}
                     className={`p-3.5 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-purple-50/80 border-primary shadow-sm ring-2 ring-primary/20'
+                        ? 'bg-blue-50/80 border-primary shadow-sm ring-2 ring-primary/20'
                         : isLocked
                         ? 'bg-surface-container-low/50 border-outline-variant/40 hover:bg-surface-container-low opacity-75'
                         : 'bg-surface-container-low border-outline-variant/60 hover:bg-surface-container-high'
@@ -687,7 +687,7 @@ const TasksReportsPage = () => {
                         ) : isApproved ? (
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                         ) : isSubmitted ? (
-                          <Clock className="w-3.5 h-3.5 text-primary" />
+                          <Clock className="w-3.5 h-3.5 text-blue-600" />
                         ) : isCorrection ? (
                           <AlertCircle className="w-3.5 h-3.5 text-orange-600" />
                         ) : (

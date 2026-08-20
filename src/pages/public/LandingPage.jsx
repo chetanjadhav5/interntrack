@@ -35,7 +35,7 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32">
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#5f1bbf_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#1a56db_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center max-w-3xl mx-auto space-y-6">

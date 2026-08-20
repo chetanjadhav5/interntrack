@@ -155,7 +155,7 @@ const StudentRegisterPage = () => {
             <img src="/logo.png" alt="RaiSakshya Logo" className="w-full h-full object-contain" />
           </div>
           <h2 className="font-headline font-bold text-xl tracking-tight">RaiSakshya Student Registration</h2>
-          <p className="text-xs text-purple-100 mt-1">
+          <p className="text-xs text-blue-100 mt-1">
             {step === 1 ? 'Step 1 of 2: Security & OTP Verification' : 'Step 2 of 2: Academic & Personal Profile'}
           </p>
         </div>
