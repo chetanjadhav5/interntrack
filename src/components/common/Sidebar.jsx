@@ -90,7 +90,7 @@ const Sidebar = () => {
     <aside className="w-64 flex-shrink-0 bg-surface-container-low border-r border-outline-variant/60 flex flex-col h-full overflow-hidden p-3">
       {/* Workspace Header */}
       <div className="mb-4 px-3 py-2 flex items-center gap-3 bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm">
-        <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-brand to-primary flex items-center justify-center text-white font-bold shadow-sm">
+        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm">
           <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
             account_circle
           </span>
@@ -121,8 +121,8 @@ const Sidebar = () => {
               className={({ isActive }) =>
                 `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
                   isActive
-                    ? 'bg-gradient-to-r from-brand to-primary text-white shadow-md shadow-brand/20'
-                    : 'text-on-surface-variant hover:bg-brand-surface/70 hover:text-brand'
+                    ? 'bg-primary-container text-on-primary shadow-sm shadow-primary/20'
+                    : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
                 }`
               }
             >

@@ -37,7 +37,7 @@ const Navbar = () => {
           {/* Logo & Institution Branding */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-white border border-brand-border/80 p-1 flex items-center justify-center shadow-sm shadow-brand/10 group-hover:scale-105 group-hover:border-brand transition-all overflow-hidden">
+              <div className="w-10 h-10 rounded-xl bg-white border border-outline-variant/60 p-1 flex items-center justify-center shadow-sm shadow-primary/10 group-hover:scale-105 transition-transform overflow-hidden">
                 <img
                   src="/logo.png"
                   alt="RaiSakshya Logo"
@@ -45,8 +45,8 @@ const Navbar = () => {
                 />
               </div>
               <div>
-                <span className="font-headline font-bold text-lg text-on-surface tracking-tight flex items-center gap-0.5">
-                  Rai<span className="text-brand font-black tracking-tight">Sakshya</span>
+                <span className="font-headline font-bold text-lg text-on-surface tracking-tight flex items-center gap-1">
+                  Rai<span className="text-primary font-black">Sakshya</span>
                 </span>
                 <span className="text-[11px] text-on-surface-variant font-medium tracking-wide block uppercase">
                   G H Raisoni College of Engineering
