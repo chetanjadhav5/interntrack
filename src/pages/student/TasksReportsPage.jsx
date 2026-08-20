@@ -181,7 +181,7 @@ const TasksReportsPage = () => {
         setGithubUser(data.github_username);
         setOauthStep(3);
         setActionMsg(`🎉 GitHub verified & connected via OAuth! @${data.github_username} (Score: ${data.github_score || 100}/100)`);
-        
+
         // Clean URL params if redirected from GitHub
         if (window.location.search.includes('code=')) {
           window.history.replaceState({}, document.title, window.location.pathname);
@@ -672,13 +672,12 @@ const TasksReportsPage = () => {
                   <div
                     key={rep.id || rep.week_number}
                     onClick={() => handleSelectReportForEdit(rep)}
-                    className={`p-3.5 rounded-2xl border cursor-pointer transition-all ${
-                      isSelected
+                    className={`p-3.5 rounded-2xl border cursor-pointer transition-all ${isSelected
                         ? 'bg-blue-50/80 border-primary shadow-sm ring-2 ring-primary/20'
                         : isLocked
-                        ? 'bg-surface-container-low/50 border-outline-variant/40 hover:bg-surface-container-low opacity-75'
-                        : 'bg-surface-container-low border-outline-variant/60 hover:bg-surface-container-high'
-                    }`}
+                          ? 'bg-surface-container-low/50 border-outline-variant/40 hover:bg-surface-container-low opacity-75'
+                          : 'bg-surface-container-low border-outline-variant/60 hover:bg-surface-container-high'
+                      }`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1.5">

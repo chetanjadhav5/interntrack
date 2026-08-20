@@ -1,11 +1,14 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
+import { useSidebar } from '../../context/SidebarContext';
+import { X } from 'lucide-react';
 
 const Sidebar = () => {
   const { user } = useAuth();
   const { moduleUnreadMap, markModuleAsRead } = useNotifications();
+  const { isOpen, closeSidebar } = useSidebar();
   const location = useLocation();
 
   if (!user) return null;
@@ -86,75 +89,149 @@ const Sidebar = () => {
 
   const navItems = getNavItems();
 
+  const renderNavList = (onItemClick = null) => (
+    <nav className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1">
+      {navItems.map((item) => {
+        const hasUnread = Boolean(moduleUnreadMap[item.moduleKey] && moduleUnreadMap[item.moduleKey] > 0);
+        const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
+
+        return (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            onClick={() => {
+              if (hasUnread) markModuleAsRead(item.moduleKey);
+              if (onItemClick) onItemClick();
+            }}
+            className={({ isActive }) =>
+              `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
+                isActive
+                  ? 'bg-primary-container text-on-primary shadow-sm shadow-primary/20'
+                  : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+              }`
+            }
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <span
+                className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform"
+                style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
+              >
+                {item.icon}
+              </span>
+              <span className="truncate">{item.name}</span>
+            </div>
+
+            {/* Unread Circular Dot Indicator */}
+            {hasUnread && (
+              <span className="w-2.5 h-2.5 rounded-full bg-error ring-2 ring-white animate-pulse flex-shrink-0" />
+            )}
+          </NavLink>
+        );
+      })}
+    </nav>
+  );
+
   return (
-    <aside className="w-64 flex-shrink-0 bg-surface-container-low border-r border-outline-variant/60 flex flex-col h-full overflow-hidden p-3">
-      {/* Workspace Header */}
-      <div className="mb-4 px-3 py-2 flex items-center gap-3 bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm">
-        <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm">
-          <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-            account_circle
-          </span>
+    <>
+      {/* 1. Desktop Stationary Sidebar (Always Fixed in Viewport, Does NOT Scroll With Main Page) */}
+      <aside className="hidden lg:flex w-64 flex-shrink-0 bg-surface-container-low border-r border-outline-variant/60 flex-col h-full overflow-hidden p-3 select-none">
+        {/* Workspace Header */}
+        <div className="mb-4 px-3 py-2 flex items-center gap-3 bg-surface-container-lowest rounded-xl border border-outline-variant/60 shadow-sm flex-shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-on-primary font-bold shadow-sm">
+            <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>
+              account_circle
+            </span>
+          </div>
+          <div className="overflow-hidden">
+            <p className="font-headline font-bold text-xs text-on-surface truncate">
+              {user.profile?.full_name || 'Portal User'}
+            </p>
+            <p className="text-[11px] text-on-surface-variant font-medium capitalize truncate">
+              {user.role.toLowerCase()} Workspace
+            </p>
+          </div>
         </div>
-        <div className="overflow-hidden">
-          <p className="font-headline font-bold text-xs text-on-surface truncate">
-            {user.profile?.full_name || 'Portal User'}
+
+        {/* Navigation List */}
+        {renderNavList()}
+
+        {/* Institutional Trust Footer */}
+        <div className="pt-3 mt-auto border-t border-outline-variant/60 text-center flex-shrink-0">
+          <p className="text-[10px] text-on-surface-variant font-medium">
+            RaiSakshya IMS v2.4
           </p>
-          <p className="text-[11px] text-on-surface-variant font-medium capitalize truncate">
-            {user.role.toLowerCase()} Workspace
+          <p className="text-[9px] text-outline">
+            Autonomous & Data-Driven
           </p>
         </div>
-      </div>
+      </aside>
 
-      {/* Navigation List */}
-      <nav className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1">
-        {navItems.map((item) => {
-          const hasUnread = Boolean(moduleUnreadMap[item.moduleKey] && moduleUnreadMap[item.moduleKey] > 0);
-          const isActive = location.pathname === item.path || location.pathname.startsWith(item.path + '/');
+      {/* 2. Mobile Responsive Drawer & Backdrop Overlay */}
+      {isOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex animate-in fade-in duration-200">
+          {/* Backdrop Blur Overlay */}
+          <div
+            onClick={closeSidebar}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            aria-hidden="true"
+          />
 
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={() => {
-                if (hasUnread) markModuleAsRead(item.moduleKey);
-              }}
-              className={({ isActive }) =>
-                `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all group ${
-                  isActive
-                    ? 'bg-primary-container text-on-primary shadow-sm shadow-primary/20'
-                    : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
-                }`
-              }
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <span
-                  className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform"
-                  style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
-                >
-                  {item.icon}
-                </span>
-                <span className="truncate">{item.name}</span>
+          {/* Slide-in Navigation Drawer */}
+          <div className="relative w-72 max-w-[85vw] bg-surface-container-lowest h-full shadow-2xl flex flex-col p-4 z-10 border-r border-outline-variant animate-in slide-in-from-left duration-300">
+            {/* Drawer Header with Brand & Close Button */}
+            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/60 mb-3 flex-shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-white border border-outline-variant/60 p-0.5 flex items-center justify-center shadow-sm overflow-hidden">
+                  <img src="/logo.png" alt="RaiSakshya" className="w-full h-full object-contain" />
+                </div>
+                <div>
+                  <span className="font-headline font-bold text-sm text-on-surface tracking-tight flex items-center gap-0.5">
+                    Rai<span className="text-primary font-black">Sakshya</span>
+                  </span>
+                  <span className="text-[10px] text-on-surface-variant font-medium block">
+                    {user.role.toLowerCase()} navigation
+                  </span>
+                </div>
               </div>
 
-              {/* Unread Circular Dot Indicator */}
-              {hasUnread && (
-                <span className="w-2.5 h-2.5 rounded-full bg-error ring-2 ring-white animate-pulse flex-shrink-0" />
-              )}
-            </NavLink>
-          );
-        })}
-      </nav>
+              <button
+                type="button"
+                onClick={closeSidebar}
+                className="p-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
+                aria-label="Close navigation"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-      {/* Institutional Trust Footer */}
-      <div className="pt-3 mt-auto border-t border-outline-variant/60 text-center">
-        <p className="text-[10px] text-on-surface-variant font-medium">
-          GHR Inter-Track IMS v2.4
-        </p>
-        <p className="text-[9px] text-outline">
-          Authentic & Data-Driven
-        </p>
-      </div>
-    </aside>
+            {/* Mobile User Profile Summary */}
+            <div className="mb-3 px-3 py-2 flex items-center gap-2.5 bg-surface-container-low rounded-xl border border-outline-variant/50 flex-shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                {user.profile?.full_name ? user.profile.full_name.charAt(0) : 'U'}
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-headline font-bold text-xs text-on-surface truncate">
+                  {user.profile?.full_name || 'Portal User'}
+                </p>
+                <p className="text-[10px] text-on-surface-variant truncate">
+                  {user.email}
+                </p>
+              </div>
+            </div>
+
+            {/* Navigation List (Closes drawer on link click) */}
+            {renderNavList(closeSidebar)}
+
+            {/* Drawer Footer */}
+            <div className="pt-3 mt-auto border-t border-outline-variant/60 text-center flex-shrink-0">
+              <p className="text-[10px] text-on-surface-variant font-medium">
+                RaiSakshya Institutional IMS
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

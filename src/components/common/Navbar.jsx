@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
-import { Bell, User, LogOut, ChevronDown, CheckCircle, AlertCircle, Building2, Briefcase, GraduationCap, Shield } from 'lucide-react';
+import { useSidebar } from '../../context/SidebarContext';
+import { Bell, User, LogOut, ChevronDown, CheckCircle, AlertCircle, Building2, Briefcase, GraduationCap, Shield, Menu } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { notifications, totalUnread, markAsRead } = useNotifications();
+  const { isOpen, toggleSidebar } = useSidebar();
   const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
 
@@ -35,7 +37,20 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo & Institution Branding */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            {/* Mobile Sidebar Hamburger Toggle */}
+            {user && (
+              <button
+                type="button"
+                onClick={toggleSidebar}
+                className="p-2 -ml-1.5 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high lg:hidden transition-colors flex items-center justify-center"
+                aria-label="Toggle navigation menu"
+                title="Navigation Menu"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            )}
+
             <Link to="/" className="flex items-center gap-2.5 group">
               <div className="w-10 h-10 rounded-xl bg-white border border-outline-variant/60 p-1 flex items-center justify-center shadow-sm shadow-primary/10 group-hover:scale-105 transition-transform overflow-hidden">
                 <img
