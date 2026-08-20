@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import GoogleMapPicker from '../../components/common/GoogleMapPicker';
+import OpenStreetMapPicker from '../../components/common/OpenStreetMapPicker';
 import {
   Building2,
   Mail,
@@ -380,8 +380,8 @@ const CompanyRegisterPage = () => {
                 />
               </div>
 
-              {/* Google Maps Location Setup */}
-              <GoogleMapPicker
+              {/* OpenStreetMap Location Setup */}
+              <OpenStreetMapPicker
                 initialAddress={officeAddress}
                 initialLat={latitude}
                 initialLng={longitude}

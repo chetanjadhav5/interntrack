@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import GoogleMapPicker from '../../components/common/GoogleMapPicker';
+import OpenStreetMapPicker from '../../components/common/OpenStreetMapPicker';
 import {
   Building2,
   MapPin,
@@ -243,7 +243,7 @@ const ReportSelfPlacedPage = () => {
             </span>
           </div>
 
-          <GoogleMapPicker
+          <OpenStreetMapPicker
             initialAddress={officeAddress}
             initialLat={latitude}
             initialLng={longitude}

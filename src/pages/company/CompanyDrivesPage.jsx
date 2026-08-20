@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import GoogleMapPicker from '../../components/common/GoogleMapPicker';
+import OpenStreetMapPicker from '../../components/common/OpenStreetMapPicker';
 import StatusBadge from '../../components/common/StatusBadge';
 import {
   Building2,
@@ -708,12 +708,12 @@ const CompanyDrivesPage = () => {
                 />
               </div>
 
-              {/* Google Maps Office Location Picker */}
+              {/* OpenStreetMap Office Location Picker */}
               <div className="space-y-2">
                 <label className="block text-xs font-bold text-on-surface uppercase tracking-wider">
                   Office Work Location & Geofence (300m Institutional Radius)
                 </label>
-                <GoogleMapPicker
+                <OpenStreetMapPicker
                   initialAddress={officeAddress}
                   initialLat={latitude}
                   initialLng={longitude}

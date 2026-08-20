@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import GoogleMapPicker from '../../components/common/GoogleMapPicker';
+import OpenStreetMapPicker from '../../components/common/OpenStreetMapPicker';
 import {
   Building2,
   Globe,
@@ -196,7 +196,7 @@ const CompanyProfilePage = () => {
             <h2 className="font-headline font-bold text-base text-on-surface">Registered Work Location & Geofence</h2>
           </div>
 
-          <GoogleMapPicker
+          <OpenStreetMapPicker
             initialAddress={officeAddress}
             initialLat={latitude}
             initialLng={longitude}

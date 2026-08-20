@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import GoogleMapPicker from '../../components/common/GoogleMapPicker';
+import OpenStreetMapPicker from '../../components/common/OpenStreetMapPicker';
 import StatusBadge from '../../components/common/StatusBadge';
 import {
   Briefcase,
@@ -400,11 +400,18 @@ const ManageDrivesPage = () => {
               </div>
 
               {/* Google Maps Location Setup */}
-              <GoogleMapPicker
-                initialAddress={officeAddress}
-                initialLat={latitude}
-                initialLng={longitude}
-                onLocationSelect={handleLocationSelect}
+              <OpenStreetMapPicker
+                initialAddress={createForm.office_address}
+                initialLat={createForm.work_location_lat}
+                initialLng={createForm.work_location_lng}
+                onLocationSelect={(loc) => {
+                  setCreateForm({
+                    ...createForm,
+                    office_address: loc.address,
+                    work_location_lat: loc.latitude,
+                    work_location_lng: loc.longitude
+                  });
+                }}
               />
 
               <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/40">
