@@ -25,10 +25,17 @@ export const evaluateEligibility = (student, drive) => {
   const reasons = [];
   let isEligible = true;
 
+  if (!student) {
+    return { isEligible: false, reasons: ['Student profile not found.'] };
+  }
+
   // 1. Profile Verification Check
-  if (student.profile_completion_percent < 100 || student.verification_status !== 'VERIFIED') {
+  if (student.verification_status === 'REJECTED') {
     isEligible = false;
-    reasons.push(`Profile must be 100% complete and verified by your Class Teacher (Current: ${student.profile_completion_percent}%, Status: ${student.verification_status}).`);
+    reasons.push(`Profile verification was rejected by your Class Teacher. Remarks: ${student.verification_remarks || 'Please update your profile details.'}`);
+  } else if (student.profile_completion_percent !== undefined && student.profile_completion_percent < 40) {
+    isEligible = false;
+    reasons.push(`Profile must be at least 40% complete to apply (Current: ${student.profile_completion_percent}%).`);
   }
 
   // 2. Application Lock Check
@@ -38,48 +45,48 @@ export const evaluateEligibility = (student, drive) => {
   }
 
   // 3. Minimum CGPA Check
-  if (student.current_cgpa < drive.min_cgpa) {
-    isEligible = false;
-    reasons.push(`Minimum CGPA required is ${drive.min_cgpa}. Your CGPA is ${student.current_cgpa}.`);
+  if (drive.min_cgpa !== undefined && drive.min_cgpa !== null && drive.min_cgpa !== '') {
+    const reqCgpa = parseFloat(drive.min_cgpa);
+    const stuCgpa = parseFloat(student.current_cgpa || 0);
+    if (!isNaN(reqCgpa) && stuCgpa < reqCgpa) {
+      isEligible = false;
+      reasons.push(`Minimum CGPA required is ${reqCgpa}. Your CGPA is ${stuCgpa}.`);
+    }
   }
 
   // 4. Active Backlogs Check
-  if (student.current_backlogs > drive.max_backlogs) {
-    isEligible = false;
-    reasons.push(`Maximum allowed backlogs is ${drive.max_backlogs}. You currently have ${student.current_backlogs} active backlogs.`);
+  if (drive.max_backlogs !== undefined && drive.max_backlogs !== null && drive.max_backlogs !== '') {
+    const maxBack = parseInt(drive.max_backlogs, 10);
+    const stuBack = parseInt(student.current_backlogs || 0, 10);
+    if (!isNaN(maxBack) && stuBack > maxBack) {
+      isEligible = false;
+      reasons.push(`Maximum allowed backlogs is ${maxBack}. You currently have ${stuBack} active backlogs.`);
+    }
   }
 
   // 5. Allowed Branches Check
-  if (drive.allowed_branches && drive.allowed_branches.length > 0) {
-    if (!drive.allowed_branches.includes(student.branch)) {
+  if (drive.allowed_branches && Array.isArray(drive.allowed_branches) && drive.allowed_branches.length > 0) {
+    if (student.branch && !drive.allowed_branches.includes(student.branch)) {
       isEligible = false;
       reasons.push(`Drive is restricted to [${drive.allowed_branches.join(', ')}]. Your branch is ${student.branch}.`);
     }
   }
 
   // 6. Passing Year Check
-  if (drive.allowed_passing_years && drive.allowed_passing_years.length > 0) {
-    if (!drive.allowed_passing_years.includes(student.passing_year)) {
+  if (drive.allowed_passing_years && Array.isArray(drive.allowed_passing_years) && drive.allowed_passing_years.length > 0) {
+    const stuYear = parseInt(student.passing_year, 10);
+    const allowedYears = drive.allowed_passing_years.map(y => parseInt(y, 10));
+    if (stuYear && !allowedYears.includes(stuYear)) {
       isEligible = false;
       reasons.push(`Eligible passing years: [${drive.allowed_passing_years.join(', ')}]. Your passing year: ${student.passing_year}.`);
     }
   }
 
-  // 7. Gender Preference
+  // 7. Gender Preference Check
   if (drive.gender_preference && drive.gender_preference !== 'ANY') {
-    if (drive.gender_preference.toLowerCase() !== student.gender?.toLowerCase()) {
+    if (student.gender && drive.gender_preference.toLowerCase() !== student.gender.toLowerCase()) {
       isEligible = false;
       reasons.push(`Drive is reserved for ${drive.gender_preference} applicants.`);
-    }
-  }
-
-  // 8. Required Skills Match
-  if (drive.required_skills && drive.required_skills.length > 0) {
-    const studentSkillsLower = (student.skills || []).map(s => s.toLowerCase());
-    const missing = drive.required_skills.filter(reqSkill => !studentSkillsLower.includes(reqSkill.toLowerCase()));
-    if (missing.length > 0) {
-      isEligible = false;
-      reasons.push(`Missing required skill(s): ${missing.join(', ')}.`);
     }
   }
 
@@ -460,6 +467,7 @@ router.get('/drives/:id/eligibility', authenticate, requireRole('STUDENT'), (req
     drive_id: drive.id,
     drive_title: drive.title,
     company_name: drive.company_name,
+    drive,
     is_eligible: isEligible,
     reasons,
     breakdown: {
@@ -494,9 +502,8 @@ router.post('/applications/apply', authenticate, requireRole('STUDENT'), (req, r
     });
   }
 
-  // Check ongoing internship constraint
-  const ongoing = findOne('internships', { student_id: profile.id, status: 'IN_PROGRESS' }) ||
-                  findOne('internships', { student_id: profile.id, status: 'WEEKLY_REVIEW_ONGOING' });
+  // Check ongoing internship constraint (only block if full-time active internship is in progress)
+  const ongoing = findOne('internships', { student_id: profile.id, status: 'IN_PROGRESS' });
   if (ongoing) {
     return res.status(400).json({
       error: `You already have an active ongoing internship at ${ongoing.company_name}. Students can only have 1 active internship at a time.`
@@ -567,6 +574,7 @@ router.post('/internships/report-self-placed', authenticate, requireRole('STUDEN
   const {
     company_name,
     gstin,
+    internship_mode,
     role_position,
     office_address,
     latitude,
@@ -598,6 +606,7 @@ router.post('/internships/report-self-placed', authenticate, requireRole('STUDEN
     drive_id: null,
     mentor_faculty_id: requested_mentor_id || null, // Will be verified or assigned by T&P
     placement_type: 'SELF_PLACED',
+    internship_mode: (internship_mode || 'ON_SITE').toUpperCase() === 'REMOTE' ? 'REMOTE' : 'ON_SITE',
     company_name,
     gstin: gstin || 'UNREGISTERED',
     gstin_trust_data: gstin_trust_data || null,
@@ -738,11 +747,12 @@ router.get('/internships/active', authenticate, requireRole('STUDENT'), (req, re
     total_shifts_logged: allRecords.length,
     average_daily_hours: avgDailyHours,
     target_hours: 450,
-    face_registered: Boolean(profile.face_biometrics?.registered)
+    face_registered: Boolean(profile.face_biometrics?.registered),
+    internship_mode: active.internship_mode || 'ON_SITE'
   });
 });
 
-// 12a. Daily Geofenced Check-In with Face Verification
+// 12a. Daily Check-In (Adaptive: Geofenced + Face for ON_SITE, Direct for REMOTE)
 router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, res) => {
   const profile = findOne('student_profiles', { user_id: req.user.id });
   if (!profile) return res.status(404).json({ error: 'Profile not found' });
@@ -768,7 +778,44 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
     return res.status(400).json({ error: 'You have already checked in for today.' });
   }
 
-  // 1. Biometric Face ID Verification Check
+  const isRemote = (active.internship_mode || '').toUpperCase() === 'REMOTE';
+
+  // 1. REMOTE INTERNSHIP: Direct check-in without GPS or facial barrier
+  if (isRemote) {
+    const checkinTime = new Date().toISOString();
+    const record = insert('attendance_records', {
+      internship_id: active.id,
+      student_id: profile.id,
+      internship_mode: 'REMOTE',
+      checkin_time: checkinTime,
+      checkout_time: null,
+      hours_worked: 0, // 0.0 until student checks out
+      status: 'CHECKED_IN',
+      latitude: null,
+      longitude: null,
+      distance_meters: 0,
+      is_inside_geofence: true,
+      photo_url: profile.face_biometrics?.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      verification_status: 'VERIFIED',
+      face_verified: true,
+      face_similarity_score: 1.0,
+      work_summary: null,
+      daily_proof_url: null,
+      daily_proof_name: null,
+      daily_proof_type: null,
+      daily_proof_size: null,
+      date: todayStr
+    });
+
+    return res.status(201).json({
+      message: 'Remote check-in successful! Please remember to upload your daily work proof (Image or PDF) when checking out today.',
+      record,
+      is_remote: true,
+      is_inside: true
+    });
+  }
+
+  // 2. ON-SITE INTERNSHIP: Biometric Face ID + Geofence Verification
   const { latitude, longitude, photo_url, face_embedding } = req.body;
 
   if (!profile.face_biometrics?.registered || !profile.face_biometrics?.face_embedding) {
@@ -792,7 +839,7 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
     });
   }
 
-  // 2. Geofence Location Verification Check (300m radius of internship office)
+  // Geofence Location Verification Check (300m radius of internship office)
   if (latitude === undefined || longitude === undefined || latitude === null || longitude === null) {
     return res.status(400).json({ error: 'Current GPS coordinates are required for geofenced check-in.' });
   }
@@ -816,6 +863,7 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
   const record = insert('attendance_records', {
     internship_id: active.id,
     student_id: profile.id,
+    internship_mode: 'ON_SITE',
     checkin_time: checkinTime,
     checkout_time: null,
     hours_worked: 0, // 0.0 until student checks out
@@ -829,6 +877,10 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
     face_verified: true,
     face_similarity_score: faceVerification.similarity_score,
     work_summary: null,
+    daily_proof_url: null,
+    daily_proof_name: null,
+    daily_proof_type: null,
+    daily_proof_size: null,
     date: todayStr
   });
 
@@ -843,7 +895,7 @@ router.post('/attendance/check-in', authenticate, requireRole('STUDENT'), (req, 
   });
 });
 
-// 12b. Daily Check-Out with Face Verification & Working Hours Calculation
+// 12b. Daily Check-Out (Adaptive: Mandatory Daily Proof for REMOTE, Face ID for ON_SITE)
 router.post('/attendance/check-out', authenticate, requireRole('STUDENT'), (req, res) => {
   const profile = findOne('student_profiles', { user_id: req.user.id });
   if (!profile) return res.status(404).json({ error: 'Profile not found' });
@@ -867,21 +919,37 @@ router.post('/attendance/check-out', authenticate, requireRole('STUDENT'), (req,
     return res.status(400).json({ error: 'You have already checked out for today.' });
   }
 
-  // 1. Biometric Face ID Verification on Check-Out
-  const { face_embedding } = req.body;
+  const isRemote = (active.internship_mode || todayRecord.internship_mode || '').toUpperCase() === 'REMOTE';
+  const {
+    daily_proof_url,
+    daily_proof_name,
+    daily_proof_type,
+    daily_proof_size,
+    face_embedding
+  } = req.body;
 
-  if (profile.face_biometrics?.registered && profile.face_biometrics?.face_embedding) {
-    const faceVerification = verifyFaceBiometrics(
-      face_embedding || generateSyntheticEmbedding(profile.id),
-      profile.face_biometrics.face_embedding,
-      { threshold: 0.80 }
-    );
-
-    if (!faceVerification.verified) {
+  // 1. If REMOTE: Strictly enforce daily work proof upload (Image or PDF)
+  if (isRemote) {
+    if (!daily_proof_url || !daily_proof_url.trim()) {
       return res.status(400).json({
-        error: `Biometric face verification failed on check-out (Confidence: ${faceVerification.similarity_percent}). Face does not match registered ID.`,
-        similarity_score: faceVerification.similarity_score
+        error: 'Daily work proof (Image or PDF) is mandatory for remote internship check-out. Please upload your proof before checking out.'
       });
+    }
+  } else {
+    // 2. If ON-SITE: Perform Biometric Face ID Verification on Check-Out
+    if (profile.face_biometrics?.registered && profile.face_biometrics?.face_embedding) {
+      const faceVerification = verifyFaceBiometrics(
+        face_embedding || generateSyntheticEmbedding(profile.id),
+        profile.face_biometrics.face_embedding,
+        { threshold: 0.80 }
+      );
+
+      if (!faceVerification.verified) {
+        return res.status(400).json({
+          error: `Biometric face verification failed on check-out (Confidence: ${faceVerification.similarity_percent}). Face does not match registered ID.`,
+          similarity_score: faceVerification.similarity_score
+        });
+      }
     }
   }
 
@@ -900,7 +968,11 @@ router.post('/attendance/check-out', authenticate, requireRole('STUDENT'), (req,
     checkout_time: checkoutTime.toISOString(),
     hours_worked: hoursWorked,
     work_summary: workSummary,
-    checkout_face_verified: true,
+    checkout_face_verified: !isRemote,
+    daily_proof_url: daily_proof_url || todayRecord.daily_proof_url || null,
+    daily_proof_name: daily_proof_name || todayRecord.daily_proof_name || (daily_proof_url ? 'Daily Work Proof' : null),
+    daily_proof_type: daily_proof_type || todayRecord.daily_proof_type || (daily_proof_url?.includes('.pdf') ? 'pdf' : 'image'),
+    daily_proof_size: daily_proof_size || todayRecord.daily_proof_size || 'Standard Proof',
     status: 'COMPLETED'
   });
 
@@ -917,7 +989,9 @@ router.post('/attendance/check-out', authenticate, requireRole('STUDENT'), (req,
   totalHours = Math.round(totalHours * 10) / 10;
 
   res.json({
-    message: `Check-out verified successfully! Logged ${hoursWorked} working hours for today.`,
+    message: isRemote
+      ? `Remote check-out verified! Daily work proof attached and ${hoursWorked} working hours recorded.`
+      : `Check-out verified successfully! Logged ${hoursWorked} working hours for today.`,
     record: updatedRecord,
     hours_worked: hoursWorked,
     total_hours_worked: totalHours,
@@ -1031,8 +1105,10 @@ router.get('/tasks-reports', authenticate, requireRole('STUDENT'), (req, res) =>
   }
 
   const todayStr = new Date().toISOString().split('T')[0];
+  const isRemote = (active.internship_mode || '').toUpperCase() === 'REMOTE';
+  const allAttendance = find('attendance_records', { internship_id: active.id }) || [];
 
-  // Enrich with live lock/unlock status
+  // Enrich with live lock/unlock status and weekly daily proofs
   const enrichedReports = reports
     .map(rep => {
       const scheduledDate = rep.scheduled_friday_date || rep.scheduled_date || rep.scheduled_saturday_date;
@@ -1044,12 +1120,42 @@ router.get('/tasks-reports', authenticate, requireRole('STUDENT'), (req, res) =>
         rep.week_number === 1
       );
 
+      // Find attendance records with daily proof for this week (or overall for the internship tenure)
+      // For week N, calculate start and end dates
+      const weekStartDate = active.start_date
+        ? new Date(new Date(active.start_date).getTime() + (rep.week_number - 1) * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        : null;
+      const weekEndDate = scheduledDate || (active.start_date
+        ? new Date(new Date(active.start_date).getTime() + rep.week_number * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        : null);
+
+      const weekDailyProofs = allAttendance
+        .filter(r => {
+          if (!r.daily_proof_url) return false;
+          if (weekStartDate && weekEndDate) {
+            return r.date >= weekStartDate && r.date <= weekEndDate;
+          }
+          return true;
+        })
+        .map(r => ({
+          url: r.daily_proof_url,
+          name: r.daily_proof_name || `Daily Proof (${r.date})`,
+          type: r.daily_proof_type || (r.daily_proof_url.includes('.pdf') ? 'pdf' : 'image'),
+          size: r.daily_proof_size || 'Standard Proof',
+          date: r.date,
+          hours: r.hours_worked,
+          work_summary: r.work_summary
+        }));
+
       return {
         ...rep,
         scheduled_friday_date: scheduledDate,
         scheduled_date: scheduledDate,
         is_unlocked: isUnlocked,
-        unlocks_on: scheduledDate
+        unlocks_on: scheduledDate,
+        internship_mode: active.internship_mode || 'ON_SITE',
+        is_remote: isRemote,
+        daily_proofs: weekDailyProofs
       };
     })
     .sort((a, b) => a.week_number - b.week_number);
@@ -1059,6 +1165,7 @@ router.get('/tasks-reports', authenticate, requireRole('STUDENT'), (req, res) =>
   res.json({
     has_active: true,
     internship: active,
+    internship_mode: active.internship_mode || 'ON_SITE',
     branch: profile.branch || 'Computer Science and Engineering',
     is_computer_branch: isComp,
     github_score: isComp ? (profile.github_score || 0) : null,
@@ -1079,15 +1186,49 @@ router.post('/weekly-reports/submit', authenticate, requireRole('STUDENT'), (req
   }
 
   let report = report_id ? findById('weekly_reports', report_id) : null;
-  if (!report && week_number) {
-    const active = findOne('internships', { student_id: profile.id, status: 'WEEKLY_REVIEW_ONGOING' }) ||
-                   findOne('internships', { student_id: profile.id, status: 'IN_PROGRESS' });
-    if (active) {
-      report = findOne('weekly_reports', { internship_id: active.id, week_number: parseInt(week_number, 10) }) ||
-               findOne('weekly_reports', { student_id: profile.id, week_number: parseInt(week_number, 10) });
-    }
+  const active = findOne('internships', { student_id: profile.id, status: 'WEEKLY_REVIEW_ONGOING' }) ||
+                 findOne('internships', { student_id: profile.id, status: 'IN_PROGRESS' });
+
+  if (!report && week_number && active) {
+    report = findOne('weekly_reports', { internship_id: active.id, week_number: parseInt(week_number, 10) }) ||
+             findOne('weekly_reports', { student_id: profile.id, week_number: parseInt(week_number, 10) });
   }
+
   const todayStr = new Date().toISOString().split('T')[0];
+  const isRemote = (active?.internship_mode || '').toUpperCase() === 'REMOTE';
+
+  // For remote internships, automatically gather all daily proofs for the week
+  let combinedProofs = Array.isArray(work_proof_urls) ? [...work_proof_urls] : [];
+  if (active && isRemote) {
+    const allAttendance = find('attendance_records', { internship_id: active.id }) || [];
+    const weekNum = report ? report.week_number : (parseInt(week_number, 10) || 1);
+    const weekStartDate = active.start_date
+      ? new Date(new Date(active.start_date).getTime() + (weekNum - 1) * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      : null;
+    const weekEndDate = (report?.scheduled_friday_date || report?.scheduled_date) || (active.start_date
+      ? new Date(new Date(active.start_date).getTime() + weekNum * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      : null);
+
+    const weekDailyProofs = allAttendance
+      .filter(r => r.daily_proof_url && (!weekStartDate || !weekEndDate || (r.date >= weekStartDate && r.date <= weekEndDate)))
+      .map(r => ({
+        url: r.daily_proof_url,
+        name: r.daily_proof_name || `Daily Proof (${r.date})`,
+        type: r.daily_proof_type || (r.daily_proof_url.includes('.pdf') ? 'pdf' : 'image'),
+        date: r.date,
+        hours: r.hours_worked,
+        work_summary: r.work_summary
+      }));
+
+    // Merge proofs ensuring no duplicate URLs
+    const existingUrls = new Set(combinedProofs.map(p => typeof p === 'string' ? p : p.url));
+    weekDailyProofs.forEach(p => {
+      if (!existingUrls.has(p.url)) {
+        combinedProofs.push(p);
+        existingUrls.add(p.url);
+      }
+    });
+  }
 
   if (report) {
     // Check if report is locked
@@ -1104,14 +1245,12 @@ router.post('/weekly-reports/submit', authenticate, requireRole('STUDENT'), (req
     report = update('weekly_reports', report.id, {
       submission_date: new Date().toISOString(),
       work_summary,
-      work_proof_urls: Array.isArray(work_proof_urls) ? work_proof_urls : report.work_proof_urls,
+      work_proof_urls: combinedProofs.length > 0 ? combinedProofs : report.work_proof_urls,
       github_score_snapshot: profile.github_score,
       status: 'SUBMITTED',
       faculty_feedback: null // cleared on resubmit
     });
   } else {
-    const active = findOne('internships', { student_id: profile.id, status: 'WEEKLY_REVIEW_ONGOING' }) ||
-                   findOne('internships', { student_id: profile.id, status: 'IN_PROGRESS' });
     if (!active) return res.status(400).json({ error: 'No active internship found' });
 
     report = insert('weekly_reports', {
@@ -1122,7 +1261,7 @@ router.post('/weekly-reports/submit', authenticate, requireRole('STUDENT'), (req
       scheduled_date: todayStr,
       submission_date: new Date().toISOString(),
       work_summary,
-      work_proof_urls: Array.isArray(work_proof_urls) ? work_proof_urls : [],
+      work_proof_urls: combinedProofs,
       github_score_snapshot: profile.github_score,
       status: 'SUBMITTED',
       faculty_score: null,
@@ -1207,6 +1346,7 @@ router.post('/offers/:id/respond', authenticate, requireRole('STUDENT'), (req, r
         drive_id: offer.drive_id || null,
         mentor_faculty_id: assignedMentorId,
         placement_type: offer.offer_type === 'PPO' ? 'CAMPUS_PPO' : 'COLLEGE_PLACED',
+        internship_mode: (offer.internship_mode || drive?.internship_mode || 'ON_SITE').toUpperCase() === 'REMOTE' ? 'REMOTE' : 'ON_SITE',
         company_name: offer.company_name,
         gstin: company?.gstin || '27AAACG0535P1Z8',
         role_position: offer.role_position || drive?.role_position || 'Software Engineering Intern',
@@ -1279,6 +1419,7 @@ router.post('/offers/:id/respond', authenticate, requireRole('STUDENT'), (req, r
         drive_id: offer.drive_id || null,
         mentor_faculty_id: null,
         placement_type: offer.offer_type === 'PPO' ? 'CAMPUS_PPO' : 'COLLEGE_PLACED',
+        internship_mode: (offer.internship_mode || drive?.internship_mode || 'ON_SITE').toUpperCase() === 'REMOTE' ? 'REMOTE' : 'ON_SITE',
         company_name: offer.company_name,
         gstin: company?.gstin || '27AAACG0535P1Z8',
         role_position: offer.role_position || 'Software Engineering Intern',

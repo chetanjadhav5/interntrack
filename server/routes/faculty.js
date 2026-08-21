@@ -204,15 +204,44 @@ router.get('/weekly-reports', authenticate, requireRole('FACULTY'), (req, res) =
   const internshipMap = new Map(relevantInternships.map(i => [i.id, i]));
   
   const allReports = find('weekly_reports') || [];
+  const allAttendance = find('attendance_records') || [];
   // Only include reports submitted by the student (not upcoming locked or unsubmitted pending reports)
   const myReports = allReports.filter(r => internshipMap.has(r.internship_id) && (r.status !== 'PENDING' || Boolean(r.submission_date)));
 
   const enrichedReports = myReports.map(report => {
     const internship = internshipMap.get(report.internship_id);
     const student = findById('student_profiles', report.student_id);
+    const isRemote = (internship?.internship_mode || '').toUpperCase() === 'REMOTE';
+
+    // Calculate week date window
+    const weekNum = report.week_number || 1;
+    const weekStartDate = internship?.start_date
+      ? new Date(new Date(internship.start_date).getTime() + (weekNum - 1) * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      : null;
+    const weekEndDate = (report.scheduled_friday_date || report.scheduled_date) || (internship?.start_date
+      ? new Date(new Date(internship.start_date).getTime() + weekNum * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      : null);
+
+    const weekDailyProofs = allAttendance
+      .filter(r => r.internship_id === report.internship_id && r.daily_proof_url && (!weekStartDate || !weekEndDate || (r.date >= weekStartDate && r.date <= weekEndDate)))
+      .map(r => ({
+        url: r.daily_proof_url,
+        name: r.daily_proof_name || `Daily Proof (${r.date})`,
+        type: r.daily_proof_type || (r.daily_proof_url.includes('.pdf') ? 'pdf' : 'image'),
+        size: r.daily_proof_size || 'Standard Proof',
+        date: r.date,
+        hours: r.hours_worked,
+        work_summary: r.work_summary
+      }));
+
     return {
       ...report,
+      internship_mode: internship?.internship_mode || 'ON_SITE',
+      is_remote: isRemote,
+      daily_proofs: weekDailyProofs,
       internship_title: `${internship?.company_name} - ${internship?.role_position}`,
+      company_name: internship?.company_name || 'Hiring Company',
+      role_position: internship?.role_position || 'Software Engineering Intern',
       student_name: student?.full_name || 'Unknown Student',
       student_roll: student?.student_id || '',
       student_branch: student?.branch || '',

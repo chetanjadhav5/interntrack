@@ -15,7 +15,8 @@ import {
   DollarSign,
   Sparkles,
   ExternalLink,
-  Check
+  Check,
+  Globe
 } from 'lucide-react';
 
 const ReportSelfPlacedPage = () => {
@@ -23,6 +24,7 @@ const ReportSelfPlacedPage = () => {
 
   const [companyName, setCompanyName] = useState('');
   const [gstin, setGstin] = useState('');
+  const [internshipMode, setInternshipMode] = useState('ON_SITE'); // ON_SITE vs REMOTE
   const [rolePosition, setRolePosition] = useState('Software Engineering Intern');
   const [stipend, setStipend] = useState('45000');
   const [startDate, setStartDate] = useState('2026-09-01');
@@ -131,6 +133,7 @@ const ReportSelfPlacedPage = () => {
         body: JSON.stringify({
           company_name: companyName,
           gstin,
+          internship_mode: internshipMode,
           role_position: rolePosition,
           office_address: officeAddress,
           latitude,
@@ -199,6 +202,68 @@ const ReportSelfPlacedPage = () => {
             <span className="text-[11px] font-semibold text-primary bg-primary/10 px-2.5 py-1 rounded-full flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5" /> RapidAPI GSTIN Verified
             </span>
+          </div>
+
+          {/* Internship Work Mode Selection */}
+          <div className="space-y-2">
+            <label className="block text-xs font-bold text-on-surface uppercase tracking-wider">
+              Internship Working Mode <span className="text-rose-600">*</span>
+            </label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setInternshipMode('ON_SITE')}
+                className={`p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${
+                  internshipMode === 'ON_SITE'
+                    ? 'bg-blue-50/80 border-primary shadow-sm ring-2 ring-primary/20'
+                    : 'bg-surface-container-low border-outline-variant hover:bg-surface-container-high'
+                }`}
+              >
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                  internshipMode === 'ON_SITE' ? 'bg-primary text-white' : 'bg-surface-container-highest text-on-surface-variant'
+                }`}>
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-xs text-on-surface">🏢 On-Site (Office Based)</h4>
+                    {internshipMode === 'ON_SITE' && (
+                      <span className="px-1.5 py-0.5 rounded bg-primary text-white text-[9px] font-black">SELECTED</span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-on-surface-variant mt-0.5 leading-snug">
+                    Verified via 300m office geofence & biometric Face ID.
+                  </p>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setInternshipMode('REMOTE')}
+                className={`p-4 rounded-2xl border text-left transition-all flex items-start gap-3 ${
+                  internshipMode === 'REMOTE'
+                    ? 'bg-purple-50/80 border-purple-600 shadow-sm ring-2 ring-purple-600/20'
+                    : 'bg-surface-container-low border-outline-variant hover:bg-surface-container-high'
+                }`}
+              >
+                <div className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                  internshipMode === 'REMOTE' ? 'bg-purple-600 text-white' : 'bg-surface-container-highest text-on-surface-variant'
+                }`}>
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-xs text-on-surface">🌐 Remote (Work From Home)</h4>
+                    {internshipMode === 'REMOTE' && (
+                      <span className="px-1.5 py-0.5 rounded bg-purple-600 text-white text-[9px] font-black">SELECTED</span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-on-surface-variant mt-0.5 leading-snug">
+                    Direct check-in; mandatory daily work proof (image/PDF) at checkout.
+                  </p>
+                </div>
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

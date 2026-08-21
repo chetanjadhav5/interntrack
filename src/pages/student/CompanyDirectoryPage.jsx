@@ -31,6 +31,7 @@ const CompanyDirectoryPage = () => {
   const [applyingId, setApplyingId] = useState(null);
   const [actionMessage, setActionMessage] = useState('');
   const [actionError, setActionError] = useState('');
+  const [actionReasons, setActionReasons] = useState([]);
 
   useEffect(() => {
     fetchDrives();
@@ -56,6 +57,7 @@ const CompanyDirectoryPage = () => {
   const handleOpenConsentModal = (drive) => {
     setActionMessage('');
     setActionError('');
+    setActionReasons([]);
     setConsentDrive(drive);
   };
 
@@ -65,6 +67,7 @@ const CompanyDirectoryPage = () => {
     setApplyingId(driveId);
     setActionMessage('');
     setActionError('');
+    setActionReasons([]);
 
     try {
       const token = localStorage.getItem('ghr_token');
@@ -93,6 +96,9 @@ const CompanyDirectoryPage = () => {
         }, 1500);
       } else {
         setActionError(data.error || 'Failed to submit application');
+        if (data.reasons && Array.isArray(data.reasons)) {
+          setActionReasons(data.reasons);
+        }
       }
     } catch {
       setActionError('Network error submitting application');
@@ -302,11 +308,17 @@ const CompanyDirectoryPage = () => {
       {/* Institutional Placement Undertaking & Conversion Policy Modal */}
       <InstitutionalConsentModal
         isOpen={Boolean(consentDrive)}
-        onClose={() => setConsentDrive(null)}
+        onClose={() => {
+          setConsentDrive(null);
+          setActionError('');
+          setActionReasons([]);
+        }}
         onConfirm={handleConfirmApply}
         drive={consentDrive}
         student={user?.profile}
         loading={Boolean(applyingId)}
+        error={actionError}
+        reasons={actionReasons}
       />
     </div>
   );

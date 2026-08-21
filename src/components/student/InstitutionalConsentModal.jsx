@@ -20,7 +20,9 @@ const InstitutionalConsentModal = ({
   onConfirm,
   drive,
   student,
-  loading
+  loading,
+  error = '',
+  reasons = []
 }) => {
   const [hasAgreed, setHasAgreed] = useState(false);
   const [acknowledgedPoints, setAcknowledgedPoints] = useState({
@@ -42,14 +44,35 @@ const InstitutionalConsentModal = ({
 
   if (!isOpen || !drive) return null;
 
-  const allPointsChecked =
+  const allClausesChecked =
     acknowledgedPoints.conversionRule &&
     acknowledgedPoints.singleOfferPolicy &&
-    acknowledgedPoints.tpGovernance &&
-    hasAgreed;
+    acknowledgedPoints.tpGovernance;
+
+  const isReadyToSubmit = hasAgreed || allClausesChecked;
+
+  const handleAcknowledgeAll = () => {
+    setHasAgreed(true);
+    setAcknowledgedPoints({
+      conversionRule: true,
+      singleOfferPolicy: true,
+      tpGovernance: true
+    });
+  };
+
+  const handleMasterToggle = (checked) => {
+    setHasAgreed(checked);
+    if (checked) {
+      setAcknowledgedPoints({
+        conversionRule: true,
+        singleOfferPolicy: true,
+        tpGovernance: true
+      });
+    }
+  };
 
   const handleSubmitApplication = () => {
-    if (!allPointsChecked) return;
+    if (!isReadyToSubmit) return;
     onConfirm({
       consent_accepted: true,
       consent_accepted_at: new Date().toISOString(),
@@ -111,6 +134,29 @@ const InstitutionalConsentModal = ({
             </div>
           </div>
 
+          {/* Error Banner if submission was blocked */}
+          {error && (
+            <div className="p-4 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-950 text-xs space-y-2 animate-in fade-in">
+              <div className="flex items-center gap-2 font-bold text-rose-900">
+                <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+                <span>Application Submission Blocked</span>
+              </div>
+              <p className="text-xs text-rose-900 leading-relaxed font-medium">{error}</p>
+              {reasons && reasons.length > 0 && (
+                <div className="pt-1 border-t border-rose-200">
+                  <span className="text-[11px] font-bold text-rose-950 uppercase tracking-wider block mb-1">
+                    Requirements to resolve:
+                  </span>
+                  <ul className="list-disc list-inside space-y-1 text-[11px] text-rose-900 font-medium">
+                    {reasons.map((r, i) => (
+                      <li key={i}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Primary Legal / Institutional Policy Notice */}
           <div className="p-4.5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 text-xs space-y-2.5">
             <div className="flex items-start gap-2.5 text-amber-800 font-bold">
@@ -129,10 +175,19 @@ const InstitutionalConsentModal = ({
 
           {/* Detailed Policy Conditions Checklist */}
           <div className="space-y-3 pt-1">
-            <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-primary" />
-              <span>Please read and acknowledge the following clauses:</span>
-            </h4>
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
+                <Info className="w-3.5 h-3.5 text-primary" />
+                <span>Please read and acknowledge the following clauses:</span>
+              </h4>
+              <button
+                type="button"
+                onClick={handleAcknowledgeAll}
+                className="text-[11px] font-bold text-primary hover:text-primary-hover hover:underline"
+              >
+                Acknowledge All Clauses
+              </button>
+            </div>
 
             {/* Clause 1 */}
             <label className="flex items-start gap-3 p-3 rounded-xl border border-outline-variant/60 bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer transition-colors">
@@ -197,7 +252,7 @@ const InstitutionalConsentModal = ({
               <input
                 type="checkbox"
                 checked={hasAgreed}
-                onChange={(e) => setHasAgreed(e.target.checked)}
+                onChange={(e) => handleMasterToggle(e.target.checked)}
                 className="mt-0.5 w-4 h-4 rounded text-primary focus:ring-primary border-primary"
               />
               <span className="text-xs text-on-surface font-semibold leading-relaxed">
@@ -222,7 +277,7 @@ const InstitutionalConsentModal = ({
           <button
             type="button"
             onClick={handleSubmitApplication}
-            disabled={!allPointsChecked || loading}
+            disabled={!isReadyToSubmit || loading}
             className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-700 text-on-primary text-xs font-bold shadow-md shadow-primary/20 flex items-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-95"
           >
             {loading ? (

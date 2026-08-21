@@ -15,7 +15,8 @@ import {
   AlertCircle,
   X,
   ArrowRight,
-  Loader2
+  Loader2,
+  Globe
 } from 'lucide-react';
 
 const ManageDrivesPage = () => {
@@ -28,6 +29,7 @@ const ManageDrivesPage = () => {
   const [title, setTitle] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [rolePosition, setRolePosition] = useState('');
+  const [internshipMode, setInternshipMode] = useState('ON_SITE'); // ON_SITE vs REMOTE
   const [stipend, setStipend] = useState('50000');
   const [duration, setDuration] = useState('6');
   const [openings, setOpenings] = useState('5');
@@ -100,6 +102,7 @@ const ManageDrivesPage = () => {
           title,
           company_name: companyName,
           role_position: rolePosition,
+          internship_mode: internshipMode,
           stipend_amount: stipend,
           duration_months: duration,
           openings_count: openings,
@@ -272,6 +275,64 @@ const ManageDrivesPage = () => {
                   <span>{actionErr}</span>
                 </div>
               )}
+
+              {/* Internship Work Mode */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-on-surface uppercase tracking-wider">
+                  Internship Working Mode <span className="text-rose-600">*</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setInternshipMode('ON_SITE')}
+                    className={`p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 ${
+                      internshipMode === 'ON_SITE'
+                        ? 'bg-purple-50/80 border-purple-600 shadow-sm ring-2 ring-purple-600/20'
+                        : 'bg-surface-container-low border-outline-variant hover:bg-surface-container-high'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                      internshipMode === 'ON_SITE' ? 'bg-purple-700 text-white' : 'bg-surface-container-highest text-on-surface-variant'
+                    }`}>
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-bold text-xs text-on-surface">🏢 On-Site (Office)</h4>
+                        {internshipMode === 'ON_SITE' && (
+                          <span className="px-1.5 py-0.2 rounded bg-purple-700 text-white text-[9px] font-black">SELECTED</span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-on-surface-variant mt-0.5">300m GPS geofence + Biometric Face ID attendance.</p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setInternshipMode('REMOTE')}
+                    className={`p-3.5 rounded-2xl border text-left transition-all flex items-start gap-3 ${
+                      internshipMode === 'REMOTE'
+                        ? 'bg-blue-50/80 border-blue-600 shadow-sm ring-2 ring-blue-600/20'
+                        : 'bg-surface-container-low border-outline-variant hover:bg-surface-container-high'
+                    }`}
+                  >
+                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                      internshipMode === 'REMOTE' ? 'bg-blue-600 text-white' : 'bg-surface-container-highest text-on-surface-variant'
+                    }`}>
+                      <Globe className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <h4 className="font-bold text-xs text-on-surface">🌐 Remote (Work From Home)</h4>
+                        {internshipMode === 'REMOTE' && (
+                          <span className="px-1.5 py-0.2 rounded bg-blue-600 text-white text-[9px] font-black">SELECTED</span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-on-surface-variant mt-0.5">Direct check-in; mandatory daily work proof on checkout.</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

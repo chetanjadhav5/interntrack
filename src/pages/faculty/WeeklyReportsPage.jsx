@@ -19,7 +19,11 @@ import {
   X,
   Filter,
   FileText,
-  Eye
+  Eye,
+  Globe,
+  Building2,
+  Image as ImageIcon,
+  Clock
 } from 'lucide-react';
 
 const WeeklyReportsPage = () => {
@@ -253,7 +257,18 @@ const WeeklyReportsPage = () => {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="font-headline font-bold text-xs text-on-surface">Week {rep.week_number} Report</h4>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="font-headline font-bold text-xs text-on-surface">Week {rep.week_number} Report</h4>
+                      {rep.internship_mode === 'REMOTE' ? (
+                        <span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 text-[9px] font-bold inline-flex items-center gap-0.5">
+                          <Globe className="w-2.5 h-2.5" /> Remote
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 rounded bg-blue-100 text-blue-900 text-[9px] font-bold inline-flex items-center gap-0.5">
+                          <Building2 className="w-2.5 h-2.5" /> On-Site
+                        </span>
+                      )}
+                    </div>
                     <StatusBadge status={rep.status} size="xs" />
                   </div>
                   <p className="text-xs font-bold text-primary">{rep.student_name}</p>
@@ -274,9 +289,22 @@ const WeeklyReportsPage = () => {
             <div className="bg-surface-container-lowest rounded-3xl p-6 border border-outline-variant/60 shadow-sm space-y-5">
               <div className="flex items-start justify-between border-b border-outline-variant/40 pb-4">
                 <div>
-                  <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                    {selectedReport.internship_title}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                      {selectedReport.internship_title}
+                    </span>
+                    {selectedReport.internship_mode === 'REMOTE' ? (
+                      <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-bold border border-purple-200 inline-flex items-center gap-1">
+                        <Globe className="w-3 h-3 text-purple-700" />
+                        <span>Remote Internship</span>
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 text-[10px] font-bold border border-blue-200 inline-flex items-center gap-1">
+                        <Building2 className="w-3 h-3 text-blue-700" />
+                        <span>On-Site Internship</span>
+                      </span>
+                    )}
+                  </div>
                   <h3 className="font-headline font-bold text-lg text-on-surface mt-0.5">
                     {selectedReport.student_name} — Week {selectedReport.week_number} Report
                   </h3>
@@ -316,18 +344,93 @@ const WeeklyReportsPage = () => {
               {/* Weekly Work Summary */}
               <div className="space-y-2">
                 <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
-                  Submitted Work Summary
+                  Submitted Weekly Summary
                 </span>
                 <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/60 text-xs text-on-surface leading-relaxed whitespace-pre-wrap">
                   {selectedReport.work_summary || 'No summary provided.'}
                 </div>
               </div>
 
+              {/* Remote Intern: Daily Check-Out Proofs Section */}
+              {selectedReport.daily_proofs && selectedReport.daily_proofs.length > 0 && (
+                <div className="space-y-3 p-4 rounded-2xl bg-purple-50/60 border border-purple-200/80">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-purple-700" />
+                      <span className="text-xs font-bold text-purple-950 uppercase tracking-wider">
+                        Daily Attendance Proofs & Check-Out Logs ({selectedReport.daily_proofs.length} Days)
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-bold text-purple-800 bg-purple-200/70 px-2 py-0.5 rounded-full">
+                      Remote Internship Verification
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-purple-900 leading-snug">
+                    Daily work proofs submitted by the remote student at check-out during this week:
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    {selectedReport.daily_proofs.map((dp, idx) => {
+                      const isPdf = dp.type === 'pdf' || (dp.url && (dp.url.startsWith('data:application/pdf') || dp.url.toLowerCase().endsWith('.pdf')));
+                      return (
+                        <div
+                          key={idx}
+                          className="p-3 rounded-xl bg-white border border-purple-200/80 shadow-sm space-y-2 flex flex-col justify-between"
+                        >
+                          <div className="flex items-center justify-between text-[11px] border-b border-purple-100 pb-1.5">
+                            <span className="font-mono font-bold text-purple-950">{dp.date}</span>
+                            <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-bold font-mono text-[10px] border border-emerald-200">
+                              {dp.hours ? `${dp.hours} hrs` : '8.5 hrs'}
+                            </span>
+                          </div>
+
+                          <p className="text-[11px] text-on-surface line-clamp-2 italic">
+                            "{dp.work_summary || 'Completed daily engineering tasks.'}"
+                          </p>
+
+                          {dp.url && (
+                            <div className="pt-1">
+                              {isPdf ? (
+                                <a
+                                  href={dp.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="p-2 rounded-lg bg-red-50 text-red-900 border border-red-200 flex items-center justify-between text-[11px] font-bold hover:bg-red-100 transition-colors"
+                                >
+                                  <div className="flex items-center gap-1.5 truncate">
+                                    <FileText className="w-4 h-4 text-red-600 flex-shrink-0" />
+                                    <span className="truncate">{dp.name || 'Daily Proof Document (PDF)'}</span>
+                                  </div>
+                                  <Eye className="w-3.5 h-3.5 text-red-600 flex-shrink-0 ml-1" />
+                                </a>
+                              ) : (
+                                <a
+                                  href={dp.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="group relative rounded-lg overflow-hidden border border-purple-200 block h-24 bg-black/5"
+                                >
+                                  <img src={dp.url} alt="Proof" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity gap-1">
+                                    <Eye className="w-3 h-3" />
+                                    <span>Preview Daily Proof</span>
+                                  </div>
+                                </a>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Work Proof Screenshots & PDF Artifacts */}
               {selectedReport.work_proof_urls && selectedReport.work_proof_urls.length > 0 && (
                 <div className="space-y-2">
                   <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">
-                    Work Proof Screenshots & Artifacts ({selectedReport.work_proof_urls.length})
+                    Additional Milestone Artifacts & Screenshots ({selectedReport.work_proof_urls.length})
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {selectedReport.work_proof_urls.map((rawItem, i) => {

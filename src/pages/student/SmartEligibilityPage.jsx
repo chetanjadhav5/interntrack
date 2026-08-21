@@ -27,6 +27,7 @@ const SmartEligibilityPage = () => {
   const [showConsentModal, setShowConsentModal] = useState(false);
   const [applying, setApplying] = useState(false);
   const [applyError, setApplyError] = useState('');
+  const [applyReasons, setApplyReasons] = useState([]);
 
   useEffect(() => {
     fetchEligibility();
@@ -49,9 +50,16 @@ const SmartEligibilityPage = () => {
     }
   };
 
+  const handleOpenConsentModal = () => {
+    setApplyError('');
+    setApplyReasons([]);
+    setShowConsentModal(true);
+  };
+
   const handleConfirmApply = async (consentData) => {
     setApplying(true);
     setApplyError('');
+    setApplyReasons([]);
     try {
       const token = localStorage.getItem('ghr_token');
       const res = await fetch('/api/student/applications/apply', {
@@ -72,6 +80,9 @@ const SmartEligibilityPage = () => {
         navigate('/student/applications');
       } else {
         setApplyError(data.error || 'Application submission failed.');
+        if (data.reasons && Array.isArray(data.reasons)) {
+          setApplyReasons(data.reasons);
+        }
       }
     } catch (err) {
       console.error('Apply error:', err);
@@ -283,7 +294,7 @@ const SmartEligibilityPage = () => {
           )}
 
           <button
-            onClick={() => setShowConsentModal(true)}
+            onClick={handleOpenConsentModal}
             disabled={!eligibility.is_eligible || applying}
             className="w-full sm:w-auto px-8 py-3 rounded-2xl bg-primary text-on-primary text-xs font-bold hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-primary/30 flex items-center justify-center gap-2 transition-all active:scale-95"
           >
@@ -307,9 +318,19 @@ const SmartEligibilityPage = () => {
         isOpen={showConsentModal}
         onClose={() => setShowConsentModal(false)}
         onConfirm={handleConfirmApply}
-        drive={eligibility.drive}
+        drive={
+          eligibility.drive || {
+            id: driveId,
+            title: eligibility.drive_title || 'Campus Placement Drive',
+            company_name: eligibility.company_name || 'Hiring Organization',
+            role_position: eligibility.breakdown?.role_position || 'Engineering Intern',
+            stipend_amount: eligibility.stipend_amount || 45000
+          }
+        }
         student={user?.profile}
         loading={applying}
+        error={applyError}
+        reasons={applyReasons}
       />
     </div>
   );

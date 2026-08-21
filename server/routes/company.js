@@ -184,6 +184,7 @@ router.post('/drives', authenticate, requireRole('COMPANY'), (req, res) => {
   const drive = insert('placement_drives', {
     created_by_user_id: req.user.id,
     title,
+    internship_mode: (req.body.internship_mode || 'ON_SITE').toUpperCase() === 'REMOTE' ? 'REMOTE' : 'ON_SITE',
     company_name: companyProfile?.company_name || 'Company Partner',
     company_profile_id: companyProfile?.id || null,
     department: 'Engineering',

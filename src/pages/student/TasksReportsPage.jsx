@@ -390,9 +390,21 @@ const TasksReportsPage = () => {
           <div className="bg-surface-container-lowest rounded-3xl p-6 sm:p-8 border border-outline-variant/60 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/40 pb-4">
               <div>
-                <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                  {internship?.company_name || 'Active Internship'} • Week {activeReport?.week_number || 1}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-primary uppercase tracking-wider">
+                    {internship?.company_name || 'Active Internship'} • Week {activeReport?.week_number || 1}
+                  </span>
+                  {internship?.internship_mode === 'REMOTE' ? (
+                    <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-bold border border-purple-200 inline-flex items-center gap-1">
+                      <Globe className="w-3 h-3 text-purple-700" />
+                      <span>Remote Mode</span>
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 text-[10px] font-bold border border-blue-200">
+                      🏢 On-Site
+                    </span>
+                  )}
+                </div>
                 <h2 className="font-headline font-bold text-xl text-on-surface mt-0.5">
                   Friday Logbook & Milestone Submission
                 </h2>
@@ -407,6 +419,24 @@ const TasksReportsPage = () => {
                 </div>
               )}
             </div>
+
+            {/* Remote Mode Auto-Bundling Notice */}
+            {internship?.internship_mode === 'REMOTE' && (
+              <div className="p-4 rounded-2xl bg-purple-50/80 border border-purple-200 text-xs text-purple-950 space-y-1.5 animate-in fade-in">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold flex items-center gap-1.5 text-purple-900">
+                    <Globe className="w-4 h-4 text-purple-700" />
+                    <span>Remote Mode: Daily Check-Out Proofs Auto-Bundled</span>
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full bg-purple-200/80 text-purple-950 text-[10px] font-bold">
+                    Faculty Verification
+                  </span>
+                </div>
+                <p className="text-[11px] text-purple-900 leading-relaxed">
+                  All daily work proofs (images/PDFs) uploaded during your weekday attendance check-outs are automatically bundled with this Friday report for faculty mentor review and grading.
+                </p>
+              </div>
+            )}
 
             {/* Faculty Feedback Banner if Correction Required */}
             {activeReport?.status === 'CORRECTION_REQUIRED' && activeReport.faculty_feedback && (
